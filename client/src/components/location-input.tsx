@@ -15,11 +15,13 @@ const LocationInput = forwardRef<HTMLInputElement, LocationInputProps>(
           focused ? 'ring-2 ring-primary-500' : ''
         }`}
       >
-        {filled ? (
-          <SewingPinFilledIcon className="w-4 h-4" />
-        ) : (
-          <SewingPinIcon className="w-4 h-4" />
-        )}
+        <div className={focused ? 'text-blue-500' : 'text-black'}>
+          {filled ? (
+            <SewingPinFilledIcon className="w-4 h-4" />
+          ) : (
+            <SewingPinIcon className="w-4 h-4" />
+          )}
+        </div>
         <input
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
