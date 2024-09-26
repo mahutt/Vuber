@@ -95,7 +95,7 @@ export default function Root() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem className="dark text-white">
-                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
