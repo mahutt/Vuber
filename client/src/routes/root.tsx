@@ -39,7 +39,7 @@ const Link: React.FC<LinkProps> = ({ to, ...props }) => {
 
 export default function Root() {
   return (
-    <>
+    <div className="h-screen flex flex-col">
       <header className="bg-black">
         <div className="max-w-screen-xl mx-auto px-16 py-3 flex flex-row items-center gap-4">
           <ReactRouterLink to="/" className="text-white font-bold text-xl">
@@ -109,6 +109,6 @@ export default function Root() {
       </header>
       <Outlet />
       <footer>Global layout footer</footer>
-    </>
+    </div>
   )
 }
