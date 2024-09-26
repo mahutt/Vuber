@@ -108,7 +108,7 @@ export default function Root() {
         </div>
       </header>
       <Outlet />
-      <footer>Global layout footer</footer>
+      {/* <footer>Global layout footer</footer> */}
     </div>
   )
 }

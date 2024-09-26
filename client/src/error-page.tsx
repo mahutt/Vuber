@@ -14,7 +14,7 @@ export default function ErrorPage() {
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="text-center">
         <h1 className="text-5xl font-bold mb-4 text-black">
-          Something went wrong
+          Something went wrong.
         </h1>
         <p className="text-xl mb-4 text-gray-700">
           Sorry, an unexpected error has occurred.
