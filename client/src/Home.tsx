@@ -1,12 +1,22 @@
 function Home() {
   return (
     <section className="flex-1 relative">
+      <div className="max-w-screen-xl mx-auto px-16 h-full flex items-center justify-around">
+        <div>
+          {/* form goes here */}
+          form
+        </div>
+        <div>
+          {/* map goes here */}
+          map
+        </div>
+      </div>
       <div className="group absolute bottom-4 right-4 bg-white drop-shadow p-2 rounded-full cursor-pointer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth={1.5}
+          strokeWidth={1}
           stroke="currentColor"
           className="size-10 group-hover:scale-110 transition-transform duration-300"
         >
