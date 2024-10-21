@@ -16,6 +16,7 @@ import {
   EnvelopeClosedIcon,
   ChatBubbleIcon,
 } from '@radix-ui/react-icons'
+import { Truck } from 'lucide-react'
 import React from 'react'
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -62,7 +63,7 @@ export default function Root() {
                     </Link>
                     <Link to="/register">
                       <div className="flex flex-row gap-2 items-center">
-                        <RocketIcon className="h-4 w-4" />
+                        <Truck className="h-4 w-4" />
                         Drive for us
                       </div>
                     </Link>
