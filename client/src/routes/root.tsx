@@ -1,4 +1,5 @@
 import { Outlet, Link as ReactRouterLink, useLocation } from 'react-router-dom'
+import { useAuth } from '@/providers/AuthProvider'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,6 +18,7 @@ import {
 } from '@radix-ui/react-icons'
 import { Truck } from 'lucide-react'
 import React from 'react'
+import { Button } from '@/components/ui/button'
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   to: string
@@ -38,6 +40,7 @@ const Link: React.FC<LinkProps> = ({ to, ...props }) => {
 }
 
 export default function Root() {
+  const { user } = useAuth()
   return (
     <div className="h-screen flex flex-col">
       <header className="bg-black">
@@ -100,11 +103,29 @@ export default function Root() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex-1"></div>
-          <ReactRouterLink to="/profile">
-            <Avatar>
-              <AvatarFallback>PR</AvatarFallback>
-            </Avatar>
-          </ReactRouterLink>
+          {user ? (
+            <ReactRouterLink to={user ? `/profile` : `/login`}>
+              <Avatar>
+                <AvatarFallback>
+                  {user.name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </ReactRouterLink>
+          ) : (
+            <>
+              <ReactRouterLink
+                to="/signup"
+                className="text-blue-400 hover:underline text-sm font-medium"
+              >
+                Sign up
+              </ReactRouterLink>
+              <ReactRouterLink to="/login">
+                <Button className="bg-blue-500 hover:bg-blue-400 transition-color duration-200">
+                  Sign in
+                </Button>
+              </ReactRouterLink>
+            </>
+          )}
         </div>
       </header>
       <Outlet />
