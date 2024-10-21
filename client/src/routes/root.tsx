@@ -10,7 +10,6 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 import {
-  RocketIcon,
   CubeIcon,
   QuestionMarkCircledIcon,
   EnvelopeClosedIcon,
