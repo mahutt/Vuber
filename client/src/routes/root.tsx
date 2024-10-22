@@ -128,7 +128,9 @@ export default function Root() {
           )}
         </div>
       </header>
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
       {/* <footer>Global layout footer</footer> */}
     </div>
   )
