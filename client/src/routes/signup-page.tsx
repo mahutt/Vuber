@@ -1,6 +1,29 @@
-import Container from '@/components/container'
 import { ReactNode, useState } from 'react'
-import { Package, Truck } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import Container from '@/components/container'
+import { Package, Truck, ArrowUpRightIcon } from 'lucide-react'
+
+const formSchema = z.object({
+  email: z
+    .string()
+    .email({ message: 'Users must register with a valid email address' }),
+  password: z.string().min(8, {
+    message: 'Password must be at least 8 characters long',
+  }),
+})
 
 function OptionCard({
   children,
@@ -35,25 +58,89 @@ function OptionCard({
 
 export default function SignupPage() {
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+    console.log(userType)
+  }
   return (
     <Container>
-      <div className="h-full flex flex-row justify-center gap-4 items-center">
-        <OptionCard
-          title="Sender"
-          tag="I want to send packages."
-          active={userType === 'sender'}
-          onMouseDown={() => setUserType('sender')}
-        >
-          <Package className="w-32 h-32 text-gray-800" />
-        </OptionCard>
-        <OptionCard
-          title="Driver"
-          tag="I want to deliver packages."
-          active={userType === 'driver'}
-          onMouseDown={() => setUserType('driver')}
-        >
-          <Truck className="w-32 h-32 text-gray-800" />
-        </OptionCard>
+      <div className="h-full flex justify-center items-center">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-[484px] flex flex-col gap-4 justify-center items-stretch"
+          >
+            <div className="w-full py-2">
+              <h1 className="text-2xl font-bold tracking-tight">
+                Create your Vüber account
+              </h1>
+            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} className="py-5" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} className="py-5" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormItem>
+              <FormLabel className="text-gray-700">Account type</FormLabel>
+              <div className="flex flex-row justify-center gap-4">
+                <OptionCard
+                  title="Sender"
+                  tag="I want to send packages."
+                  active={userType === 'sender'}
+                  onMouseDown={() => setUserType('sender')}
+                >
+                  <Package className="w-32 h-32 text-gray-800" />
+                </OptionCard>
+                <OptionCard
+                  title="Driver"
+                  tag="I want to deliver packages."
+                  active={userType === 'driver'}
+                  onMouseDown={() => setUserType('driver')}
+                >
+                  <Truck className="w-32 h-32 text-gray-800" />
+                </OptionCard>
+              </div>
+            </FormItem>
+            <Button type="submit" className="py-6 rounded-lg">
+              Create account
+            </Button>
+            <Link
+              to="/login"
+              className="text-blue-500 hover:underline text-center"
+            >
+              Already have an account? Log in
+              <ArrowUpRightIcon className="w-4 h-4 inline-block ml-1" />
+            </Link>
+          </form>
+        </Form>
       </div>
     </Container>
   )
