@@ -11,6 +11,7 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import DropdownRadio from '@/components/dropdown-radio'
 
 export interface Parcel {
@@ -126,6 +127,15 @@ export default function ParcelForm({
                 }
               />
             </div>
+          </div>
+          <div>
+            <Label>Description (optional)</Label>
+            <Textarea
+              value={parcel.description}
+              onChange={(e) =>
+                setParcel({ ...parcel, description: e.target.value })
+              }
+            />
           </div>
           <div className="ml-auto">
             <Button
