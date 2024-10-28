@@ -31,10 +31,12 @@ export default function ParcelForm({
   open,
   setOpen,
   addParcel,
+  className = '',
 }: {
   open: boolean
   setOpen: (open: boolean) => void
   addParcel: (parcel: Parcel) => void
+  className: string
 }) {
   const [parcel, setParcel] = useState<Parcel>({
     name: 'Parcel 1',
@@ -47,7 +49,9 @@ export default function ParcelForm({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="bg-white shadow rounded-lg w-[250px] h-[200px] flex justify-center items-center">
+      <DialogTrigger
+        className={`${className} flex justify-center items-center`}
+      >
         <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
           <PlusIcon className="w-4 h-4" />
           Add a parcel
@@ -56,7 +60,12 @@ export default function ParcelForm({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <input type="text" defaultValue={'Package 1'} className="rounded" />
+            <input
+              type="text"
+              className="rounded"
+              value={parcel.name}
+              onChange={(e) => setParcel({ ...parcel, name: e.target.value })}
+            />
             <DialogDescription>Add a parcel to your order</DialogDescription>
           </DialogTitle>
         </DialogHeader>
