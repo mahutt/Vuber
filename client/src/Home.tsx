@@ -1,6 +1,5 @@
 import { Button } from './components/ui/button'
 import { LocationInput } from './components/location-input'
-import Chatbot from './components/chatbot'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 
 function Home() {
@@ -28,7 +27,6 @@ function Home() {
           ></img>
         </div>
       </div>
-      <Chatbot />
     </section>
   )
 }

@@ -19,6 +19,7 @@ import {
 import { Truck } from 'lucide-react'
 import React from 'react'
 import { Button } from '@/components/ui/button'
+import Chatbot from '@/components/chatbot'
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   to: string
@@ -132,6 +133,7 @@ export default function Root() {
         <Outlet />
       </div>
       {/* <footer>Global layout footer</footer> */}
+      <Chatbot />
     </div>
   )
 }
