@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
-import ParcelForm, { Parcel } from '@/components/parcel-form'
+import ParcelForm, { Parcel, ParcelFormActions } from '@/components/parcel-form'
+import { PlusIcon } from '@radix-ui/react-icons'
 import { Weight, Box, Trash2 } from 'lucide-react'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 
 export default function OrderPage() {
-  const [formIsOpen, setFormIsOpen] = useState(false)
+  const parcelForm = useRef<ParcelFormActions>(null)
   const [parcels, setParcels] = useLocalStorage<Parcel[]>('order-draft', [])
   const deleteParcel = (index: number) => {
     setParcels([...parcels.slice(0, index), ...parcels.slice(index + 1)])
@@ -32,18 +33,35 @@ export default function OrderPage() {
                 handleDelete={() => deleteParcel(index)}
               />
             ))}
-            <ParcelForm
-              className={packageCardStyling}
-              open={formIsOpen}
-              setOpen={setFormIsOpen}
-              addParcel={(parcel: Parcel) => {
-                setParcels([...parcels, parcel])
-                setFormIsOpen(false)
+            <button
+              onClick={() => {
+                parcelForm.current?.setParcel({
+                  name: `Parcel ${parcels.length + 1}`,
+                  description: '',
+                  weight: 1,
+                  weightUnit: 'lb',
+                  size: { width: 1, height: 1, length: 1 },
+                  sizeUnit: 'in',
+                })
+                parcelForm.current?.open()
               }}
-            />
+              className={`${packageCardStyling} flex justify-center items-center`}
+            >
+              <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
+                <PlusIcon className="w-4 h-4" />
+                Add a parcel
+              </div>
+            </button>
           </div>
         </div>
       </div>
+      <ParcelForm
+        ref={parcelForm}
+        addParcel={(parcel: Parcel) => {
+          setParcels([...parcels, parcel])
+          parcelForm.current?.close()
+        }}
+      />
     </Container>
   )
 }
@@ -60,8 +78,8 @@ function ParcelCard({
   handleDelete: () => void
 }) {
   return (
-    <div className={`${packageCardStyling} p-5 flex flex-col`}>
-      <div className="flex justify-between items-center">
+    <button className={`${packageCardStyling} p-5 flex flex-col items-start`}>
+      <div className="flex justify-between items-center w-full">
         <div className="text-lg font-semibold">{parcel.name}</div>
         <div
           onClick={handleDelete}
@@ -81,6 +99,6 @@ function ParcelCard({
         {getVolume(parcel)} {parcel.sizeUnit}
         <sup>3</sup>
       </div>
-    </div>
+    </button>
   )
 }

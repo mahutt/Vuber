@@ -1,13 +1,11 @@
-import { useState } from 'react'
+import { useState, forwardRef, useImperativeHandle } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger,
 } from '@/components/ui/dialog'
-import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -27,17 +25,17 @@ export interface Parcel {
   sizeUnit: 'in' | 'cm'
 }
 
-export default function ParcelForm({
-  open,
-  setOpen,
-  addParcel,
-  className = '',
-}: {
-  open: boolean
-  setOpen: (open: boolean) => void
-  addParcel: (parcel: Parcel) => void
-  className: string
-}) {
+export interface ParcelFormActions {
+  open: () => void
+  close: () => void
+  getParcel: () => Parcel
+  setParcel: (parcel: Parcel) => void
+}
+
+const ParcelForm = forwardRef<
+  ParcelFormActions,
+  { addParcel: (parcel: Parcel) => void }
+>(({ addParcel }, ref) => {
   const [parcel, setParcel] = useState<Parcel>({
     name: 'Parcel 1',
     description: '',
@@ -46,17 +44,25 @@ export default function ParcelForm({
     size: { width: 1, height: 1, length: 1 },
     sizeUnit: 'in',
   })
+  const [isOpen, setIsOpen] = useState(false)
+
+  useImperativeHandle(ref, () => ({
+    open: () => {
+      setIsOpen(true)
+    },
+    close: () => {
+      setIsOpen(false)
+    },
+    getParcel: () => {
+      return parcel
+    },
+    setParcel: (p: Parcel) => {
+      setParcel(p)
+    },
+  }))
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        className={`${className} flex justify-center items-center`}
-      >
-        <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
-          <PlusIcon className="w-4 h-4" />
-          Add a parcel
-        </div>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -159,4 +165,6 @@ export default function ParcelForm({
       </DialogContent>
     </Dialog>
   )
-}
+})
+
+export default ParcelForm
