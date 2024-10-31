@@ -30,12 +30,17 @@ export interface ParcelFormActions {
   close: () => void
   getParcel: () => Parcel
   setParcel: (parcel: Parcel) => void
+  setEditIndex: (index: number | null) => void
 }
 
 const ParcelForm = forwardRef<
   ParcelFormActions,
-  { addParcel: (parcel: Parcel) => void }
->(({ addParcel }, ref) => {
+  {
+    addParcel: (parcel: Parcel) => void
+    onEdit: (parcel: Parcel, index: number) => void
+  }
+>(({ addParcel, onEdit }, ref) => {
+  const [editIndex, setEditIndex] = useState<number | null>(null)
   const [parcel, setParcel] = useState<Parcel>({
     name: 'Parcel 1',
     description: '',
@@ -59,7 +64,19 @@ const ParcelForm = forwardRef<
     setParcel: (p: Parcel) => {
       setParcel(p)
     },
+    setEditIndex: (index: number | null) => {
+      setEditIndex(index)
+    },
   }))
+
+  const handleSubmit = () => {
+    if (editIndex !== null) {
+      onEdit(parcel, editIndex)
+    } else {
+      addParcel(parcel)
+    }
+    setIsOpen(false)
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -72,7 +89,11 @@ const ParcelForm = forwardRef<
               value={parcel.name}
               onChange={(e) => setParcel({ ...parcel, name: e.target.value })}
             />
-            <DialogDescription>Add a parcel to your order</DialogDescription>
+            <DialogDescription>
+              {editIndex !== undefined
+                ? 'Edit parcel'
+                : 'Add a parcel to your order'}
+            </DialogDescription>
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-2">
@@ -153,12 +174,8 @@ const ParcelForm = forwardRef<
             />
           </div>
           <div className="ml-auto">
-            <Button
-              onClick={() => {
-                addParcel(parcel)
-              }}
-            >
-              Add parcel
+            <Button onClick={handleSubmit}>
+              {editIndex !== undefined ? 'Update parcel' : 'Add parcel'}
             </Button>
           </div>
         </div>

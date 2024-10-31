@@ -3,7 +3,7 @@ import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
 import ParcelForm, { Parcel, ParcelFormActions } from '@/components/parcel-form'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { PlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { Weight, Box, Trash2 } from 'lucide-react'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
@@ -11,9 +11,40 @@ const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 export default function OrderPage() {
   const parcelForm = useRef<ParcelFormActions>(null)
   const [parcels, setParcels] = useLocalStorage<Parcel[]>('order-draft', [])
+
   const deleteParcel = (index: number) => {
     setParcels([...parcels.slice(0, index), ...parcels.slice(index + 1)])
   }
+
+  const editParcel = (index: number) => {
+    parcelForm.current?.setEditIndex(index)
+    parcelForm.current?.setParcel(parcels[index])
+    parcelForm.current?.open()
+  }
+
+  const addParcel = () => {
+    parcelForm.current?.setEditIndex(null)
+    parcelForm.current?.setParcel({
+      name: `Parcel ${parcels.length + 1}`,
+      description: '',
+      weight: 1,
+      weightUnit: 'lb',
+      size: { width: 1, height: 1, length: 1 },
+      sizeUnit: 'in',
+    })
+    parcelForm.current?.open()
+  }
+
+  const handleEditSubmit = (updatedParcel: Parcel, index: number) => {
+    const newParcels = [...parcels]
+    newParcels[index] = updatedParcel
+    setParcels(newParcels)
+  }
+
+  const handleAddSubmit = (parcel: Parcel) => {
+    setParcels([...parcels, parcel])
+  }
+
   return (
     <Container>
       <div className="h-full flex flex-row items-center gap-10 py-10">
@@ -31,20 +62,11 @@ export default function OrderPage() {
                 key={index}
                 parcel={parcel}
                 handleDelete={() => deleteParcel(index)}
+                handleEdit={() => editParcel(index)}
               />
             ))}
             <button
-              onClick={() => {
-                parcelForm.current?.setParcel({
-                  name: `Parcel ${parcels.length + 1}`,
-                  description: '',
-                  weight: 1,
-                  weightUnit: 'lb',
-                  size: { width: 1, height: 1, length: 1 },
-                  sizeUnit: 'in',
-                })
-                parcelForm.current?.open()
-              }}
+              onClick={addParcel}
               className={`${packageCardStyling} flex justify-center items-center`}
             >
               <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
@@ -57,10 +79,8 @@ export default function OrderPage() {
       </div>
       <ParcelForm
         ref={parcelForm}
-        addParcel={(parcel: Parcel) => {
-          setParcels([...parcels, parcel])
-          parcelForm.current?.close()
-        }}
+        addParcel={handleAddSubmit}
+        onEdit={handleEditSubmit}
       />
     </Container>
   )
@@ -73,19 +93,29 @@ function getVolume(parcel: Parcel) {
 function ParcelCard({
   parcel,
   handleDelete,
+  handleEdit,
 }: {
   parcel: Parcel
   handleDelete: () => void
+  handleEdit: () => void
 }) {
   return (
-    <button className={`${packageCardStyling} p-5 flex flex-col items-start`}>
+    <div className={`${packageCardStyling} p-5 flex flex-col items-start`}>
       <div className="flex justify-between items-center w-full">
         <div className="text-lg font-semibold">{parcel.name}</div>
-        <div
-          onClick={handleDelete}
-          className="cursor-pointer text-muted-foreground"
-        >
-          <Trash2 className="w-4 h-4" />
+        <div className="flex gap-2">
+          <div
+            onClick={handleEdit}
+            className="cursor-pointer text-muted-foreground"
+          >
+            <Pencil1Icon className="w-4 h-4" />
+          </div>
+          <div
+            onClick={handleDelete}
+            className="cursor-pointer text-muted-foreground"
+          >
+            <Trash2 className="w-4 h-4" />
+          </div>
         </div>
       </div>
       <div className="text-sm text-muted-foreground">{parcel.description}</div>
@@ -99,6 +129,6 @@ function ParcelCard({
         {getVolume(parcel)} {parcel.sizeUnit}
         <sup>3</sup>
       </div>
-    </button>
+    </div>
   )
 }
