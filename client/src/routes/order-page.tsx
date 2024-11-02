@@ -3,16 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
-import ParcelForm, { Parcel, ParcelFormActions } from '@/components/parcel-form'
+import ParcelForm, {
+  Parcel,
+  ParcelFormActions,
+} from '@/components/order-page/parcel-form'
+import ParcelCard from '@/components/order-page/parcel-card'
 import FadeInWrapper from '@/components/fade-in-wrapper'
 import Map from '@/components/map'
-import {
-  PlusIcon,
-  Pencil1Icon,
-  CubeIcon,
-  ArrowRightIcon,
-} from '@radix-ui/react-icons'
-import { Weight, Box, Trash2 } from 'lucide-react'
+import { PlusIcon, CubeIcon, ArrowRightIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
@@ -143,6 +141,7 @@ export default function OrderPage() {
                       parcel={parcel}
                       handleDelete={() => deleteParcel(index)}
                       handleEdit={() => editParcel(index)}
+                      className={packageCardStyling}
                     />
                   ))}
                   <button
@@ -166,52 +165,5 @@ export default function OrderPage() {
         onEdit={handleEditSubmit}
       />
     </Container>
-  )
-}
-
-function getVolume(parcel: Parcel) {
-  return parcel.size.width * parcel.size.height * parcel.size.length
-}
-
-function ParcelCard({
-  parcel,
-  handleDelete,
-  handleEdit,
-}: {
-  parcel: Parcel
-  handleDelete: () => void
-  handleEdit: () => void
-}) {
-  return (
-    <div className={`${packageCardStyling} p-5 flex flex-col items-start`}>
-      <div className="flex justify-between items-center w-full">
-        <div className="text-lg font-semibold">{parcel.name}</div>
-        <div className="flex gap-2">
-          <div
-            onClick={handleEdit}
-            className="cursor-pointer text-muted-foreground"
-          >
-            <Pencil1Icon className="w-4 h-4" />
-          </div>
-          <div
-            onClick={handleDelete}
-            className="cursor-pointer text-muted-foreground"
-          >
-            <Trash2 className="w-4 h-4" />
-          </div>
-        </div>
-      </div>
-      <div className="text-sm text-muted-foreground">{parcel.description}</div>
-      <div className="flex-1"></div>
-      <div className="text-sm text-muted-foreground">
-        <Weight className="w-5 h-5 inline pr-1" />
-        {parcel.weight} {parcel.weightUnit}
-      </div>
-      <div className="text-sm text-muted-foreground">
-        <Box className="w-5 h-5 inline pr-1" />
-        {getVolume(parcel)} {parcel.sizeUnit}
-        <sup>3</sup>
-      </div>
-    </div>
   )
 }
