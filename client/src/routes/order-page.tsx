@@ -1,10 +1,19 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
 import ParcelForm, { Parcel, ParcelFormActions } from '@/components/parcel-form'
-import { PlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
+import FadeInWrapper from '@/components/fade-in-wrapper'
+import Map from '@/components/map'
+import {
+  PlusIcon,
+  Pencil1Icon,
+  CubeIcon,
+  ArrowRightIcon,
+} from '@radix-ui/react-icons'
 import { Weight, Box, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 
@@ -45,36 +54,110 @@ export default function OrderPage() {
     setParcels([...parcels, parcel])
   }
 
+  const pickUpLocation = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    setTimeout(() => {
+      pickUpLocation.current?.focus()
+    }, 250)
+  }, [])
+
+  const [startLocation, setStartLocation] = useState<string>('')
+  const [endLocation, setEndLocation] = useState<string>('')
+  const [addParcelPhase, setAddParcelPhase] = useState<boolean>(false)
+  const navigate = useNavigate()
+
   return (
     <Container>
       <div className="h-full flex flex-row items-center gap-10 py-10">
-        <div className="flex flex-col gap-4 max-w-[300px]">
-          <div className="text-5xl font-extrabold tracking-tight mb-2">
-            Place an order...
-          </div>
-          <LocationInput placeholder="From" />
-          <LocationInput placeholder="To" filled={true} />
-        </div>
-        <div className="w-full h-full border shadow rounded-lg bg-slate-100">
-          <div className="flex flex-row flex-wrap p-5 gap-5">
-            {parcels.map((parcel, index) => (
-              <ParcelCard
-                key={index}
-                parcel={parcel}
-                handleDelete={() => deleteParcel(index)}
-                handleEdit={() => editParcel(index)}
-              />
-            ))}
-            <button
-              onClick={addParcel}
-              className={`${packageCardStyling} flex justify-center items-center`}
+        <FadeInWrapper className="h-full">
+          <div className="h-full flex flex-col gap-4 max-w-[300px] justify-center">
+            <div
+              className={`text-3xl font-bold tracking-tight mb-2 transition-height duration-500 ease-in-out overflow-hidden
+                 ${addParcelPhase ? 'h-0' : 'h-[108px]'}`}
             >
-              <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
-                <PlusIcon className="w-4 h-4" />
-                Add a parcel
-              </div>
-            </button>
+              Where should we deliver your package?
+            </div>
+            <LocationInput
+              placeholder="From"
+              ref={pickUpLocation}
+              value={startLocation}
+              onChange={(e) => setStartLocation(e.target.value)}
+            />
+            <LocationInput
+              placeholder="To"
+              filled={true}
+              value={endLocation}
+              onChange={(e) => setEndLocation(e.target.value)}
+            />
+
+            <div
+              className={`transition-height duration-500 ease-in-out
+                 ${addParcelPhase ? 'h-full' : 'h-0'}`}
+            />
+
+            <FadeInWrapper control={!!startLocation && !!endLocation}>
+              {addParcelPhase && (
+                <FadeInWrapper delay={75} className="flex justify-between mb-2">
+                  <div className="text-3xl font-bold tracking-tight">
+                    Total:
+                  </div>
+                  <div className="text-3xl font-bold tracking-tight">$0.00</div>
+                </FadeInWrapper>
+              )}
+              <Button
+                onClick={() => {
+                  if (!addParcelPhase) {
+                    setAddParcelPhase(true)
+                  } else {
+                    navigate('/payment')
+                  }
+                }}
+                className="w-full rounded-lg"
+              >
+                {addParcelPhase ? (
+                  <>
+                    Proceed to Payment
+                    <ArrowRightIcon className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <CubeIcon className="w-4 h-4" />
+                    Add Parcel Info
+                  </>
+                )}
+              </Button>
+            </FadeInWrapper>
           </div>
+        </FadeInWrapper>
+        <div className="w-full h-full relative">
+          <FadeInWrapper className="w-full h-full" delay={75}>
+            <Map startLocation={startLocation} endLocation={endLocation} />
+          </FadeInWrapper>
+          {addParcelPhase && (
+            <FadeInWrapper className="w-full h-full absolute top-0 left-0">
+              <div className="w-full h-full border shadow rounded-2xl bg-slate-100">
+                <div className="flex flex-row flex-wrap p-5 gap-5">
+                  {parcels.map((parcel, index) => (
+                    <ParcelCard
+                      key={index}
+                      parcel={parcel}
+                      handleDelete={() => deleteParcel(index)}
+                      handleEdit={() => editParcel(index)}
+                    />
+                  ))}
+                  <button
+                    onClick={addParcel}
+                    className={`${packageCardStyling} flex justify-center items-center`}
+                  >
+                    <div className="text-sm font-medium text-muted-foreground flex gap-1 items-center">
+                      <PlusIcon className="w-4 h-4" />
+                      Add a parcel
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </FadeInWrapper>
+          )}
         </div>
       </div>
       <ParcelForm

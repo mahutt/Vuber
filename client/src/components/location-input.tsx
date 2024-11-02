@@ -24,11 +24,16 @@ const LocationInput = forwardRef<HTMLInputElement, LocationInputProps>(
         </div>
         <input
           onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
           className="outline-none ring-0 focus:ring-0 focus:outline-none bg-inherit"
           type={type}
           ref={ref}
           {...props}
+          onBlur={(e) => {
+            setFocused(false)
+            if (props.onBlur) {
+              props.onBlur(e)
+            }
+          }}
         />
       </div>
     )

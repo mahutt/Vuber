@@ -90,7 +90,7 @@ const ParcelForm = forwardRef<
               onChange={(e) => setParcel({ ...parcel, name: e.target.value })}
             />
             <DialogDescription>
-              {editIndex !== undefined
+              {editIndex !== null
                 ? 'Edit parcel'
                 : 'Add a parcel to your order'}
             </DialogDescription>
@@ -175,7 +175,7 @@ const ParcelForm = forwardRef<
           </div>
           <div className="ml-auto">
             <Button onClick={handleSubmit}>
-              {editIndex !== undefined ? 'Update parcel' : 'Add parcel'}
+              {editIndex !== null ? 'Update parcel' : 'Add parcel'}
             </Button>
           </div>
         </div>
