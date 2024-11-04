@@ -17,6 +17,7 @@ import {
   GlobeIcon,
 } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
+import QuoteDisplay from '@/components/order-page/quote-display'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 
@@ -104,7 +105,7 @@ export default function OrderPage() {
                   <div className="text-3xl font-bold tracking-tight">
                     Total:
                   </div>
-                  <div className="text-3xl font-bold tracking-tight">$0.00</div>
+                  <QuoteDisplay className="h-full text-3xl font-bold tracking-tight" />
                 </FadeInWrapper>
               )}
               <Button
