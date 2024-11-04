@@ -60,9 +60,13 @@ export default function OrderPage() {
 
   const pickUpLocation = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    setTimeout(() => {
-      pickUpLocation.current?.focus()
-    }, 250)
+    if (startLocation !== '' && endLocation !== '') {
+      setAddParcelPhase(true)
+    } else {
+      setTimeout(() => {
+        pickUpLocation.current?.focus()
+      }, 250)
+    }
   }, [])
   const [startLocation, setStartLocation] = useLocalStorage<string>(
     'start-location',

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import useLocalStorage from 'use-local-storage'
 import { Button } from './components/ui/button'
 import { LocationInput } from './components/location-input'
@@ -34,10 +35,12 @@ function Home() {
             value={endLocation}
             onChange={(e) => setEndLocation(e.target.value)}
           />
-          <Button>
-            Get Quote
-            <ArrowTopRightIcon className="w-4 h-4 ml-2" />
-          </Button>
+          <Link to="/order">
+            <Button>
+              Get Quote
+              <ArrowTopRightIcon className="w-4 h-4 ml-2" />
+            </Button>
+          </Link>
         </div>
         <div className="w-full h-full max-w-[500px] max-h-[500px]">
           {import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ? (
