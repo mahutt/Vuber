@@ -64,9 +64,19 @@ export default function OrderPage() {
       pickUpLocation.current?.focus()
     }, 250)
   }, [])
-
-  const [startLocation, setStartLocation] = useState<string>('')
-  const [endLocation, setEndLocation] = useState<string>('')
+  const [startLocation, setStartLocation] = useLocalStorage<string>(
+    'start-location',
+    ''
+  )
+  const [endLocation, setEndLocation] = useLocalStorage<string>(
+    'end-location',
+    ''
+  )
+  useEffect(() => {
+    if (addParcelPhase) {
+      setAddParcelPhase(false)
+    }
+  }, [startLocation, endLocation])
   const [addParcelPhase, setAddParcelPhase] = useState<boolean>(false)
   const navigate = useNavigate()
 
