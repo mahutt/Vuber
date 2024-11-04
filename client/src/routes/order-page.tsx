@@ -10,7 +10,12 @@ import ParcelForm, {
 import ParcelCard from '@/components/order-page/parcel-card'
 import FadeInWrapper from '@/components/fade-in-wrapper'
 import Map from '@/components/map'
-import { PlusIcon, CubeIcon, ArrowRightIcon } from '@radix-ui/react-icons'
+import {
+  PlusIcon,
+  CubeIcon,
+  ArrowRightIcon,
+  GlobeIcon,
+} from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
@@ -129,7 +134,13 @@ export default function OrderPage() {
         </FadeInWrapper>
         <div className="w-full h-full relative">
           <FadeInWrapper className="w-full h-full" delay={75}>
-            <Map startLocation={startLocation} endLocation={endLocation} />
+            {import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ? (
+              <Map startLocation={startLocation} endLocation={endLocation} />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center">
+                <GlobeIcon className="w-64 h-64 text-gray-500" />
+              </div>
+            )}
           </FadeInWrapper>
           {addParcelPhase && (
             <FadeInWrapper className="w-full h-full absolute top-0 left-0">
