@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+import { useAuth } from '@/providers/AuthProvider'
 
 const LoginFormSchema = z.object({
   email: z.string().email(),
@@ -20,6 +21,7 @@ const LoginFormSchema = z.object({
 })
 
 export default function LoginPage() {
+  const { login } = useAuth()
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -28,8 +30,8 @@ export default function LoginPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+    await login(values.email, values.password)
   }
 
   return (

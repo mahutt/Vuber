@@ -33,8 +33,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkLoggedIn = async () => {
       try {
-        const { data } = await api.get<{ user: User }>('/users/current')
-        setUser(data.user)
+        const { data } = await api.get<User | null>('/users/current')
+        setUser(data)
       } catch (error) {
         setUser(null)
       } finally {
@@ -45,10 +45,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [])
 
   const login = async (name: string, password: string) => {
-    const { data } = await api.post<{ user: User }>('/login', {
-      name,
-      password,
-    })
+    const { data } = await api.post<{ accessToken: string; user: User }>(
+      'users/signin',
+      {
+        name,
+        password,
+      }
+    )
+    localStorage.setItem('accessToken', data.accessToken)
     setUser(data.user)
   }
 

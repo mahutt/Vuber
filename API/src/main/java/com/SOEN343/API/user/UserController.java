@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.SOEN343.API.config.auth.TokenProvider;
-import com.SOEN343.API.user.dto.JwtDto;
-import com.SOEN343.API.user.dto.SignInDto;
-import com.SOEN343.API.user.dto.SignUpDto;
+import com.SOEN343.API.user.dto.*;
 
 //Handle http requests related to User objects
 @RestController
@@ -45,8 +45,16 @@ public class UserController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<Object> getAuthenticatedUser() {
-        return userService.getAuthenticatedUser();
+    public ResponseEntity<UserDto> getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            var user = authentication.getPrincipal();
+            if (user instanceof User) {
+                User authenticatedUser = (User) user;
+                return ResponseEntity.ok(new UserDto(authenticatedUser.getId(), authenticatedUser.getUsername()));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
     @PostMapping("/signup")
@@ -56,11 +64,12 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtDto> signIn(@RequestBody @Valid SignInDto data) {
+    public ResponseEntity<SignInResponseDto> signIn(@RequestBody @Valid SignInDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.name(), data.password());
         var authUser = authenticationManager.authenticate(usernamePassword);
-        var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
-        return ResponseEntity.ok(new JwtDto(accessToken));
+        User user = (User) authUser.getPrincipal();
+        String accessToken = tokenService.generateAccessToken(user);
+        return ResponseEntity.ok(new SignInResponseDto(accessToken, user));
     }
 
     @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
