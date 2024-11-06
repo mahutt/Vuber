@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
-
 //Logic for user class
 @Service
 public class UserService {
@@ -15,6 +14,10 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public ResponseEntity<Object> getAuthenticatedUser() {
+        return ResponseEntity.ok("Authenticated User");
     }
 
     public ResponseEntity<Object> newUser(User user) {
@@ -64,5 +67,3 @@ public class UserService {
         return ResponseEntity.ok(user);
     }
 }
-
-

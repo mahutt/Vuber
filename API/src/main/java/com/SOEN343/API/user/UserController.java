@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 //Handle http requests related to User objects
 @RestController
 @RequestMapping("/api/users")
@@ -22,29 +21,33 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<Object> getAuthenticatedUser() {
+        return userService.getAuthenticatedUser();
+    }
+
     @PostMapping("/createUser")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         return userService.newUser(user);
 
     }
-    
-    @PutMapping("/updateUser/{id}") //<--    The {id} is the @PathVariable parameter to this function
+
+    @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
     public ResponseEntity<Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
         return userService.updateUser(id, user);
 
     }
-    
-    @DeleteMapping("/deleteUser/{id}") //<--    The {id} is the @PathVariable parameter to this function
+
+    @DeleteMapping("/deleteUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
     public ResponseEntity<Object> updateUser(@PathVariable Integer id) {
         return userService.deleteUser(id);
 
     }
+
     @GetMapping("/getUserById/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable Integer id){
+    public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
         return userService.getUser(id);
     }
-
-
-    
 
 }
