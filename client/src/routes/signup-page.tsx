@@ -16,6 +16,7 @@ import {
 import Container from '@/components/container'
 import { Package, Truck, ArrowUpRightIcon } from 'lucide-react'
 import { useAuth } from '@/providers/AuthProvider'
+import ErrorBanner from '@/components/error-banner'
 
 const formSchema = z.object({
   email: z
@@ -61,6 +62,7 @@ export default function SignupPage() {
   const { signup, signin } = useAuth()
   const navigate = useNavigate()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
+  const [bannerMessage, setBannerMessage] = useState<string | null>(null)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,7 +75,7 @@ export default function SignupPage() {
       await signin(values.email, values.password)
       navigate('/profile')
     } else {
-      alert('Failed to sign up')
+      setBannerMessage('We could not create your account. Please try again.')
     }
   }
   return (
@@ -89,6 +91,7 @@ export default function SignupPage() {
                 Create your Vüber account
               </h1>
             </div>
+            {bannerMessage && <ErrorBanner message={bannerMessage} />}
             <FormField
               control={form.control}
               name="email"

@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/form'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { useAuth } from '@/providers/AuthProvider'
+import ErrorBanner from '@/components/error-banner'
+import { useState } from 'react'
 
 const LoginFormSchema = z.object({
   email: z.string().email(),
@@ -23,6 +25,7 @@ const LoginFormSchema = z.object({
 export default function LoginPage() {
   const { signin } = useAuth()
   const navigate = useNavigate()
+  const [bannerMessage, setBannerMessage] = useState<string | null>(null)
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -35,7 +38,7 @@ export default function LoginPage() {
     if (await signin(values.email, values.password)) {
       navigate('/profile')
     } else {
-      alert('Invalid email or password')
+      setBannerMessage('Invalid email or password')
     }
   }
 
@@ -47,6 +50,7 @@ export default function LoginPage() {
           className="w-[515px] p-10 border shadow rounded-3xl space-y-6"
         >
           <div className="text-2xl font-bold">Sign in to Vüber</div>
+          {bannerMessage && <ErrorBanner message={bannerMessage} />}
           <FormField
             control={form.control}
             name="email"
