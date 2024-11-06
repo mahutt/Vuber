@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -21,7 +21,8 @@ const LoginFormSchema = z.object({
 })
 
 export default function LoginPage() {
-  const { login } = useAuth()
+  const { signin } = useAuth()
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -31,7 +32,11 @@ export default function LoginPage() {
   })
 
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    await login(values.email, values.password)
+    if (await signin(values.email, values.password)) {
+      navigate('/profile')
+    } else {
+      alert('Invalid email or password')
+    }
   }
 
   return (

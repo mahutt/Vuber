@@ -66,11 +66,15 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<SignInResponseDto> signIn(@RequestBody @Valid SignInDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.name(), data.password());
-        var authUser = authenticationManager.authenticate(usernamePassword);
-        User user = (User) authUser.getPrincipal();
-        UserDto userDto = new UserDto(user.getId(), user.getUsername());
-        String accessToken = tokenService.generateAccessToken(user);
-        return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
+        try {
+            var authUser = authenticationManager.authenticate(usernamePassword);
+            User user = (User) authUser.getPrincipal();
+            UserDto userDto = new UserDto(user.getId(), user.getUsername());
+            String accessToken = tokenService.generateAccessToken(user);
+            return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function

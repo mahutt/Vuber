@@ -14,7 +14,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (name: string, password: string) => Promise<void>
+  signin: (name: string, password: string) => Promise<boolean>
   signup: (name: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
   loading: boolean
@@ -44,28 +44,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkLoggedIn()
   }, [])
 
-  const login = async (name: string, password: string) => {
-    const { data } = await api.post<{ accessToken: string; user: User }>(
-      'users/signin',
-      {
+  const signin = async (name: string, password: string): Promise<boolean> => {
+    return api
+      .post<{ accessToken: string; user: User } | null>('users/signin', {
         name,
         password,
-      }
-    )
-    localStorage.setItem('accessToken', data.accessToken)
-    setUser(data.user)
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          localStorage.setItem('accessToken', response.data.accessToken)
+          setUser(response.data.user)
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(() => false)
   }
 
   const signup = async (name: string, password: string): Promise<boolean> => {
-    const response = await api.post('users/signup', {
-      name,
-      password,
-    })
-    if (response.status === 201) {
-      return true
-    } else {
-      return false
-    }
+    return api
+      .post('users/signup', {
+        name,
+        password,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(() => false)
   }
 
   const logout = async () => {
@@ -74,7 +84,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, signup, loading }}>
+    <AuthContext.Provider value={{ user, signin, logout, signup, loading }}>
       {children}
     </AuthContext.Provider>
   )

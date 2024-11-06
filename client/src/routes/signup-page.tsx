@@ -58,7 +58,7 @@ function OptionCard({
 }
 
 export default function SignupPage() {
-  const { signup, login } = useAuth()
+  const { signup, signin } = useAuth()
   const navigate = useNavigate()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,7 +70,7 @@ export default function SignupPage() {
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (await signup(values.email, values.password)) {
-      await login(values.email, values.password)
+      await signin(values.email, values.password)
       navigate('/profile')
     } else {
       alert('Failed to sign up')
