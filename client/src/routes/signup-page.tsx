@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/form'
 import Container from '@/components/container'
 import { Package, Truck, ArrowUpRightIcon } from 'lucide-react'
+import { useAuth } from '@/providers/AuthProvider'
 
 const formSchema = z.object({
   email: z
@@ -57,6 +58,8 @@ function OptionCard({
 }
 
 export default function SignupPage() {
+  const { signup } = useAuth()
+  const navigate = useNavigate()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,9 +68,10 @@ export default function SignupPage() {
       password: '',
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    console.log(userType)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (await signup(values.email, values.password)) {
+      navigate('/profile')
+    }
   }
   return (
     <Container>

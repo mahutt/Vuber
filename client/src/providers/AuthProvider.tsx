@@ -15,7 +15,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (name: string, password: string) => Promise<void>
-  register: (name: string, password: string) => Promise<void>
+  signup: (name: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
   loading: boolean
 }
@@ -52,12 +52,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(data.user)
   }
 
-  const register = async (name: string, password: string) => {
-    const { data } = await api.post<{ user: User }>('/register', {
-      name,
-      password,
-    })
-    setUser(data.user)
+  const signup = async (name: string, password: string): Promise<boolean> => {
+    const response = await api.post<{ id: number; username: string }>(
+      'users/signup',
+      {
+        name,
+        password,
+      }
+    )
+    if (response.status === 201) {
+      setUser({ id: response.data.id, name: response.data.username })
+      return true
+    } else {
+      return false
+    }
   }
 
   const logout = async () => {
@@ -66,7 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, signup, loading }}>
       {children}
     </AuthContext.Provider>
   )
