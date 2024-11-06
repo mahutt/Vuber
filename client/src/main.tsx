@@ -36,6 +36,10 @@ const router = createBrowserRouter([
         path: 'order',
         element: <OrderPage />,
       },
+      {
+        path: 'profile',
+        element: <div>Profile page placeholder</div>,
+      },
     ],
   },
 ])

@@ -57,15 +57,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signup = async (name: string, password: string): Promise<boolean> => {
-    const response = await api.post<{ id: number; username: string }>(
-      'users/signup',
-      {
-        name,
-        password,
-      }
-    )
+    const response = await api.post('users/signup', {
+      name,
+      password,
+    })
     if (response.status === 201) {
-      setUser({ id: response.data.id, name: response.data.username })
       return true
     } else {
       return false

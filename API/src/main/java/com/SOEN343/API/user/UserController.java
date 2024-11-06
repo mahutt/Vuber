@@ -59,8 +59,8 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody @Valid SignUpDto data) {
-        UserDetails details = userService.signUp(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body((User) details);
+        userService.signUp(data);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/signin")
@@ -68,8 +68,9 @@ public class UserController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.name(), data.password());
         var authUser = authenticationManager.authenticate(usernamePassword);
         User user = (User) authUser.getPrincipal();
+        UserDto userDto = new UserDto(user.getId(), user.getUsername());
         String accessToken = tokenService.generateAccessToken(user);
-        return ResponseEntity.ok(new SignInResponseDto(accessToken, user));
+        return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
     }
 
     @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
