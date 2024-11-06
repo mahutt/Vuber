@@ -17,6 +17,9 @@ public class User implements UserDetails {
     private Integer id;
     private String name;
     private String password;
+    
+
+    
 
     public User(String name, String password) {
         this.name = name;
@@ -55,6 +58,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+  
 
     public Integer getId() {
         return id;
