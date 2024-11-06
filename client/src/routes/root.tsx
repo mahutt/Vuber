@@ -105,7 +105,7 @@ export default function Root() {
           </NavigationMenu>
           <div className="flex-1"></div>
           {user ? (
-            <ReactRouterLink to={user ? `/profile` : `/login`}>
+            <ReactRouterLink to={user ? `/profile` : `/signin`}>
               <Avatar>
                 <AvatarFallback>
                   {user.name.slice(0, 2).toUpperCase()}
@@ -120,7 +120,7 @@ export default function Root() {
               >
                 Sign up
               </ReactRouterLink>
-              <ReactRouterLink to="/login">
+              <ReactRouterLink to="/signin">
                 <Button className="bg-blue-500 hover:bg-blue-400 transition-color duration-200">
                   Sign in
                 </Button>

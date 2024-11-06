@@ -143,7 +143,7 @@ export default function SignupPage() {
               Create account
             </Button>
             <Link
-              to="/login"
+              to="/signin"
               className="text-blue-500 hover:underline text-center"
             >
               Already have an account? Log in

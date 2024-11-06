@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from '@/providers/AuthProvider.tsx'
 import Root from './routes/root.tsx'
-import LoginPage from './routes/login-page.tsx'
+import SigninPage from './routes/signin-page.tsx'
 import OrderPage from './routes/order-page.tsx'
 import SignupPage from './routes/signup-page.tsx'
 import ErrorPage from './error-page.tsx'
@@ -25,8 +25,8 @@ const router = createBrowserRouter([
         element: <div>About page placeholder</div>,
       },
       {
-        path: 'login',
-        element: <LoginPage />,
+        path: 'signin',
+        element: <SigninPage />,
       },
       {
         path: 'signup',

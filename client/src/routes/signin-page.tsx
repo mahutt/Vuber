@@ -17,24 +17,24 @@ import { useAuth } from '@/providers/AuthProvider'
 import ErrorBanner from '@/components/error-banner'
 import { useState } from 'react'
 
-const LoginFormSchema = z.object({
+const SigninFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
 
-export default function LoginPage() {
+export default function SigninPage() {
   const { signin } = useAuth()
   const navigate = useNavigate()
   const [bannerMessage, setBannerMessage] = useState<string | null>(null)
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
+  const form = useForm<z.infer<typeof SigninFormSchema>>({
+    resolver: zodResolver(SigninFormSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+  async function onSubmit(values: z.infer<typeof SigninFormSchema>) {
     if (await signin(values.email, values.password)) {
       navigate('/profile')
     } else {
