@@ -66,7 +66,13 @@ export function Message({
   )
 }
 
-export function MessageInput({ onSend }: { onSend: (input: string) => void }) {
+export function MessageInput({
+  onSend,
+  placeholder,
+}: {
+  onSend: (input: string) => void
+  placeholder?: string
+}) {
   const [value, setValue] = useState<string>('')
   const handleSend = () => {
     onSend(value)
@@ -77,7 +83,12 @@ export function MessageInput({ onSend }: { onSend: (input: string) => void }) {
       <Input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Ask Question Here"
+        placeholder={placeholder}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSend()
+          }
+        }}
       />
       <Button onClick={handleSend}>
         <Send size={24} />

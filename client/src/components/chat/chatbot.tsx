@@ -134,7 +134,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
             })}
           </MessageList>
           <div className="mt-2">
-            <MessageInput onSend={handleSend} />
+            <MessageInput onSend={handleSend} placeholder="Message VuberBot" />
           </div>
         </ChatContainer>
       </CardContent>
