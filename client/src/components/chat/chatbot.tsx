@@ -1,36 +1,47 @@
 import { useState } from 'react'
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
+import useLocalStorage from 'use-local-storage'
 
 import {
-  MainContainer,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Bot, X } from 'lucide-react'
+
+import {
   ChatContainer,
   MessageList,
   Message,
   MessageInput,
-  TypingIndicator,
-} from '@chatscope/chat-ui-kit-react'
+} from '@/components/chat/chat-kit'
 
 const API_KEY = import.meta.env.VITE_OPENAI_SECRET_KEY
 interface MessageType {
   message: string
   sender: string
-  direction: string
+  direction: 'incoming' | 'outgoing'
   position: string // Adjust if neces
 }
-function AiChatBot() {
-  const [typing, setTyping] = useState<Boolean>(false)
-  const [messages, setMessages] = useState<MessageType[]>([
-    {
-      message:
-        'Need a hand with anything? I am your dedicated AI package handleing expert, Vini :) Ask away!',
-      sender: 'ai',
-      direction: 'incoming',
-      position: 'left',
-    },
-  ])
+function Chatbot({ onClose }: { onClose: () => void }) {
+  const [typing, setTyping] = useState<boolean>(false)
+  const [messages, setMessages] = useLocalStorage<MessageType[]>(
+    'chatbot-messages',
+    [
+      {
+        message:
+          'Need a hand with anything? I am your dedicated AI package handleing expert, Vini :) Ask away!',
+        sender: 'ai',
+        direction: 'incoming',
+        position: 'left',
+      },
+    ]
+  )
 
-  const handleSend = async (message: string): Promise<void> => {
-    const newMessage = {
+  const handleSend = async (message: string) => {
+    console.log('User message:', message)
+    const newMessage: MessageType = {
       message: message,
       sender: 'user',
       direction: 'outgoing',
@@ -65,7 +76,7 @@ function AiChatBot() {
 
     //OpenAI api roles "user" -> a message from the app user, "assistant" -> a message from openAI, "System" -> a genreal instruction defining HOW the open AI model should act. Kind of like a pre prompt
     const apiRequestBody = {
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o-mini',
       messages: [
         systemMessage,
         ...apiMessages, //All the text messages
@@ -83,7 +94,7 @@ function AiChatBot() {
     const data = await response.json()
     console.log(data.choices[0].message.content)
 
-    const AiMessage = {
+    const AiMessage: MessageType = {
       message: data.choices[0].message.content,
       sender: 'ai',
       direction: 'incoming',
@@ -95,49 +106,40 @@ function AiChatBot() {
   }
 
   return (
-    <div
-      className="App"
-      style={{
-        position: 'relative',
-        display: 'flex',
-        textAlign: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div style={{ position: 'relative', height: '21.2rem', width: '80%' }}>
-        <h4 style={{ marginTop: '0.4rem' }}>Customer Service Chatbot</h4>
-        <MainContainer>
-          <ChatContainer>
-            <MessageList
-              typingIndicator={
-                typing ? <TypingIndicator content="Vini is typing" /> : ''
-              }
-            >
-              {messages.map((message, i) => {
-                return (
-                  <Message
-                    key={i}
-                    model={{
-                      message: message.message, // Text content
-                      sentTime: 'just now',
-                      sender: message.sender,
-                      direction:
-                        message.direction === 'outgoing'
-                          ? 'outgoing'
-                          : 'incoming', // Adjust direction based on the library's requirement
-                      position:
-                        message.direction === 'outgoing' ? 'last' : 'first', // Adjust if necessary
-                    }}
-                  />
-                )
-              })}
-            </MessageList>
-            <MessageInput placeholder="Ask Question Here" onSend={handleSend} />
-          </ChatContainer>
-        </MainContainer>
-      </div>
-    </div>
+    <Card className="w-[500px] h-[500px] flex flex-col">
+      <CardHeader className="flex flex-row gap-4 items-center">
+        <Bot size={32} />
+        <div className="flex-1">
+          <CardTitle>VuberBot</CardTitle>
+          <CardDescription>Our friendly support bot</CardDescription>
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onClose()
+          }}
+        >
+          <X size={24} />
+        </button>
+      </CardHeader>
+      <CardContent className="h-full overflow-auto">
+        <ChatContainer>
+          <MessageList typingIndicator={typing}>
+            {messages.map((message, i) => {
+              return (
+                <Message key={i} direction={message.direction}>
+                  {message.message}
+                </Message>
+              )
+            })}
+          </MessageList>
+          <div className="mt-2">
+            <MessageInput onSend={handleSend} placeholder="Message VuberBot" />
+          </div>
+        </ChatContainer>
+      </CardContent>
+    </Card>
   )
 }
 
-export default AiChatBot
+export default Chatbot

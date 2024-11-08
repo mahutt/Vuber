@@ -10,7 +10,6 @@ import ProfilePage from './routes/profile-page.tsx'
 
 import ErrorPage from './error-page.tsx'
 import Home from './Home.tsx'
-import AiChatBot from './routes/AiChatbot.tsx'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -43,10 +42,6 @@ const router = createBrowserRouter([
         path: 'profile',
         element: <ProfilePage />,
       },
-      {
-        path: 'chatbot',
-        element: <AiChatBot />
-      }
     ],
   },
 ])

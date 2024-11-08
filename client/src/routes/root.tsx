@@ -1,4 +1,5 @@
 import { Outlet, Link as ReactRouterLink, useLocation } from 'react-router-dom'
+import useLocalStorage from 'use-local-storage'
 import { useAuth } from '@/providers/AuthProvider'
 import {
   NavigationMenu,
@@ -19,11 +20,14 @@ import {
 import { Truck } from 'lucide-react'
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import Chatbot from '@/components/chatbot'
+import ChatbotToggle from '@/components/chat/chatbot-toggle'
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   to: string
 }
+
+const linkStyling =
+  'h-9 rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none'
 
 const Link: React.FC<LinkProps> = ({ to, ...props }) => {
   let location = useLocation()
@@ -31,17 +35,14 @@ const Link: React.FC<LinkProps> = ({ to, ...props }) => {
 
   return (
     <NavigationMenuLink asChild active={isActive}>
-      <ReactRouterLink
-        to={to}
-        {...props}
-        className="h-9 rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
-      />
+      <ReactRouterLink to={to} {...props} className={linkStyling} />
     </NavigationMenuLink>
   )
 }
 
 export default function Root() {
   const { user } = useAuth()
+  const [_, setChatbotOpen] = useLocalStorage<boolean>('chatbot-open', false)
   return (
     <div className="h-screen flex flex-col">
       <header className="bg-black">
@@ -77,12 +78,15 @@ export default function Root() {
                 <NavigationMenuTrigger>Support</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="m-2 flex flex-col w-[250px]">
-                    <Link to="/chatbot">
+                    <button
+                      onClick={() => setChatbotOpen(true)}
+                      className={linkStyling}
+                    >
                       <div className="flex flex-row gap-2 items-center">
                         <ChatBubbleIcon className="h-4 w-4" />
                         Chatbot
                       </div>
-                    </Link>
+                    </button>
                     <Link to="/faq">
                       <div className="flex flex-row gap-2 items-center">
                         <QuestionMarkCircledIcon className="h-4 w-4" />
@@ -133,7 +137,7 @@ export default function Root() {
         <Outlet />
       </div>
       {/* <footer>Global layout footer</footer> */}
-      <Chatbot />
+      <ChatbotToggle />
     </div>
   )
 }
