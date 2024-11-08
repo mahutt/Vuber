@@ -74,7 +74,7 @@ function AiChatBot() {
 
     //OpenAI api roles "user" -> a message from the app user, "assistant" -> a message from openAI, "System" -> a genreal instruction defining HOW the open AI model should act. Kind of like a pre prompt
     const apiRequestBody = {
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o-mini',
       messages: [
         systemMessage,
         ...apiMessages, //All the text messages
