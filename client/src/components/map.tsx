@@ -60,7 +60,9 @@ export default function Map({
   )
 }
 
-const fetchCoordinates = async (location: string) => {
+export const fetchCoordinates = async (
+  location: string
+): Promise<[number, number]> => {
   const response = await fetch(
     `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       location

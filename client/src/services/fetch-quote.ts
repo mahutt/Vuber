@@ -1,5 +1,5 @@
-import api from '@/services/api'
-import { Parcel } from '@/components/order-page/parcel-form'
+// import api from '@/services/api'
+import { Parcel } from '@/types/types'
 
 const fetchQuote = async (parcels: Parcel[]): Promise<number> => {
   //   const { data } = await api.post<{ quote: number }>('/quote', {

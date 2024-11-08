@@ -7,10 +7,7 @@ import React, {
 } from 'react'
 import api from '@/services/api'
 
-interface User {
-  id: number
-  name: string
-}
+import { User } from '@/types/types'
 
 interface AuthContextType {
   user: User | null

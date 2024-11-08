@@ -5,6 +5,7 @@ import { AuthProvider } from '@/providers/AuthProvider.tsx'
 import Root from './routes/root.tsx'
 import SigninPage from './routes/signin-page.tsx'
 import OrderPage from './routes/order-page.tsx'
+import PaymentPage from './routes/payment.tsx'
 import SignupPage from './routes/signup-page.tsx'
 import ProfilePage from './routes/profile-page.tsx'
 
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <ProfilePage />,
+      },
+      {
+        path: 'payment',
+        element: <PaymentPage />,
       },
     ],
   },

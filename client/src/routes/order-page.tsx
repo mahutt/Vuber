@@ -4,9 +4,9 @@ import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
 import ParcelForm, {
-  Parcel,
   ParcelFormActions,
 } from '@/components/order-page/parcel-form'
+import { Parcel } from '@/types/types'
 import ParcelCard from '@/components/order-page/parcel-card'
 import FadeInWrapper from '@/components/fade-in-wrapper'
 import Map from '@/components/map'
