@@ -49,10 +49,10 @@ public class OrderController {
             Parcel parcel = new Parcel();
             parcel.setName(parcelDto.getName());
             parcel.setWeight(parcelDto.getWeight());
-            parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightunit()));
-            parcel.setWidth(parcelDto.getWidth());
-            parcel.setLength(parcelDto.getLength());
-            parcel.setHeight(parcelDto.getHeight());
+            parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightUnit()));
+            parcel.setWidth(parcelDto.getSize().getWidth());
+            parcel.setLength(parcelDto.getSize().getLength());
+            parcel.setHeight(parcelDto.getSize().getHeight());
             parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
             parcel.setDescription(parcelDto.getDescription());
             parcel.setOrder(order); 

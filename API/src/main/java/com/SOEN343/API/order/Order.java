@@ -21,8 +21,11 @@ public class Order {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Parcel> parcels;
 
+    @Column
     private String status;
-    private double total;
+
+    @Column (nullable = true)
+    private Double total;
 
     // location (from and to)
 
