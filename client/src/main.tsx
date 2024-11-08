@@ -6,6 +6,8 @@ import Root from './routes/root.tsx'
 import SigninPage from './routes/signin-page.tsx'
 import OrderPage from './routes/order-page.tsx'
 import SignupPage from './routes/signup-page.tsx'
+import ProfilePage from './routes/profile-page.tsx'
+
 import ErrorPage from './error-page.tsx'
 import Home from './Home.tsx'
 import AiChatBot from './routes/AiChatbot.tsx'
@@ -39,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <div>Profile page placeholder</div>,
+        element: <ProfilePage />,
       },
       {
         path: 'chatbot',
