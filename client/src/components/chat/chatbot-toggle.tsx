@@ -1,9 +1,9 @@
 import useLocalStorage from 'use-local-storage'
 import { MessageCircleMore } from 'lucide-react'
 
-import AiChatBot from '@/routes/AiChatbot'
+import Chatbot from '@/components/chat/chatbot'
 
-export default function Chatbot() {
+export default function ChatbotToggle() {
   const [isOpen, setIsOpen] = useLocalStorage<boolean>('chatbot-open', false)
   return (
     <div
@@ -23,7 +23,7 @@ export default function Chatbot() {
         />
       )}
       {isOpen && (
-        <AiChatBot
+        <Chatbot
           onClose={() => {
             setIsOpen(false)
           }}

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import useLocalStorage from 'use-local-storage'
 
 import {
   Card,
@@ -23,17 +24,20 @@ interface MessageType {
   direction: 'incoming' | 'outgoing'
   position: string // Adjust if neces
 }
-function AiChatBot({ onClose }: { onClose: () => void }) {
+function Chatbot({ onClose }: { onClose: () => void }) {
   const [typing, setTyping] = useState<boolean>(false)
-  const [messages, setMessages] = useState<MessageType[]>([
-    {
-      message:
-        'Need a hand with anything? I am your dedicated AI package handleing expert, Vini :) Ask away!',
-      sender: 'ai',
-      direction: 'incoming',
-      position: 'left',
-    },
-  ])
+  const [messages, setMessages] = useLocalStorage<MessageType[]>(
+    'chatbot-messages',
+    [
+      {
+        message:
+          'Need a hand with anything? I am your dedicated AI package handleing expert, Vini :) Ask away!',
+        sender: 'ai',
+        direction: 'incoming',
+        position: 'left',
+      },
+    ]
+  )
 
   const handleSend = async (message: string) => {
     console.log('User message:', message)
@@ -138,4 +142,4 @@ function AiChatBot({ onClose }: { onClose: () => void }) {
   )
 }
 
-export default AiChatBot
+export default Chatbot

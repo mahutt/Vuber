@@ -16,7 +16,6 @@ export function MessageList({
 }) {
   const messageListRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    console.log('running')
     if (messageListRef.current) {
       const lastChild = messageListRef.current.lastElementChild as HTMLElement
       if (lastChild) {
