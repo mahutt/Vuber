@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Bot } from 'lucide-react'
+import { Bot, X } from 'lucide-react'
 
 import {
   ChatContainer,
@@ -16,8 +16,6 @@ import {
   MessageInput,
 } from '@/components/chat/chat-kit'
 
-import Container from '@/components/container'
-
 const API_KEY = import.meta.env.VITE_OPENAI_SECRET_KEY
 interface MessageType {
   message: string
@@ -25,7 +23,7 @@ interface MessageType {
   direction: 'incoming' | 'outgoing'
   position: string // Adjust if neces
 }
-function AiChatBot() {
+function AiChatBot({ onClose }: { onClose: () => void }) {
   const [typing, setTyping] = useState<boolean>(false)
   const [messages, setMessages] = useState<MessageType[]>([
     {
@@ -104,35 +102,39 @@ function AiChatBot() {
   }
 
   return (
-    <Container>
-      <div className="py-5 flex justify-center items-center h-full">
-        <Card className="w-[500px] h-[500px] flex flex-col">
-          <CardHeader className="flex flex-row gap-4 items-center">
-            <Bot size={32} />
-            <div>
-              <CardTitle>VuberBot</CardTitle>
-              <CardDescription>Our friendly support bot</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="h-full overflow-auto">
-            <ChatContainer>
-              <MessageList typingIndicator={typing}>
-                {messages.map((message, i) => {
-                  return (
-                    <Message key={i} direction={message.direction}>
-                      {message.message}
-                    </Message>
-                  )
-                })}
-              </MessageList>
-              <div className="mt-2">
-                <MessageInput onSend={handleSend} />
-              </div>
-            </ChatContainer>
-          </CardContent>
-        </Card>
-      </div>
-    </Container>
+    <Card className="w-[500px] h-[500px] flex flex-col">
+      <CardHeader className="flex flex-row gap-4 items-center">
+        <Bot size={32} />
+        <div className="flex-1">
+          <CardTitle>VuberBot</CardTitle>
+          <CardDescription>Our friendly support bot</CardDescription>
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onClose()
+          }}
+        >
+          <X size={24} />
+        </button>
+      </CardHeader>
+      <CardContent className="h-full overflow-auto">
+        <ChatContainer>
+          <MessageList typingIndicator={typing}>
+            {messages.map((message, i) => {
+              return (
+                <Message key={i} direction={message.direction}>
+                  {message.message}
+                </Message>
+              )
+            })}
+          </MessageList>
+          <div className="mt-2">
+            <MessageInput onSend={handleSend} />
+          </div>
+        </ChatContainer>
+      </CardContent>
+    </Card>
   )
 }
 
