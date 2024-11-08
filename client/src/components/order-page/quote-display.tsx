@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import useLocalStorage from 'use-local-storage'
-import { Parcel } from '@/components/order-page/parcel-form'
+import { Parcel } from '@/types/types'
 import fetchQuote from '@/services/fetch-quote'
 
 export default function QuoteDisplay({ className }: { className?: string }) {

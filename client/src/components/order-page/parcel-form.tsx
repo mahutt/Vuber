@@ -12,18 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import DropdownRadio from '@/components/dropdown-radio'
 
-export interface Parcel {
-  name: string
-  description: string
-  weight: number
-  weightUnit: 'lb' | 'kg'
-  size: {
-    width: number
-    height: number
-    length: number
-  }
-  sizeUnit: 'in' | 'cm'
-}
+import { Parcel } from '@/types/types'
 
 export interface ParcelFormActions {
   open: () => void

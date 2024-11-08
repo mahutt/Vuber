@@ -31,6 +31,9 @@ public class AuthConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/*").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/api/users/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/orders/*").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/orders/*").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
