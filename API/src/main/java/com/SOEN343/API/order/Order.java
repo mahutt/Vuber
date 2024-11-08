@@ -1,5 +1,10 @@
 package com.SOEN343.API.order;
 
+import java.util.List;
+
+import com.SOEN343.API.parcel.Parcel;
+import com.SOEN343.API.user.User;
+
 import jakarta.persistence.*;
 
 // database entity for order class
@@ -10,11 +15,22 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId; 
+    @ManyToOne
+    private User user;
 
-    @Column(name = "status")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Parcel> parcels;
+
     private String status;
+    private double total;
+
+    // location (from and to)
+
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "destination")
+    private String destination;
 
     public Order() {
 
@@ -28,49 +44,53 @@ public class Order {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-        }
-        
+    public void setUser(User user2) {
+        this.user = user;
+    }
+
     public String getStatus() {
         return status;
     }
-        
+
     public void setStatus(String status) {
-       this.status = status;
+        this.status = status;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public List<Parcel> getParcels() {
+        return parcels;
+    }
+
+    public void setParcels(List<Parcel> parcels) {
+        this.parcels = parcels;
     }
 
 }
-
-
-// post make order
-// payment, fetch to quote calculator
-// on success payment, then order details will be sent to backend
-
-
-// get quote endpoint
-
-
-// order controller end point post
-// create order instance in db, associate with order, generate the trajectory for the order, assign the driver
-// just show orders themselves for now
-
-// /post/api/orders/new , save this with the user 
-
-// /post/api/orders/new in the body of
-
-
-// parcel Parcel.java in a different folder parcel
-// parcel ParcelRepo needed probably
-
-// trajectory
-
-// deliver 
-
-// 
-
 

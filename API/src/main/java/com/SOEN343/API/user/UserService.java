@@ -3,6 +3,8 @@ package com.SOEN343.API.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -87,6 +89,18 @@ public class UserService implements UserDetailsService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.name(), encryptedPassword);
         return userRepository.save(newUser);
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            var user = authentication.getPrincipal();
+            if (user instanceof User) {
+                User authenticatedUser = (User) user;
+                return authenticatedUser;
+            }
+        }
+        return null;
     }
 
 }
