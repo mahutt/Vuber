@@ -103,4 +103,8 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    public User getUserById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
 }

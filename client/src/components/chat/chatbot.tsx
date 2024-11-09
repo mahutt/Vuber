@@ -31,7 +31,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
     [
       {
         message:
-          'Need a hand with anything? I am your dedicated AI package handleing expert, Vini :) Ask away!',
+          'Need a hand with anything? I am your dedicated AI package handling expert, Vini :) Ask away!',
         sender: 'ai',
         direction: 'incoming',
         position: 'left',

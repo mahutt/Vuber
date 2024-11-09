@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.SOEN343.API.order.Order;
+
 import jakarta.persistence.*;
 
 //Database entity for user class
@@ -18,6 +20,8 @@ public class User implements UserDetails {
     private String name;
     private String password;
     
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")  
+    private List<Order> orders;
 
     
 
@@ -76,6 +80,14 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
 }

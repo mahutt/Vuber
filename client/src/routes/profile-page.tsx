@@ -1,7 +1,5 @@
-// import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuth } from '@/providers/AuthProvider'
 import { useState } from 'react'
-// import { Link as ReactRouterLink } from 'react-router-dom';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth()

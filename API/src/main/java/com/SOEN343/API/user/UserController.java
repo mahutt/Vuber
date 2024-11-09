@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers());
     }
 
+    // use
     @GetMapping("/current")
     public ResponseEntity<UserDto> getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -92,6 +92,15 @@ public class UserController {
     @GetMapping("/getUserById/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
         return userService.getUser(id);
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<Object> getUserOrders(@PathVariable Integer id) {
+        User user = userService.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user.getOrders());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 
 }
