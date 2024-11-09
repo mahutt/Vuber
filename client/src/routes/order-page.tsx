@@ -95,18 +95,24 @@ export default function OrderPage() {
             >
               Where should we deliver your package?
             </div>
-            <LocationInput
-              placeholder="From"
-              ref={pickUpLocation}
-              value={startLocation}
-              onChange={(e) => setStartLocation(e.target.value)}
-            />
-            <LocationInput
-              placeholder="To"
-              filled={true}
-              value={endLocation}
-              onChange={(e) => setEndLocation(e.target.value)}
-            />
+            <div>
+              <FadeInLabel text="Pickup Location" visible={addParcelPhase} />
+              <LocationInput
+                placeholder="From"
+                ref={pickUpLocation}
+                value={startLocation}
+                onChange={(e) => setStartLocation(e.target.value)}
+              />
+            </div>
+            <div>
+              <FadeInLabel text="Dropoff Location" visible={addParcelPhase} />
+              <LocationInput
+                placeholder="To"
+                filled={true}
+                value={endLocation}
+                onChange={(e) => setEndLocation(e.target.value)}
+              />
+            </div>
 
             <div
               className={`transition-height duration-500 ease-in-out
@@ -191,5 +197,17 @@ export default function OrderPage() {
         onEdit={handleEditSubmit}
       />
     </Container>
+  )
+}
+
+const FadeInLabel = ({ text, visible }: { text: string; visible: boolean }) => {
+  return (
+    <div
+      className={`ml-3 text-sm font-medium text-muted-foreground ${
+        visible ? 'h-6' : 'h-0'
+      } transition-height duration-500 ease-in-out overflow-hidden`}
+    >
+      {text}
+    </div>
   )
 }
