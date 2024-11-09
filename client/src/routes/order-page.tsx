@@ -18,6 +18,7 @@ import {
 } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import QuoteDisplay from '@/components/order-page/quote-display'
+import LocationInstructions from '@/components/order-page/location-instructions'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 
@@ -103,6 +104,10 @@ export default function OrderPage() {
                 value={startLocation}
                 onChange={(e) => setStartLocation(e.target.value)}
               />
+              <LocationInstructions
+                visible={!!startLocation}
+                locationType="pickup"
+              />
             </div>
             <div>
               <FadeInLabel text="Dropoff Location" visible={addParcelPhase} />
@@ -111,6 +116,10 @@ export default function OrderPage() {
                 filled={true}
                 value={endLocation}
                 onChange={(e) => setEndLocation(e.target.value)}
+              />
+              <LocationInstructions
+                visible={!!endLocation}
+                locationType="dropoff"
               />
             </div>
 
