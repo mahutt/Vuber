@@ -6,6 +6,8 @@ import java.util.List;
 import com.SOEN343.API.Coordinates.Coordinates;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -17,16 +19,18 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @JsonBackReference
     @ManyToOne
     private User user;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Parcel> parcels;
 
     @Column
     private String status;
 
-    @Column (nullable = true)
+    @Column(nullable = true)
     private Double total;
 
     // location (from and to)
@@ -39,25 +43,24 @@ public class Order {
 
     // private List<Coordinates> prevCoordinates = new ArrayList<>();
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "xCoord", column = @Column(name = "origin_x_coord")),
+            @AttributeOverride(name = "yCoord", column = @Column(name = "origin_y_coord"))
+    })
+    private Coordinates originCoords;
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "xCoord", column = @Column(name = "origin_x_coord")),
-        @AttributeOverride(name = "yCoord", column = @Column(name = "origin_y_coord"))
-    })
-    private Coordinates originCoords;
- 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "xCoord", column = @Column(name = "destination_x_coord")),
-        @AttributeOverride(name = "yCoord", column = @Column(name = "destination_y_coord"))
+            @AttributeOverride(name = "xCoord", column = @Column(name = "destination_x_coord")),
+            @AttributeOverride(name = "yCoord", column = @Column(name = "destination_y_coord"))
     })
     private Coordinates destinationCoords;
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "xCoord", column = @Column(name = "current_x_coord")),
-        @AttributeOverride(name = "yCoord", column = @Column(name = "current_y_coord"))
+            @AttributeOverride(name = "xCoord", column = @Column(name = "current_x_coord")),
+            @AttributeOverride(name = "yCoord", column = @Column(name = "current_y_coord"))
     })
     private Coordinates currentCoordinates;
 
@@ -156,7 +159,4 @@ public class Order {
         this.prevCoordinates = prevCoordinates;
     }
 
-    
-
 }
-

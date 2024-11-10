@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.SOEN343.API.order.Order;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -19,11 +20,10 @@ public class User implements UserDetails {
     private Integer id;
     private String name;
     private String password;
-    
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")  
-    private List<Order> orders;
 
-    
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Order> orders;
 
     public User(String name, String password) {
         this.name = name;
@@ -62,8 +62,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-  
 
     public Integer getId() {
         return id;

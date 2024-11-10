@@ -1,6 +1,7 @@
 package com.SOEN343.API.parcel;
 
 import com.SOEN343.API.order.Order;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 
@@ -34,10 +35,11 @@ public class Parcel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @JsonBackReference
     @ManyToOne
     private Order order;
 
-    @Column 
+    @Column
     private String name;
 
     @Column
@@ -57,8 +59,8 @@ public class Parcel {
 
     @Column
     private SizeUnit sizeUnit;
-    
-    @Column (nullable = true)
+
+    @Column(nullable = true)
     private String description;
 
     public Integer getId() {
