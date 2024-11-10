@@ -24,7 +24,7 @@ public class Order {
     private User user;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Parcel> parcels;
 
     @Column

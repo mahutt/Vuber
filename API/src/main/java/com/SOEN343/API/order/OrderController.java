@@ -30,66 +30,73 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @Autowired
-    public OrderController(UserService userService,OrderService orderService, OrderRepository orderRepository) {
+    public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository) {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
     }
 
+    @GetMapping("/purge")
+    public void purgeOrders() {
+        orderRepository.deleteAll();
+    }
+
     // @PostMapping("/new")
-    // public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto orderDetails) {
-    //     double total = orderDetails.getTotal();
-    //     CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
-    //     CoordinatesDto destinationCoordinates = orderDetails.getDestinationCoordinates();
-    //     // Coordinates originCoords = new  Coordinates(originCoordinates.getLng(),originCoordinates.getLat());
-    //     // Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(), destinationCoordinates.getLat());
+    // public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto
+    // orderDetails) {
+    // double total = orderDetails.getTotal();
+    // CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
+    // CoordinatesDto destinationCoordinates =
+    // orderDetails.getDestinationCoordinates();
+    // // Coordinates originCoords = new
+    // Coordinates(originCoordinates.getLng(),originCoordinates.getLat());
+    // // Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(),
+    // destinationCoordinates.getLat());
 
-    //     User user = userService.getCurrentUser();
+    // User user = userService.getCurrentUser();
 
-    //     Order order = new Order();
-    //     order.setUser(user);
-    //     order.setStatus("Pending");
-    //     order.setTotal(total);
+    // Order order = new Order();
+    // order.setUser(user);
+    // order.setStatus("Pending");
+    // order.setTotal(total);
 
-    //     // order.setOriginCoords(originCoords);
-    //     // order.setDestinationCoords(destCoords);
-    //     // order.setCurrentCoordinates(originCoords);
-    //     // order.getPrevCoordinates().add(originCoords);
+    // // order.setOriginCoords(originCoords);
+    // // order.setDestinationCoords(destCoords);
+    // // order.setCurrentCoordinates(originCoords);
+    // // order.getPrevCoordinates().add(originCoords);
 
-    //     // order.setOrigin(originCoordinates.toString());
-    //     // order.setDestination(destinationCoordinates.toString());
+    // // order.setOrigin(originCoordinates.toString());
+    // // order.setDestination(destinationCoordinates.toString());
 
-    //     List<Parcel> parcelList = new ArrayList<>();
+    // List<Parcel> parcelList = new ArrayList<>();
 
-    //     for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
-    //         Parcel parcel = new Parcel();
-    //         parcel.setName(parcelDto.getName());
-    //         parcel.setWeight(parcelDto.getWeight());
-    //         parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightunit()));
-    //         parcel.setWidth(parcelDto.getWidth());
-    //         parcel.setLength(parcelDto.getLength());
-    //         parcel.setHeight(parcelDto.getHeight());
-    //         parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
-    //         parcel.setDescription(parcelDto.getDescription());
-    //         parcel.setOrder(order); 
-    //         parcelList.add(parcel);
-    //     }
-
-    //     order.setParcels(parcelList);
-    //     Order savedOrder = orderRepository.save(order);
-
-    //     return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
+    // for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
+    // Parcel parcel = new Parcel();
+    // parcel.setName(parcelDto.getName());
+    // parcel.setWeight(parcelDto.getWeight());
+    // parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightunit()));
+    // parcel.setWidth(parcelDto.getWidth());
+    // parcel.setLength(parcelDto.getLength());
+    // parcel.setHeight(parcelDto.getHeight());
+    // parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
+    // parcel.setDescription(parcelDto.getDescription());
+    // parcel.setOrder(order);
+    // parcelList.add(parcel);
     // }
 
+    // order.setParcels(parcelList);
+    // Order savedOrder = orderRepository.save(order);
+
+    // return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
+    // }
 
     @PostMapping("/new")
     public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto orderDetails) {
         double total = orderDetails.getTotal();
         CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
         CoordinatesDto destinationCoordinates = orderDetails.getDestinationCoordinates();
-        Coordinates originCoords = new  Coordinates(originCoordinates.getLng(),originCoordinates.getLat());
+        Coordinates originCoords = new Coordinates(originCoordinates.getLng(), originCoordinates.getLat());
         Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(), destinationCoordinates.getLat());
-        
 
         User user = userService.getCurrentUser();
 
@@ -104,7 +111,6 @@ public class OrderController {
         order.setDestinationCoords(destCoords);
         order.setCurrentCoordinates(originCoords);
         order.getPrevCoordinates().add(originCoords);
-
 
         System.out.println("==============================================================");
         System.out.println(destinationCoordinates.toString());
@@ -123,18 +129,15 @@ public class OrderController {
             parcel.setHeight(parcelDto.getSize().getHeight());
             parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
             parcel.setDescription(parcelDto.getDescription());
-            parcel.setOrder(order); 
+            parcel.setOrder(order);
             parcelList.add(parcel);
         }
 
         order.setParcels(parcelList);
         Order savedOrder = orderRepository.save(order);
-        
 
         return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
     }
-
-
 
     // get all orders (for now)
     @GetMapping("/")
@@ -142,59 +145,48 @@ public class OrderController {
         return orderRepository.findAll();
     }
 
-
     @GetMapping("/track/{id}")
-    public ResponseEntity<Object> trackOrder(@PathVariable Integer id){
-        
+    public ResponseEntity<Object> trackOrder(@PathVariable Integer id) {
 
-       Optional<Order> orderOpt = orderRepository.findById(id);
+        Optional<Order> orderOpt = orderRepository.findById(id);
 
-
-
-       if(orderOpt.isPresent()){
+        if (orderOpt.isPresent()) {
 
             Order order = orderOpt.get();
             Coordinates curr = order.getCurrentCoordinates();
             Coordinates dest = order.getDestinationCoords();
-            List<Coordinates> prev =order.getPrevCoordinates();
-            
-            Coordinates newCurr = this.orderService.getMidPoint(curr,dest);
-            
+            List<Coordinates> prev = order.getPrevCoordinates();
 
-            ////Verify if Order is out for deliver or if it is delivered
+            Coordinates newCurr = this.orderService.getMidPoint(curr, dest);
+
+            //// Verify if Order is out for deliver or if it is delivered
             double xCurr = newCurr.getxCoord();
             double yCurr = newCurr.getyCoord();
 
             double xDist = Math.abs(dest.getxCoord() - xCurr);
             double yDist = Math.abs(dest.getyCoord() - yCurr);
 
-
             prev.add(newCurr);
             order.setCurrentCoordinates(newCurr);
 
-            
-            if(xDist <=0.5 && yDist <=0.5 && xDist >= 0.05 && yDist >=0.05
-            ){
+            if (xDist <= 0.5 && yDist <= 0.5 && xDist >= 0.05 && yDist >= 0.05) {
                 order.setStatus("Out for Delivery");
-            }
-            else if(xDist <=0.005 && yDist <=0.005){
+            } else if (xDist <= 0.005 && yDist <= 0.005) {
                 order.setStatus("Delivered");
-            }
-            else{
+            } else {
                 order.setStatus("In Transit");
 
             }
 
-            
             orderRepository.save(order);
 
-            TrackingDto trackingDto = new TrackingDto(newCurr,dest,prev,order.getStatus());
-            return new ResponseEntity<>(trackingDto,HttpStatus.OK);
+            TrackingDto trackingDto = new TrackingDto(newCurr, dest, prev, order.getStatus());
+            return new ResponseEntity<>(trackingDto, HttpStatus.OK);
 
-       }else{
-        return new ResponseEntity<>(HttpStatusCode.valueOf(400));
+        } else {
+            return new ResponseEntity<>(HttpStatusCode.valueOf(400));
 
-       }
+        }
 
     }
 
