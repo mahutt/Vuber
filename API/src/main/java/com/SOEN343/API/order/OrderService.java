@@ -1,5 +1,6 @@
 package com.SOEN343.API.order;
 
+import com.SOEN343.API.Coordinates.Coordinates;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.parcel.ParcelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,4 +45,18 @@ public class OrderService {
             orderRepository.save(order);
         }
     }
+
+    public Coordinates getMidPoint(Coordinates curr, Coordinates dest){
+
+        double midpointX;
+        double midpointY;
+
+        midpointX = ((dest.getxCoord() + curr.getxCoord()))/2;
+        midpointY = ((dest.getyCoord() + curr.getyCoord()))/2;
+
+        return new Coordinates(midpointX, midpointY);
+
+
+    }
+
 }

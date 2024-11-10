@@ -2,11 +2,9 @@ package com.SOEN343.API.order.dto;
 
 public class ParcelDetailsDto {
     String name;
-    Double weight;
-    String weightunit;
-    int width;
-    int length;
-    int height;
+    double weight;
+    String weightUnit;
+    SizeDto size;
     String sizeUnit;
     String description;
 
@@ -14,24 +12,12 @@ public class ParcelDetailsDto {
         return name;
     }
 
-    public Double getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public String getWeightunit() {
-        return weightunit;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public int getHeight() {
-        return height;
+    public String getWeightUnit() {
+        return weightUnit;
     }
 
     public String getSizeUnit() {
@@ -46,24 +32,12 @@ public class ParcelDetailsDto {
         this.name = name;
     }
 
-    public void setWeight(Double weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public void setWeightunit(String weightunit) {
-        this.weightunit = weightunit;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+    public void setWeightUnit(String weightunit) {
+        this.weightUnit = weightunit;
     }
 
     public void setSizeUnit(String sizeUnit) {
@@ -73,4 +47,14 @@ public class ParcelDetailsDto {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public SizeDto getSize() {
+        return size;
+    }
+
+    public void setSize(SizeDto size) {
+        this.size = size;
+    }
+
+    
 }
