@@ -21,6 +21,8 @@ export interface OrderDetails {
   parcels: Parcel[]
   originCoordinates: Coordinates
   destinationCoordinates: Coordinates
+  pickupInstructions: string
+  dropoffInstructions: string
 }
 
 export interface Coordinates {

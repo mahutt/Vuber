@@ -5,6 +5,8 @@ public class OrderDetailsDto {
     private double total;
     private CoordinatesDto originCoordinates;
     private CoordinatesDto destinationCoordinates;
+    private String pickupInstructions;
+    private String dropoffInstructions;
 
     public ParcelDetailsDto[] getParcels() {
         return parcels;
@@ -36,5 +38,21 @@ public class OrderDetailsDto {
 
     public void setDestinationCoordinates(CoordinatesDto destinationCoordinates) {
         this.destinationCoordinates = destinationCoordinates;
+    }
+
+    public String getPickupInstructions() {
+        return pickupInstructions;
+    }
+
+    public void setPickupInstructions(String pickupInstructions) {
+        this.pickupInstructions = pickupInstructions;
+    }
+
+    public String getDropoffInstructions() {
+        return dropoffInstructions;
+    }
+
+    public void setDropoffInstructions(String dropoffInstructions) {
+        this.dropoffInstructions = dropoffInstructions;
     }
 }

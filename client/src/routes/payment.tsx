@@ -18,6 +18,14 @@ export default function PaymentPage() {
   const [parcels] = useLocalStorage<Parcel[]>('order-draft', [])
   const [startLocation] = useLocalStorage<string>('start-location', '')
   const [endLocation] = useLocalStorage<string>('end-location', '')
+  const [pickupInstructions] = useLocalStorage<string>(
+    'pickup-instructions',
+    ''
+  )
+  const [dropoffInstructions] = useLocalStorage<string>(
+    'dropoff-instructions',
+    ''
+  )
 
   const executeCreateOrder = async () => {
     console.log(parcels)
@@ -28,6 +36,8 @@ export default function PaymentPage() {
       parcels: parcels,
       originCoordinates,
       destinationCoordinates,
+      pickupInstructions,
+      dropoffInstructions,
     }
     createOrder(orderDetails).then((orderId) => {
       console.log(orderId)

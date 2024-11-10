@@ -97,6 +97,8 @@ public class OrderController {
         CoordinatesDto destinationCoordinates = orderDetails.getDestinationCoordinates();
         Coordinates originCoords = new Coordinates(originCoordinates.getLng(), originCoordinates.getLat());
         Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(), destinationCoordinates.getLat());
+        String pickupInstructions = orderDetails.getPickupInstructions();
+        String dropoffInstructions = orderDetails.getDropoffInstructions();
 
         User user = userService.getCurrentUser();
 
@@ -106,6 +108,8 @@ public class OrderController {
         order.setTotal(total);
         order.setOrigin(originCoordinates.toString());
         order.setDestination(destinationCoordinates.toString());
+        order.setPickupInstructions(pickupInstructions);
+        order.setDropoffInstructions(dropoffInstructions);
 
         order.setOriginCoords(originCoords);
         order.setDestinationCoords(destCoords);

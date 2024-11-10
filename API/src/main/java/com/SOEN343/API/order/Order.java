@@ -41,6 +41,12 @@ public class Order {
     @Column(name = "destination")
     private String destination;
 
+    @Column
+    private String pickupInstructions;
+
+    @Column
+    private String dropoffInstructions;
+
     // private List<Coordinates> prevCoordinates = new ArrayList<>();
 
     @Embedded
@@ -157,6 +163,22 @@ public class Order {
 
     public void setPrevCoordinates(List<Coordinates> prevCoordinates) {
         this.prevCoordinates = prevCoordinates;
+    }
+
+    public String getPickupInstructions() {
+        return pickupInstructions;
+    }
+
+    public void setPickupInstructions(String pickupInstructions) {
+        this.pickupInstructions = pickupInstructions;
+    }
+
+    public String getDropoffInstructions() {
+        return dropoffInstructions;
+    }
+
+    public void setDropoffInstructions(String dropoffInstructions) {
+        this.dropoffInstructions = dropoffInstructions;
     }
 
 }
