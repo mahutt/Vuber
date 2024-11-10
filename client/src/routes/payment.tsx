@@ -11,7 +11,7 @@ const fetchTypedCoordinates = async (
     return { lat: 37.7749, lng: -122.4194 }
   }
   const coordinatesArray = await fetchCoordinates(location)
-  return { lat: coordinatesArray[0], lng: coordinatesArray[1] }
+  return { lng: coordinatesArray[0], lat: coordinatesArray[1] }
 }
 
 export default function PaymentPage() {

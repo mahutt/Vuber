@@ -24,6 +24,7 @@ export default function Map({
 
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
+  
 
   useEffect(() => {
     if (!mapContainerRef.current) return
@@ -146,4 +147,15 @@ const addRoute = async (
     new mapboxgl.LngLatBounds(routeCoordinates[0], routeCoordinates[0])
   )
   map.fitBounds(bounds, { padding: 50 })
+}
+
+export const fetchPlaceName = async (
+  longitude: number,
+  latitude: number
+): Promise<string | null> => {
+  const response = await fetch(
+    `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`
+  )
+  const data = await response.json()
+  return data.features[0]?.place_name || null
 }

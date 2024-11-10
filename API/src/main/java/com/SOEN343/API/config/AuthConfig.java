@@ -1,5 +1,7 @@
 package com.SOEN343.API.config;
 
+import java.beans.Customizer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,7 @@ public class AuthConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+             
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -34,6 +37,8 @@ public class AuthConfig {
                         .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/orders/*").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/api/orders/*").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/orders/track/{id}").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS,"/api/orders/track/{id}").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
