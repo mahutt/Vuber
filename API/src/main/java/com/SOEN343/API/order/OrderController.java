@@ -142,6 +142,7 @@ public class OrderController {
         return orderRepository.findAll();
     }
 
+
     @GetMapping("/track/{id}")
     public ResponseEntity<Object> trackOrder(@PathVariable Integer id){
         
@@ -196,6 +197,14 @@ public class OrderController {
        }
 
 
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<Object> getUserOrders(@PathVariable Integer id) {
+        User user = userService.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user.getOrders());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
     }
 
