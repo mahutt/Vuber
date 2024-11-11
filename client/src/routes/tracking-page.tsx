@@ -41,13 +41,10 @@ function TrackingPage() {
 
     try {
       const response = await trackOrder(trackingNumber)
-      console.log(response)
-      console.log(response.status)
       if (response.status == 200) {
         setStatus(response.data.status)
         setIsValid(true)
         setTrackingDataFound(true)
-        console.log(response.data.newCurrLocation)
         var currLoc = await fetchPlaceName(
           response.data.newCurrLocation.xCoord,
           response.data.newCurrLocation.yCoord
@@ -82,9 +79,6 @@ function TrackingPage() {
         }
         setTrackingDataFound(true)
         setPreviousLocations(trackingHistory)
-        for (let i = 0; i < trackingHistory.length; i++) {
-          console.log(trackingHistory[i])
-        }
       }
     } catch (error) {
       if (

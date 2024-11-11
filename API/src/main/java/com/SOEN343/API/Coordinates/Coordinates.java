@@ -7,14 +7,15 @@ public class Coordinates {
     double xCoord;
     double yCoord;
 
-    public Coordinates(double xCoord, double yCoord){
-        this.xCoord =xCoord;
-        this.yCoord =yCoord;
+    public Coordinates(double xCoord, double yCoord) {
+        this.xCoord = xCoord;
+        this.yCoord = yCoord;
     }
 
-    public Coordinates(){
-        
+    public Coordinates() {
+
     }
+
     public double getxCoord() {
         return xCoord;
     }
@@ -30,5 +31,9 @@ public class Coordinates {
     public void setyCoord(double yCoord) {
         this.yCoord = yCoord;
     }
-    
+
+    public double distanceTo(Coordinates other) {
+        return Math.sqrt(Math.pow(this.xCoord - other.xCoord, 2) + Math.pow(this.yCoord - other.yCoord, 2));
+    }
+
 }

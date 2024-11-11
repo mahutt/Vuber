@@ -153,45 +153,39 @@ public class OrderController {
     public ResponseEntity<Object> trackOrder(@PathVariable Integer id) {
 
         Optional<Order> orderOpt = orderRepository.findById(id);
-
-        if (orderOpt.isPresent()) {
-
-            Order order = orderOpt.get();
-            Coordinates curr = order.getCurrentCoordinates();
-            Coordinates dest = order.getDestinationCoords();
-            List<Coordinates> prev = order.getPrevCoordinates();
-
-            Coordinates newCurr = this.orderService.getMidPoint(curr, dest);
-
-            //// Verify if Order is out for deliver or if it is delivered
-            double xCurr = newCurr.getxCoord();
-            double yCurr = newCurr.getyCoord();
-
-            double xDist = Math.abs(dest.getxCoord() - xCurr);
-            double yDist = Math.abs(dest.getyCoord() - yCurr);
-
-            prev.add(newCurr);
-            order.setCurrentCoordinates(newCurr);
-
-            if (xDist <= 0.5 && yDist <= 0.5 && xDist >= 0.05 && yDist >= 0.05) {
-                order.setStatus("Out for Delivery");
-            } else if (xDist <= 0.005 && yDist <= 0.005) {
-                order.setStatus("Delivered");
-            } else {
-                order.setStatus("In Transit");
-
-            }
-
-            orderRepository.save(order);
-
-            TrackingDto trackingDto = new TrackingDto(newCurr, dest, prev, order.getStatus());
-            return new ResponseEntity<>(trackingDto, HttpStatus.OK);
-
-        } else {
+        if (!orderOpt.isPresent()) {
             return new ResponseEntity<>(HttpStatusCode.valueOf(400));
-
         }
 
+        Order order = orderOpt.get();
+        Coordinates destinationCoordinates = order.getDestinationCoords();
+        List<Coordinates> history = order.getPrevCoordinates();
+
+        if (order.getStatus().equals("Delivered")) {
+            TrackingDto trackingDto = new TrackingDto(destinationCoordinates, destinationCoordinates, history,
+                    order.getStatus());
+            return new ResponseEntity<>(trackingDto, HttpStatus.OK);
+        }
+
+        Coordinates currentCoordinates = order.getCurrentCoordinates();
+        Coordinates newCurrentCoordinates = this.orderService.getMidPoint(currentCoordinates, destinationCoordinates);
+
+        history.add(newCurrentCoordinates);
+        order.setCurrentCoordinates(newCurrentCoordinates);
+
+        if (newCurrentCoordinates.distanceTo(destinationCoordinates) <= 0.5
+                && newCurrentCoordinates.distanceTo(destinationCoordinates) >= 0.5) {
+            order.setStatus("Out for Delivery");
+        } else if (newCurrentCoordinates.distanceTo(destinationCoordinates) <= 0.005) {
+            order.setStatus("Delivered");
+        } else {
+            order.setStatus("In Transit");
+        }
+
+        orderRepository.save(order);
+        TrackingDto trackingDto = new TrackingDto(newCurrentCoordinates, destinationCoordinates, history,
+                order.getStatus());
+        return new ResponseEntity<>(trackingDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/orders")
