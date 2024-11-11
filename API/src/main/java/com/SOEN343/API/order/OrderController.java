@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.SOEN343.API.Coordinates.Coordinates;
+import com.SOEN343.API.Coordinates.Coordinate;
 import com.SOEN343.API.order.dto.CoordinatesDto;
 import com.SOEN343.API.order.dto.OrderDetailsDto;
 import com.SOEN343.API.order.dto.ParcelDetailsDto;
@@ -48,9 +48,9 @@ public class OrderController {
     // CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
     // CoordinatesDto destinationCoordinates =
     // orderDetails.getDestinationCoordinates();
-    // // Coordinates originCoords = new
-    // Coordinates(originCoordinates.getLng(),originCoordinates.getLat());
-    // // Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(),
+    // // Coordinate originCoords = new
+    // Coordinate(originCoordinates.getLng(),originCoordinates.getLat());
+    // // Coordinate destCoords = new Coordinate(destinationCoordinates.getLng(),
     // destinationCoordinates.getLat());
 
     // User user = userService.getCurrentUser();
@@ -95,8 +95,8 @@ public class OrderController {
         double total = orderDetails.getTotal();
         CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
         CoordinatesDto destinationCoordinates = orderDetails.getDestinationCoordinates();
-        Coordinates originCoords = new Coordinates(originCoordinates.getLng(), originCoordinates.getLat());
-        Coordinates destCoords = new Coordinates(destinationCoordinates.getLng(), destinationCoordinates.getLat());
+        Coordinate originCoords = new Coordinate(originCoordinates.getLng(), originCoordinates.getLat());
+        Coordinate destCoords = new Coordinate(destinationCoordinates.getLng(), destinationCoordinates.getLat());
         String pickupInstructions = orderDetails.getPickupInstructions();
         String dropoffInstructions = orderDetails.getDropoffInstructions();
 
@@ -158,9 +158,9 @@ public class OrderController {
         }
 
         Order order = orderOpt.get();
-        Coordinates originCoordinates = order.getOriginCoords();
-        Coordinates destinationCoordinates = order.getDestinationCoords();
-        List<Coordinates> history = order.getPrevCoordinates();
+        Coordinate originCoordinates = order.getOriginCoords();
+        Coordinate destinationCoordinates = order.getDestinationCoords();
+        List<Coordinate> history = order.getPrevCoordinates();
 
         if (order.getStatus().equals("Delivered")) {
             TrackingDto trackingDto = new TrackingDto(originCoordinates, destinationCoordinates, destinationCoordinates,
@@ -169,8 +169,8 @@ public class OrderController {
             return new ResponseEntity<>(trackingDto, HttpStatus.OK);
         }
 
-        Coordinates currentCoordinates = order.getCurrentCoordinates();
-        Coordinates newCurrentCoordinates = this.orderService.getMidPoint(currentCoordinates, destinationCoordinates);
+        Coordinate currentCoordinates = order.getCurrentCoordinates();
+        Coordinate newCurrentCoordinates = this.orderService.getMidPoint(currentCoordinates, destinationCoordinates);
 
         history.add(newCurrentCoordinates);
         order.setCurrentCoordinates(newCurrentCoordinates);

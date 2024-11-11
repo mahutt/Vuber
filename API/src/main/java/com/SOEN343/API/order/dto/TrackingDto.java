@@ -2,18 +2,18 @@ package com.SOEN343.API.order.dto;
 
 import java.util.List;
 
-import com.SOEN343.API.Coordinates.Coordinates;
+import com.SOEN343.API.Coordinates.Coordinate;
 
 public class TrackingDto {
 
-    private Coordinates originCoordinates;
-    private Coordinates newCurrLocation;
-    private Coordinates destinationCoords;
-    private List<Coordinates> prevCoords;
+    private Coordinate originCoordinates;
+    private Coordinate newCurrLocation;
+    private Coordinate destinationCoords;
+    private List<Coordinate> prevCoords;
     private String status;
 
-    public TrackingDto(Coordinates originCoordiantes, Coordinates newCurrLocation, Coordinates destinationCoordinates,
-            List<Coordinates> prevCoords,
+    public TrackingDto(Coordinate originCoordiantes, Coordinate newCurrLocation, Coordinate destinationCoordinates,
+            List<Coordinate> prevCoords,
             String status) {
         this.originCoordinates = originCoordiantes;
         this.status = status;
@@ -22,19 +22,19 @@ public class TrackingDto {
         this.prevCoords = prevCoords;
     }
 
-    public Coordinates getNewCurrLocation() {
+    public Coordinate getNewCurrLocation() {
         return newCurrLocation;
     }
 
-    public void setNewCurrLocation(Coordinates newCurrLocation) {
+    public void setNewCurrLocation(Coordinate newCurrLocation) {
         this.newCurrLocation = newCurrLocation;
     }
 
-    public List<Coordinates> getPrevCoords() {
+    public List<Coordinate> getPrevCoords() {
         return prevCoords;
     }
 
-    public void setPrevCoords(List<Coordinates> prevCoords) {
+    public void setPrevCoords(List<Coordinate> prevCoords) {
         this.prevCoords = prevCoords;
     }
 
@@ -42,11 +42,11 @@ public class TrackingDto {
         return status;
     }
 
-    public Coordinates getDestinationCoords() {
+    public Coordinate getDestinationCoords() {
         return destinationCoords;
     }
 
-    public void setDestinationCoords(Coordinates destinationCoords) {
+    public void setDestinationCoords(Coordinate destinationCoords) {
         this.destinationCoords = destinationCoords;
     }
 
@@ -54,11 +54,11 @@ public class TrackingDto {
         this.status = status;
     }
 
-    public Coordinates getOriginCoordinates() {
+    public Coordinate getOriginCoordinates() {
         return originCoordinates;
     }
 
-    public void setOriginCoordinates(Coordinates originCoordinates) {
+    public void setOriginCoordinates(Coordinate originCoordinates) {
         this.originCoordinates = originCoordinates;
     }
 

@@ -3,16 +3,16 @@ package com.SOEN343.API.Coordinates;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class Coordinates {
+public class Coordinate {
     double x;
     double y;
 
-    public Coordinates(double x, double y) {
+    public Coordinate(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Coordinates() {
+    public Coordinate() {
 
     }
 
@@ -32,7 +32,7 @@ public class Coordinates {
         this.y = y;
     }
 
-    public double distanceTo(Coordinates other) {
+    public double distanceTo(Coordinate other) {
         return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
 }

@@ -3,7 +3,7 @@ package com.SOEN343.API.order;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.SOEN343.API.Coordinates.Coordinates;
+import com.SOEN343.API.Coordinates.Coordinate;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -47,31 +47,31 @@ public class Order {
     @Column
     private String dropoffInstructions;
 
-    // private List<Coordinates> prevCoordinates = new ArrayList<>();
+    // private List<Coordinate> prevCoordinates = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "x", column = @Column(name = "origin_x_coord")),
             @AttributeOverride(name = "y", column = @Column(name = "origin_y_coord"))
     })
-    private Coordinates originCoords;
+    private Coordinate originCoords;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "x", column = @Column(name = "destination_x_coord")),
             @AttributeOverride(name = "y", column = @Column(name = "destination_y_coord"))
     })
-    private Coordinates destinationCoords;
+    private Coordinate destinationCoords;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "x", column = @Column(name = "current_x_coord")),
             @AttributeOverride(name = "y", column = @Column(name = "current_y_coord"))
     })
-    private Coordinates currentCoordinates;
+    private Coordinate currentCoordinates;
 
     @ElementCollection
-    private List<Coordinates> prevCoordinates = new ArrayList<>();
+    private List<Coordinate> prevCoordinates = new ArrayList<>();
 
     public Order() {
 
@@ -133,35 +133,35 @@ public class Order {
         this.parcels = parcels;
     }
 
-    public Coordinates getOriginCoords() {
+    public Coordinate getOriginCoords() {
         return originCoords;
     }
 
-    public void setOriginCoords(Coordinates originCoords) {
+    public void setOriginCoords(Coordinate originCoords) {
         this.originCoords = originCoords;
     }
 
-    public Coordinates getDestinationCoords() {
+    public Coordinate getDestinationCoords() {
         return destinationCoords;
     }
 
-    public void setDestinationCoords(Coordinates destinationCoords) {
+    public void setDestinationCoords(Coordinate destinationCoords) {
         this.destinationCoords = destinationCoords;
     }
 
-    public Coordinates getCurrentCoordinates() {
+    public Coordinate getCurrentCoordinates() {
         return currentCoordinates;
     }
 
-    public void setCurrentCoordinates(Coordinates currentCoordinates) {
+    public void setCurrentCoordinates(Coordinate currentCoordinates) {
         this.currentCoordinates = currentCoordinates;
     }
 
-    public List<Coordinates> getPrevCoordinates() {
+    public List<Coordinate> getPrevCoordinates() {
         return prevCoordinates;
     }
 
-    public void setPrevCoordinates(List<Coordinates> prevCoordinates) {
+    public void setPrevCoordinates(List<Coordinate> prevCoordinates) {
         this.prevCoordinates = prevCoordinates;
     }
 
