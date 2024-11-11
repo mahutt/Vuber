@@ -16,7 +16,7 @@ import { trackOrder } from '@/services/track-service'
 
 import { fetchPlaceName } from '../components/map'
 
-function Tracking() {
+function TrackingPage() {
   const [trackingNumber, setTrackingNumber] = useState<string>('')
   const [isValidTracking, setIsValid] = useState<Boolean>(true)
   const [previousLocations, setPreviousLocations] = useState<String[]>([])
@@ -197,4 +197,4 @@ function Tracking() {
     </div>
   )
 }
-export default Tracking
+export default TrackingPage
