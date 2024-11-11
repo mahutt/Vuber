@@ -7,9 +7,11 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || ''
 export default function Map({
   startLocation,
   endLocation,
+  pingLocation,
 }: {
   startLocation: string
   endLocation: string
+  pingLocation?: string
 }) {
   if (!mapboxgl.accessToken) {
     return (
@@ -24,7 +26,6 @@ export default function Map({
 
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
-  
 
   useEffect(() => {
     if (!mapContainerRef.current) return
@@ -50,6 +51,17 @@ export default function Map({
     return () => clearTimeout(timeout)
   }, [startLocation, endLocation])
 
+  useEffect(() => {
+    if (!pingLocation) return
+    const timeout = setTimeout(() => {
+      if (!mapRef.current) return
+      fetchCoordinates(pingLocation).then((coords) => {
+        if (coords && mapRef.current) addPing(mapRef.current, coords)
+      })
+    }, 500)
+    return () => clearTimeout(timeout)
+  }, [pingLocation])
+
   return (
     <>
       <div
@@ -59,6 +71,23 @@ export default function Map({
       />
     </>
   )
+}
+
+const addPing = (
+  map: mapboxgl.Map,
+  coordinates: [number, number],
+  color: string = '#3b82f6'
+) => {
+  const el = document.createElement('div')
+  el.className = 'ping-marker'
+  el.style.width = '20px'
+  el.style.height = '20px'
+  el.style.borderRadius = '50%'
+  el.style.backgroundColor = color
+  el.style.border = '3px solid white'
+  el.style.boxShadow = '0 0 0 2px ' + color
+
+  new mapboxgl.Marker(el).setLngLat(coordinates).addTo(map)
 }
 
 export const fetchCoordinates = async (

@@ -51,22 +51,22 @@ public class Order {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "xCoord", column = @Column(name = "origin_x_coord")),
-            @AttributeOverride(name = "yCoord", column = @Column(name = "origin_y_coord"))
+            @AttributeOverride(name = "x", column = @Column(name = "origin_x_coord")),
+            @AttributeOverride(name = "y", column = @Column(name = "origin_y_coord"))
     })
     private Coordinates originCoords;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "xCoord", column = @Column(name = "destination_x_coord")),
-            @AttributeOverride(name = "yCoord", column = @Column(name = "destination_y_coord"))
+            @AttributeOverride(name = "x", column = @Column(name = "destination_x_coord")),
+            @AttributeOverride(name = "y", column = @Column(name = "destination_y_coord"))
     })
     private Coordinates destinationCoords;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "xCoord", column = @Column(name = "current_x_coord")),
-            @AttributeOverride(name = "yCoord", column = @Column(name = "current_y_coord"))
+            @AttributeOverride(name = "x", column = @Column(name = "current_x_coord")),
+            @AttributeOverride(name = "y", column = @Column(name = "current_y_coord"))
     })
     private Coordinates currentCoordinates;
 

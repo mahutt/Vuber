@@ -19,6 +19,7 @@ import { fetchPlaceName } from '../components/map'
 function TrackingPage() {
   const [trackingNumber, setTrackingNumber] = useState<string>('')
   const [isValidTracking, setIsValid] = useState<Boolean>(true)
+  const [originLocation, setOriginLocation] = useState<string>('')
   const [previousLocations, setPreviousLocations] = useState<String[]>([])
   const [currentLocation, setCurrentLocation] = useState<string>('')
   const [endLocation, setEndLocation] = useState<string>('')
@@ -148,6 +149,7 @@ function TrackingPage() {
                 <Map
                   startLocation={currentLocation}
                   endLocation={endLocation}
+                  pingLocation={currentLocation}
                 />
               </div>
             ) : (

@@ -6,27 +6,34 @@ import com.SOEN343.API.Coordinates.Coordinates;
 
 public class TrackingDto {
 
+    private Coordinates originCoordinates;
     private Coordinates newCurrLocation;
     private Coordinates destinationCoords;
     private List<Coordinates> prevCoords;
     private String status;
 
-    public TrackingDto(Coordinates newCurrLocation,Coordinates destinationCoordinates, List<Coordinates> prevCoords, String status) {
+    public TrackingDto(Coordinates originCoordiantes, Coordinates newCurrLocation, Coordinates destinationCoordinates,
+            List<Coordinates> prevCoords,
+            String status) {
+        this.originCoordinates = originCoordiantes;
         this.status = status;
         this.newCurrLocation = newCurrLocation;
         this.destinationCoords = destinationCoordinates;
         this.prevCoords = prevCoords;
     }
-    
+
     public Coordinates getNewCurrLocation() {
         return newCurrLocation;
     }
+
     public void setNewCurrLocation(Coordinates newCurrLocation) {
         this.newCurrLocation = newCurrLocation;
     }
+
     public List<Coordinates> getPrevCoords() {
         return prevCoords;
     }
+
     public void setPrevCoords(List<Coordinates> prevCoords) {
         this.prevCoords = prevCoords;
     }
@@ -47,5 +54,12 @@ public class TrackingDto {
         this.status = status;
     }
 
-    
+    public Coordinates getOriginCoordinates() {
+        return originCoordinates;
+    }
+
+    public void setOriginCoordinates(Coordinates originCoordinates) {
+        this.originCoordinates = originCoordinates;
+    }
+
 }

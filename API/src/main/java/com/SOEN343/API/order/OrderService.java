@@ -46,17 +46,10 @@ public class OrderService {
         }
     }
 
-    public Coordinates getMidPoint(Coordinates curr, Coordinates dest){
-
-        double midpointX;
-        double midpointY;
-
-        midpointX = ((dest.getxCoord() + curr.getxCoord()))/2;
-        midpointY = ((dest.getyCoord() + curr.getyCoord()))/2;
-
+    public Coordinates getMidPoint(Coordinates curr, Coordinates dest) {
+        double midpointX = ((dest.getX() + curr.getX())) / 2;
+        double midpointY = ((dest.getY() + curr.getY())) / 2;
         return new Coordinates(midpointX, midpointY);
-
-
     }
 
 }

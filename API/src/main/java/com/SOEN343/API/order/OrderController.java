@@ -158,11 +158,13 @@ public class OrderController {
         }
 
         Order order = orderOpt.get();
+        Coordinates originCoordinates = order.getOriginCoords();
         Coordinates destinationCoordinates = order.getDestinationCoords();
         List<Coordinates> history = order.getPrevCoordinates();
 
         if (order.getStatus().equals("Delivered")) {
-            TrackingDto trackingDto = new TrackingDto(destinationCoordinates, destinationCoordinates, history,
+            TrackingDto trackingDto = new TrackingDto(originCoordinates, destinationCoordinates, destinationCoordinates,
+                    history,
                     order.getStatus());
             return new ResponseEntity<>(trackingDto, HttpStatus.OK);
         }
@@ -183,7 +185,8 @@ public class OrderController {
         }
 
         orderRepository.save(order);
-        TrackingDto trackingDto = new TrackingDto(newCurrentCoordinates, destinationCoordinates, history,
+        TrackingDto trackingDto = new TrackingDto(originCoordinates, newCurrentCoordinates, destinationCoordinates,
+                history,
                 order.getStatus());
         return new ResponseEntity<>(trackingDto, HttpStatus.OK);
     }

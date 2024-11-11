@@ -4,36 +4,35 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Coordinates {
-    double xCoord;
-    double yCoord;
+    double x;
+    double y;
 
-    public Coordinates(double xCoord, double yCoord) {
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
+    public Coordinates(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Coordinates() {
 
     }
 
-    public double getxCoord() {
-        return xCoord;
+    public double getX() {
+        return x;
     }
 
-    public void setxCoord(double xCoord) {
-        this.xCoord = xCoord;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public double getyCoord() {
-        return yCoord;
+    public double getY() {
+        return y;
     }
 
-    public void setyCoord(double yCoord) {
-        this.yCoord = yCoord;
+    public void setY(double y) {
+        this.y = y;
     }
 
     public double distanceTo(Coordinates other) {
-        return Math.sqrt(Math.pow(this.xCoord - other.xCoord, 2) + Math.pow(this.yCoord - other.yCoord, 2));
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
-
 }
