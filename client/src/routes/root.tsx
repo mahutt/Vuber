@@ -65,7 +65,7 @@ export default function Root() {
                         Place an order
                       </div>
                     </Link>
-                    <Link to="/register">
+                    <Link to="/signup">
                       <div className="flex flex-row gap-2 items-center">
                         <Truck className="h-4 w-4" />
                         Drive for us
