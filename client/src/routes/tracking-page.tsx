@@ -1,54 +1,48 @@
-import Map from '../components/map'
-import { useState } from 'react'
-import { Input } from '../components/ui/input'
+import Container from '@/components/container'
+import Map, { fetchPlaceName } from '@/components/map'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
   TableHeader,
   TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableFooter,
 } from '@/components/ui/table'
+import { MapPin } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import FadeInWrapper from '@/components/fade-in-wrapper'
 import { trackOrder } from '@/services/track-service'
+import Spinner from '@/components/spinner'
 
-import { fetchPlaceName } from '../components/map'
-
-function TrackingPage() {
-  const [trackingNumber, setTrackingNumber] = useState<string>('')
-  const [isValidTracking, setIsValid] = useState<Boolean>(true)
+export default function TrackingPage() {
+  const { id } = useParams()
+  const [isValid, setIsValid] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [originLocation, setOriginLocation] = useState<string>('')
   const [previousLocations, setPreviousLocations] = useState<String[]>([])
   const [currentLocation, setCurrentLocation] = useState<string>('')
   const [endLocation, setEndLocation] = useState<string>('')
-  const [trackingDataFound, setTrackingDataFound] = useState<Boolean>(false)
   const [status, setStatus] = useState<string>('')
 
-  const isNumString = (string: string) => /^\d+$/.test(string)
+  if (!id) {
+    return <TrackingNumberInput />
+  }
 
   const track = async () => {
-    console.log('start')
-    console.log(trackingNumber)
-    if (trackingNumber == '') {
-      setIsValid(false)
-      return
-    }
-    if (!isNumString(trackingNumber)) {
-      setIsValid(false)
-      return
-    }
-
     try {
-      const trackingData = await trackOrder(trackingNumber)
+      const trackingData = await trackOrder(id)
       if (trackingData == null) {
         setIsValid(false)
+        setLoading(false)
         return
       }
       setStatus(trackingData.status)
       setIsValid(true)
-      setTrackingDataFound(true)
       var currLoc = await fetchPlaceName(
         trackingData.currentCoordinate.lat,
         trackingData.currentCoordinate.lng
@@ -80,7 +74,6 @@ function TrackingPage() {
           trackingHistory.push('Error fetching Location')
         }
       }
-      setTrackingDataFound(true)
       setPreviousLocations(trackingHistory)
       let origin = await fetchPlaceName(
         trackingData.originCoordinate.lat,
@@ -90,6 +83,7 @@ function TrackingPage() {
         origin = ''
       }
       setOriginLocation(origin)
+      setLoading(false)
     } catch (error) {
       if (
         error instanceof Error &&
@@ -102,17 +96,71 @@ function TrackingPage() {
       } else {
         console.error('An unexpected error occurred:', error)
       }
+      setLoading(false)
     }
   }
 
-  function OrderCard() {
+  useEffect(() => {
+    track()
+  }, [id])
+
+  if (loading) {
     return (
-      <div className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-        <p className="font-medium">
-          <strong>Order Number:</strong> {trackingNumber}
-        </p>
-        <p>
-          <strong>Status:</strong>{' '}
+      <Container>
+        <div className="w-full h-full flex justify-center items-center">
+          <FadeInWrapper>
+            <Spinner />
+          </FadeInWrapper>
+        </div>
+      </Container>
+    )
+  }
+  if (!isValid) {
+    return <TrackingNumberInput invalidId={id} setLoading={setLoading} />
+  }
+  return (
+    <Container>
+      <div className="mt-4 flex flex-col gap-4 h-full">
+        <OrderInformationCard orderId={id} status={status} />
+        <div className="rounded-2xl border shadow p-4 h-[500px] grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4 overflow-scroll">
+            <div className="flex items-center gap-2">
+              <MapPin size={24} className="text-green-500" />
+              <h2 className="flex-1 text-xl font-bold truncate">
+                {currentLocation}
+              </h2>
+            </div>
+            <LocationHistory locations={previousLocations} />
+          </div>
+          <div className="w-full">
+            <Map
+              startLocation={originLocation}
+              endLocation={endLocation}
+              pingLocation={currentLocation}
+            />
+          </div>
+        </div>
+      </div>
+    </Container>
+  )
+}
+
+function OrderInformationCard({
+  orderId,
+  status,
+}: {
+  orderId: string
+  status: string
+}) {
+  return (
+    <div className="flex justify-between">
+      <div>
+        <div className="text-sm font-bold text-slate-500">Tracking Number</div>
+        <div className="text-2xl font-bold">{orderId}</div>
+      </div>
+      <div className="text-center">
+        <div className="text-sm font-bold text-slate-500">Order Status</div>
+        <div>
           <span
             className={`px-2 py-1 rounded-full text-sm font-medium ${
               status === 'Delivered'
@@ -124,82 +172,91 @@ function TrackingPage() {
           >
             {status}
           </span>
-        </p>
-        <p>
-          <strong>Current Location: </strong> {currentLocation}
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="h-full relative flex flex-col overflow-auto">
-      <section className="h-full relative">
-        <div className="max-w-screen-xl mx-auto  mt-2 p-16 h-full flex items-center justify-around gap-4">
-          <div className="w-[350px] flex flex-col gap-4 items-ends">
-            <div className="text-4xl font-extrabold tracking-tight mb-8">
-              Enter your tracking number
-            </div>
-            <Input
-              placeholder="Tracking Number"
-              value={trackingNumber}
-              onChange={(e) => setTrackingNumber(e.target.value)}
-            ></Input>
-            {!isValidTracking && (
-              <div className="text-m text-red-500">
-                Not a Valid Tracking Number
-              </div>
-            )}
-            <Button onClick={track}>Track Order</Button>
-          </div>
-          <div className="w-full h-full max-w-[500px] max-h-[500px] ">
-            {import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ? (
-              <div className="w-full h-full">
-                <Map
-                  startLocation={originLocation}
-                  endLocation={endLocation}
-                  pingLocation={currentLocation}
-                />
-              </div>
-            ) : (
-              <img
-                src="map.png"
-                className="size-auto object-contain rounded-lg"
-              ></img>
-            )}
-          </div>
         </div>
-      </section>
-
-      {trackingDataFound && (
-        <section className="w-[1000px] mx-auto mb-4 overflow-y-auto">
-          {/* OrderCard and Table Container */}
-          <div>
-            <OrderCard />
-
-            <Table>
-              <TableCaption>Order Tracking History</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Location History</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {previousLocations
-                  .slice()
-                  .reverse()
-                  .map((location, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium">{location}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-              <TableFooter></TableFooter>
-            </Table>
-          </div>
-        </section>
-      )}
+      </div>
+      <div className="text-end">
+        <div className="text-sm font-bold text-slate-500">User Information</div>
+        <div>j@doe.com</div>
+      </div>
     </div>
   )
 }
-export default TrackingPage
+
+function LocationHistory({ locations }: { locations: String[] }) {
+  return (
+    <ScrollArea>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Location History</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {locations
+            .slice()
+            .reverse()
+            .map((location, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{location}</TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+        <TableFooter></TableFooter>
+      </Table>
+    </ScrollArea>
+  )
+}
+
+function TrackingNumberInput({
+  invalidId,
+  setLoading,
+}: {
+  invalidId?: string
+  setLoading?: any
+}) {
+  const [trackingNumber, setTrackingNumber] = useState('')
+  const navigate = useNavigate()
+  const handleTrackingNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const stripped = e.target.value.replace(/\D/g, '')
+    setTrackingNumber(stripped)
+  }
+  const handleSubmit = () => {
+    setLoading(true)
+    navigate(`/track/${trackingNumber}`)
+  }
+
+  return (
+    <Container>
+      <div className="flex justify-center mt-20">
+        <div className="w-[350px] flex flex-col gap-4 items-ends">
+          <FadeInWrapper>
+            <div className="text-4xl font-extrabold tracking-tight mb-4">
+              What's your tracking number?
+            </div>
+          </FadeInWrapper>
+          <FadeInWrapper delay={50}>
+            <Input
+              className="p-6 text-lg text-center shadow"
+              value={trackingNumber}
+              onChange={handleTrackingNumberChange}
+            ></Input>
+          </FadeInWrapper>
+          {invalidId && (
+            <FadeInWrapper delay={75}>
+              <div className="text-m text-red-500">
+                {invalidId} is not a valid tracking number.
+              </div>
+            </FadeInWrapper>
+          )}
+          <FadeInWrapper delay={100}>
+            <div className="flex justify-end">
+              <Button onClick={handleSubmit}>Track Order</Button>
+            </div>
+          </FadeInWrapper>
+        </div>
+      </div>
+    </Container>
+  )
+}

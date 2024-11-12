@@ -8,7 +8,7 @@ import OrderPage from './routes/order-page.tsx'
 import PaymentPage from './routes/payment.tsx'
 import SignupPage from './routes/signup-page.tsx'
 import ProfilePage from './routes/profile-page.tsx'
-import TrackingPage from './routes/tracking-page.tsx'
+import TrackingPage from './routes/tracking-page'
 import ErrorPage from './error-page.tsx'
 import Home from './Home.tsx'
 import './index.css'
@@ -49,8 +49,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/track',
-        element: <TrackingPage/>
-      }
+        element: <TrackingPage />,
+      },
+      {
+        path: '/track/:id',
+        element: <TrackingPage />,
+      },
     ],
   },
 ])
