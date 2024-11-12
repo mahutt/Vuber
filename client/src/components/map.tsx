@@ -44,12 +44,19 @@ export default function Map({
       if (!mapRef.current) return
       if (startLocation && !endLocation) {
         flyTo(mapRef.current, startLocation)
-      } else if (startLocation && endLocation) {
+      } else if (startLocation && endLocation && !pingLocation) {
         addRoute(mapRef.current, startLocation, endLocation)
+      } else if (startLocation && endLocation && pingLocation) {
+        addRouteWithWaypoint(
+          mapRef.current,
+          startLocation,
+          pingLocation,
+          endLocation
+        )
       }
     }, 500)
     return () => clearTimeout(timeout)
-  }, [startLocation, endLocation])
+  }, [startLocation, pingLocation, endLocation])
 
   useEffect(() => {
     if (!pingLocation) return
@@ -78,16 +85,36 @@ const addPing = (
   coordinates: [number, number],
   color: string = '#3b82f6'
 ) => {
-  const el = document.createElement('div')
-  el.className = 'ping-marker'
-  el.style.width = '20px'
-  el.style.height = '20px'
-  el.style.borderRadius = '50%'
-  el.style.backgroundColor = color
-  el.style.border = '3px solid white'
-  el.style.boxShadow = '0 0 0 2px ' + color
+  if (map.getLayer('ping-marker')) {
+    map.removeLayer('ping-marker')
+  }
+  if (map.getSource('ping-marker')) {
+    map.removeSource('ping-marker')
+  }
 
-  new mapboxgl.Marker(el).setLngLat(coordinates).addTo(map)
+  map.addSource('ping-marker', {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Point',
+        coordinates: coordinates,
+      },
+    },
+  })
+
+  map.addLayer({
+    id: 'ping-marker',
+    type: 'circle',
+    source: 'ping-marker',
+    paint: {
+      'circle-radius': 10,
+      'circle-color': color,
+      'circle-stroke-width': 3,
+      'circle-stroke-color': 'white',
+    },
+  })
 }
 
 export const fetchCoordinates = async (
@@ -175,6 +202,78 @@ const addRoute = async (
       bounds.extend(coord),
     new mapboxgl.LngLatBounds(routeCoordinates[0], routeCoordinates[0])
   )
+  map.fitBounds(bounds, { padding: 50 })
+}
+
+const addRouteWithWaypoint = async (
+  map: mapboxgl.Map,
+  startLocation: string,
+  waypointLocation: string,
+  endLocation: string
+) => {
+  const [startCoords, waypointCoords, endCoords] = await Promise.all([
+    fetchCoordinates(startLocation),
+    fetchCoordinates(waypointLocation),
+    fetchCoordinates(endLocation),
+  ])
+
+  if (!startCoords || !waypointCoords || !endCoords) return
+
+  // Fetch route with waypoint
+  const response = await fetch(
+    `https://api.mapbox.com/directions/v5/mapbox/driving/${startCoords.join(
+      ','
+    )};${waypointCoords.join(',')};${endCoords.join(
+      ','
+    )}?geometries=geojson&access_token=${mapboxgl.accessToken}`
+  )
+  const data = await response.json()
+  const routeCoordinates = data.routes?.[0]?.geometry?.coordinates
+  if (!routeCoordinates) return
+
+  // Update or add the route source
+  if (map.getSource('route')) {
+    ;(map.getSource('route') as mapboxgl.GeoJSONSource).setData({
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: routeCoordinates,
+      },
+    })
+  } else {
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: routeCoordinates,
+        },
+      },
+    })
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round',
+      },
+      paint: {
+        'line-color': '#3b82f6',
+        'line-width': 4,
+      },
+    })
+  }
+
+  // Fit bounds to include all points
+  const bounds = new mapboxgl.LngLatBounds()
+  bounds.extend(startCoords)
+  bounds.extend(waypointCoords)
+  bounds.extend(endCoords)
+
   map.fitBounds(bounds, { padding: 50 })
 }
 
