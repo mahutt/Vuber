@@ -9,16 +9,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 import { PersonIcon, ExitIcon } from '@radix-ui/react-icons'
+import Spinner from '@/components/spinner'
 
 export default function ProfileButton() {
-  const { user, logout } = useAuth()
+  const { user, loading, logout } = useAuth()
   const navigate = useNavigate()
   const handleLogout = async () => {
     await logout()
     navigate('/')
   }
-  if (!user) return null
+
+  if (loading) return <Spinner />
+  if (!user) return <AuthenticateButtons />
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
@@ -41,5 +45,23 @@ export default function ProfileButton() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+function AuthenticateButtons() {
+  return (
+    <>
+      <Link
+        to="/signup"
+        className="text-blue-400 hover:underline text-sm font-medium"
+      >
+        Sign up
+      </Link>
+      <Link to="/signin">
+        <Button className="bg-blue-500 hover:bg-blue-400 transition-color duration-200">
+          Sign in
+        </Button>
+      </Link>
+    </>
   )
 }
