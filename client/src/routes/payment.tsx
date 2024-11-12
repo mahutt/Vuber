@@ -4,12 +4,14 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { createOrder } from '@/services/order-service'
 import { fetchCoordinates } from '@/components/map'
 import { Button } from '@/components/ui/button'
-import { Parcel, OrderDetails, Coordinates } from '@/types/types'
+import { Parcel, OrderDetails, Coordinate } from '@/types/types'
 import { useState } from 'react'
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
-const fetchTypedCoordinates = async (location: string): Promise<Coordinates> => {
+const fetchTypedCoordinates = async (
+  location: string
+): Promise<Coordinate> => {
   if (!import.meta.env.VITE_MAPBOX_ACCESS_TOKEN) {
     return { lat: 37.7749, lng: -122.4194 }
   }

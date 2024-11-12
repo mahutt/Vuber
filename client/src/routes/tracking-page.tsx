@@ -19,6 +19,7 @@ import { fetchPlaceName } from '../components/map'
 function TrackingPage() {
   const [trackingNumber, setTrackingNumber] = useState<string>('')
   const [isValidTracking, setIsValid] = useState<Boolean>(true)
+  const [originLocation, setOriginLocation] = useState<string>('')
   const [previousLocations, setPreviousLocations] = useState<String[]>([])
   const [currentLocation, setCurrentLocation] = useState<string>('')
   const [endLocation, setEndLocation] = useState<string>('')
@@ -40,46 +41,55 @@ function TrackingPage() {
     }
 
     try {
-      const response = await trackOrder(trackingNumber)
-      if (response.status == 200) {
-        setStatus(response.data.status)
-        setIsValid(true)
-        setTrackingDataFound(true)
-        var currLoc = await fetchPlaceName(
-          response.data.newCurrLocation.xCoord,
-          response.data.newCurrLocation.yCoord
-        )
-        if (currLoc == null) {
-          currLoc = ''
-        }
-        setCurrentLocation(currLoc)
-
-        var dest = await fetchPlaceName(
-          response.data.destinationCoords.xCoord,
-          response.data.destinationCoords.yCoord
-        )
-        if (dest == null) {
-          dest = ''
-        }
-        setEndLocation(dest)
-
-        const prevCoordArr = response.data.prevCoords
-        console.log(prevCoordArr)
-        const trackingHistory: string[] = []
-        for (let i = 0; i < prevCoordArr.length; i++) {
-          let locString = await fetchPlaceName(
-            prevCoordArr[i].xCoord,
-            prevCoordArr[i].yCoord
-          )
-          if (locString) {
-            trackingHistory.push(locString)
-          } else {
-            trackingHistory.push('Error fetching Location')
-          }
-        }
-        setTrackingDataFound(true)
-        setPreviousLocations(trackingHistory)
+      const trackingData = await trackOrder(trackingNumber)
+      if (trackingData == null) {
+        setIsValid(false)
+        return
       }
+      setStatus(trackingData.status)
+      setIsValid(true)
+      setTrackingDataFound(true)
+      var currLoc = await fetchPlaceName(
+        trackingData.currentCoordinate.lat,
+        trackingData.currentCoordinate.lng
+      )
+      if (currLoc == null) {
+        currLoc = ''
+      }
+      setCurrentLocation(currLoc)
+
+      var dest = await fetchPlaceName(
+        trackingData.destinationCoordinate.lat,
+        trackingData.destinationCoordinate.lng
+      )
+      if (dest == null) {
+        dest = ''
+      }
+      setEndLocation(dest)
+
+      const prevCoordArr = trackingData.previousCoordinates
+      const trackingHistory: string[] = []
+      for (let i = 0; i < prevCoordArr.length; i++) {
+        let locString = await fetchPlaceName(
+          prevCoordArr[i].lat,
+          prevCoordArr[i].lng
+        )
+        if (locString) {
+          trackingHistory.push(locString)
+        } else {
+          trackingHistory.push('Error fetching Location')
+        }
+      }
+      setTrackingDataFound(true)
+      setPreviousLocations(trackingHistory)
+      let origin = await fetchPlaceName(
+        trackingData.originCoordinate.lat,
+        trackingData.originCoordinate.lng
+      )
+      if (origin == null) {
+        origin = ''
+      }
+      setOriginLocation(origin)
     } catch (error) {
       if (
         error instanceof Error &&
@@ -146,8 +156,9 @@ function TrackingPage() {
             {import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ? (
               <div className="w-full h-full">
                 <Map
-                  startLocation={currentLocation}
+                  startLocation={originLocation}
                   endLocation={endLocation}
+                  pingLocation={currentLocation}
                 />
               </div>
             ) : (

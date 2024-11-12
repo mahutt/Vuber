@@ -2,50 +2,64 @@ package com.SOEN343.API.order.dto;
 
 import java.util.List;
 
-import com.SOEN343.API.Coordinates.Coordinates;
+import com.SOEN343.API.Coordinates.Coordinate;
 
 public class TrackingDto {
 
-    private Coordinates newCurrLocation;
-    private Coordinates destinationCoords;
-    private List<Coordinates> prevCoords;
+    private Coordinate originCoordinate;
+    private Coordinate currentCoordinate;
+    private Coordinate destinationCoordinate;
+    private List<Coordinate> previousCoordinates;
     private String status;
 
-    public TrackingDto(Coordinates newCurrLocation,Coordinates destinationCoordinates, List<Coordinates> prevCoords, String status) {
+    public TrackingDto(Coordinate originCoordiante, Coordinate currentCoordinate, Coordinate destinationCoordinate,
+            List<Coordinate> previousCoordinates,
+            String status) {
+        this.originCoordinate = originCoordiante;
         this.status = status;
-        this.newCurrLocation = newCurrLocation;
-        this.destinationCoords = destinationCoordinates;
-        this.prevCoords = prevCoords;
+        this.currentCoordinate = currentCoordinate;
+        this.destinationCoordinate = destinationCoordinate;
+        this.previousCoordinates = previousCoordinates;
     }
-    
-    public Coordinates getNewCurrLocation() {
-        return newCurrLocation;
+
+    public Coordinate getCurrentCoordinate() {
+        return currentCoordinate;
     }
-    public void setNewCurrLocation(Coordinates newCurrLocation) {
-        this.newCurrLocation = newCurrLocation;
+
+    public void setCurrentCoordinate(Coordinate currentCoordinate) {
+        this.currentCoordinate = currentCoordinate;
     }
-    public List<Coordinates> getPrevCoords() {
-        return prevCoords;
+
+    public List<Coordinate> getPreviousCoordinates() {
+        return previousCoordinates;
     }
-    public void setPrevCoords(List<Coordinates> prevCoords) {
-        this.prevCoords = prevCoords;
+
+    public void setPreviousCoordinates(List<Coordinate> previousCoordinates) {
+        this.previousCoordinates = previousCoordinates;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public Coordinates getDestinationCoords() {
-        return destinationCoords;
+    public Coordinate getDestinationCoordinate() {
+        return destinationCoordinate;
     }
 
-    public void setDestinationCoords(Coordinates destinationCoords) {
-        this.destinationCoords = destinationCoords;
+    public void setDestinationCoordinate(Coordinate destinationCoordinate) {
+        this.destinationCoordinate = destinationCoordinate;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    
+    public Coordinate getOriginCoordinate() {
+        return originCoordinate;
+    }
+
+    public void setOriginCoordinate(Coordinate originCoordinate) {
+        this.originCoordinate = originCoordinate;
+    }
+
 }
