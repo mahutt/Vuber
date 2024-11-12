@@ -9,9 +9,7 @@ import { useState } from 'react'
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
-const fetchTypedCoordinates = async (
-  location: string
-): Promise<Coordinate> => {
+const fetchTypedCoordinates = async (location: string): Promise<Coordinate> => {
   if (!import.meta.env.VITE_MAPBOX_ACCESS_TOKEN) {
     return { lat: 37.7749, lng: -122.4194 }
   }
@@ -63,7 +61,6 @@ const CheckoutForm = () => {
         console.log('Card validated successfully')
         setErrorMessage(null)
 
-        
         createOrder(orderDetails).then((orderId) => {
           console.log('Order created with ID:', orderId)
 
@@ -80,24 +77,26 @@ const CheckoutForm = () => {
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Payment Information</h2>
+    <div className="w-full max-w-lg mx-auto bg-white m-10 p-8 rounded-lg shadow-md">
+      <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800 tracking-tight">Payment Information</h2>
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
         {/* Error Popup */}
         {errorMessage && (
-          <div className="mb-4 p-4 text-red-700 bg-red-100 border border-red-400 rounded-lg">
+          <div className="mb-4 p-4 text-red-700 bg-red-100 border border-red-400 rounded-lg font-extrabold tracking-tight">
             {errorMessage}
           </div>
         )}
 
         <div className="p-3 border rounded-md">
           <CardElement
-            className="p-2 text-gray-700"
+            className="p-2 text-gray-700 font-extrabold tracking-tight"
             options={{
               style: {
                 base: {
                   fontSize: '16px',
                   color: '#424770',
+                  fontWeight:'800',
+                  letterSpacing:'-0.015em',
                   '::placeholder': { color: '#a0aec0' },
                 },
                 invalid: { color: '#9e2146' },
@@ -108,7 +107,7 @@ const CheckoutForm = () => {
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium mb-1" htmlFor="postal-code">
+          <label className="block text-gray-700 font-extrabold tracking-tight mb-1" htmlFor="postal-code">
             Postal Code
           </label>
           <input
@@ -117,13 +116,13 @@ const CheckoutForm = () => {
             value={postalCode}
             onChange={handlePostalCodeChange}
             placeholder="e.g., A1A1A1"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 font-extrabold tracking-tight"
           />
         </div>
         
         <Button 
           onClick={executeCreateOrder}
-          className="w-full bg-blue-500 hover:bg-blue-400 transition-color duration-200 text-white py-3 rounded-md font-medium"
+          className="w-full bg-blue-500 hover:bg-blue-400 transition-color duration-200 text-white py-7 rounded-md font-extrabold text-xl"
         >
           Submit Payment
         </Button>
@@ -134,10 +133,15 @@ const CheckoutForm = () => {
 
 export default function PaymentPage() {
   return (
-    <Elements stripe={stripePromise}>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <CheckoutForm />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="text-6xl font-extrabold tracking-tight mb-8 text-center text-gray-800">
+        Payment Step
       </div>
-    </Elements>
+      <Elements stripe={stripePromise}>
+        <div className="max-w-lg w-full">
+          <CheckoutForm />
+        </div>
+      </Elements>
+    </div>
   )
 }
