@@ -19,13 +19,13 @@ export interface User {
 export interface OrderDetails {
   total: number
   parcels: Parcel[]
-  originCoordinates: Coordinates
-  destinationCoordinates: Coordinates
+  originCoordinates: Coordinate
+  destinationCoordinates: Coordinate
   pickupInstructions: string
   dropoffInstructions: string
 }
 
-export interface Coordinates {
+export interface Coordinate {
   lat: number
   lng: number
 }

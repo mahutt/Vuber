@@ -47,8 +47,8 @@ public class OrderService {
     }
 
     public Coordinate getMidPoint(Coordinate curr, Coordinate dest) {
-        double midpointX = ((dest.getX() + curr.getX())) / 2;
-        double midpointY = ((dest.getY() + curr.getY())) / 2;
+        double midpointX = ((dest.getLat() + curr.getLat())) / 2;
+        double midpointY = ((dest.getLng() + curr.getLng())) / 2;
         return new Coordinate(midpointX, midpointY);
     }
 

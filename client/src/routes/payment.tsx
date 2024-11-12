@@ -2,11 +2,9 @@ import useLocalStorage from 'use-local-storage'
 import { Button } from '@/components/ui/button'
 import { fetchCoordinates } from '@/components/map'
 import { createOrder } from '@/services/order-service'
-import { Parcel, OrderDetails, Coordinates } from '@/types/types'
+import { Parcel, OrderDetails, Coordinate } from '@/types/types'
 
-const fetchTypedCoordinates = async (
-  location: string
-): Promise<Coordinates> => {
+const fetchTypedCoordinates = async (location: string): Promise<Coordinate> => {
   if (!import.meta.env.VITE_MAPBOX_ACCESS_TOKEN) {
     return { lat: 37.7749, lng: -122.4194 }
   }
