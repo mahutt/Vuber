@@ -9,6 +9,7 @@ import SignupPage from './routes/signup-page.tsx'
 import ErrorPage from './error-page.tsx'
 import Home from './Home.tsx'
 import './index.css'
+import ContactUs from './components/contact-page/Contact-Page.tsx'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: 'order',
         element: <OrderPage />,
+      },
+      {
+        path: 'contact-page',
+        element: <ContactUs/>,
       },
     ],
   },

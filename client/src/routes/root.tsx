@@ -89,7 +89,7 @@ export default function Root() {
                         FAQ
                       </div>
                     </Link>
-                    <Link to="/contact">
+                    <Link to="/contact-page">
                       <div className="flex flex-row gap-2 items-center">
                         <EnvelopeClosedIcon className="h-4 w-4" />
                         Contact us
