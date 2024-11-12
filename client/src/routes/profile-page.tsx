@@ -1,14 +1,16 @@
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/providers/AuthProvider'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+type Order = {
+  orderNumber: string
+  status: string
+  estimatedDelivery: string
+}
 
 export default function ProfilePage() {
   const { user, loading } = useAuth()
-
-  type Order = {
-    orderNumber: string
-    status: string
-    estimatedDelivery: string
-  }
+  const navigate = useNavigate()
 
   const [orderInfo] = useState([
     {
@@ -38,41 +40,18 @@ export default function ProfilePage() {
   )
   const pastOrders = orderInfo.filter((order) => order.status === 'Delivered')
 
+  useEffect(() => {
+    if (!user && !loading) {
+      navigate('/signin')
+    }
+  }, [user, loading, navigate])
+
   if (loading) {
     return <div className="text-center p-4">Loading...</div>
   }
 
   if (!user) {
-    return (
-      <div className="text-center p-4">Please log in to view your profile.</div>
-    )
-  }
-
-  function OrderCard({ order }: { order: Order }) {
-    return (
-      <li className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-        <p className="font-medium">
-          <strong>Order Number:</strong> {order.orderNumber}
-        </p>
-        <p>
-          <strong>Status:</strong>{' '}
-          <span
-            className={`px-2 py-1 rounded-full text-sm font-medium ${
-              order.status === 'Delivered'
-                ? 'bg-green-100 text-green-800'
-                : order.status === 'In Transit'
-                ? 'bg-blue-100 text-blue-800'
-                : 'bg-yellow-100 text-yellow-800'
-            }`}
-          >
-            {order.status}
-          </span>
-        </p>
-        <p>
-          <strong>Estimated Delivery:</strong> {order.estimatedDelivery}
-        </p>
-      </li>
-    )
+    return null
   }
 
   return (
@@ -109,5 +88,32 @@ export default function ProfilePage() {
         </section>
       </div>
     </div>
+  )
+}
+
+function OrderCard({ order }: { order: Order }) {
+  return (
+    <li className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+      <p className="font-medium">
+        <strong>Order Number:</strong> {order.orderNumber}
+      </p>
+      <p>
+        <strong>Status:</strong>{' '}
+        <span
+          className={`px-2 py-1 rounded-full text-sm font-medium ${
+            order.status === 'Delivered'
+              ? 'bg-green-100 text-green-800'
+              : order.status === 'In Transit'
+              ? 'bg-blue-100 text-blue-800'
+              : 'bg-yellow-100 text-yellow-800'
+          }`}
+        >
+          {order.status}
+        </span>
+      </p>
+      <p>
+        <strong>Estimated Delivery:</strong> {order.estimatedDelivery}
+      </p>
+    </li>
   )
 }
