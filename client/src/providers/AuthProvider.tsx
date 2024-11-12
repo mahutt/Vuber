@@ -7,15 +7,12 @@ import React, {
 } from 'react'
 import api from '@/services/api'
 
-interface User {
-  id: number
-  name: string
-}
+import { User } from '@/types/types'
 
 interface AuthContextType {
   user: User | null
-  login: (name: string, password: string) => Promise<void>
-  register: (name: string, password: string) => Promise<void>
+  signin: (name: string, password: string) => Promise<boolean>
+  signup: (name: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
   loading: boolean
 }
@@ -33,8 +30,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkLoggedIn = async () => {
       try {
-        const { data } = await api.get<{ user: User }>('/users/current')
-        setUser(data.user)
+        const { data } = await api.get<User | null>('/users/current')
+        setUser(data)
       } catch (error) {
         setUser(null)
       } finally {
@@ -44,29 +41,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkLoggedIn()
   }, [])
 
-  const login = async (name: string, password: string) => {
-    const { data } = await api.post<{ user: User }>('/login', {
-      name,
-      password,
-    })
-    setUser(data.user)
+  const signin = async (name: string, password: string): Promise<boolean> => {
+    return api
+      .post<{ accessToken: string; user: User } | null>('users/signin', {
+        name,
+        password,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          localStorage.setItem('accessToken', response.data.accessToken)
+          setUser(response.data.user)
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(() => false)
   }
 
-  const register = async (name: string, password: string) => {
-    const { data } = await api.post<{ user: User }>('/register', {
-      name,
-      password,
-    })
-    setUser(data.user)
+  const signup = async (name: string, password: string): Promise<boolean> => {
+    return api
+      .post('users/signup', {
+        name,
+        password,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(() => false)
   }
 
   const logout = async () => {
-    await api.post('/logout')
-    setUser(null)
+    api
+      .post('users/logout')
+      .then(() => {
+        localStorage.removeItem('accessToken')
+        setUser(null)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+    <AuthContext.Provider value={{ user, signin, logout, signup, loading }}>
       {children}
     </AuthContext.Provider>
   )

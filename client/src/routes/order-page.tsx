@@ -4,9 +4,9 @@ import useLocalStorage from 'use-local-storage'
 import Container from '@/components/container'
 import { LocationInput } from '@/components/location-input'
 import ParcelForm, {
-  Parcel,
   ParcelFormActions,
 } from '@/components/order-page/parcel-form'
+import { Parcel } from '@/types/types'
 import ParcelCard from '@/components/order-page/parcel-card'
 import FadeInWrapper from '@/components/fade-in-wrapper'
 import Map from '@/components/map'
@@ -18,6 +18,7 @@ import {
 } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import QuoteDisplay from '@/components/order-page/quote-display'
+import LocationInstructions from '@/components/order-page/location-instructions'
 
 const packageCardStyling = 'bg-white shadow rounded-lg w-[250px] h-[200px]'
 
@@ -95,18 +96,32 @@ export default function OrderPage() {
             >
               Where should we deliver your package?
             </div>
-            <LocationInput
-              placeholder="From"
-              ref={pickUpLocation}
-              value={startLocation}
-              onChange={(e) => setStartLocation(e.target.value)}
-            />
-            <LocationInput
-              placeholder="To"
-              filled={true}
-              value={endLocation}
-              onChange={(e) => setEndLocation(e.target.value)}
-            />
+            <div>
+              <FadeInLabel text="Pickup Location" visible={addParcelPhase} />
+              <LocationInput
+                placeholder="From"
+                ref={pickUpLocation}
+                value={startLocation}
+                onChange={(e) => setStartLocation(e.target.value)}
+              />
+              <LocationInstructions
+                visible={!!startLocation}
+                locationType="pickup"
+              />
+            </div>
+            <div>
+              <FadeInLabel text="Dropoff Location" visible={addParcelPhase} />
+              <LocationInput
+                placeholder="To"
+                filled={true}
+                value={endLocation}
+                onChange={(e) => setEndLocation(e.target.value)}
+              />
+              <LocationInstructions
+                visible={!!endLocation}
+                locationType="dropoff"
+              />
+            </div>
 
             <div
               className={`transition-height duration-500 ease-in-out
@@ -191,5 +206,17 @@ export default function OrderPage() {
         onEdit={handleEditSubmit}
       />
     </Container>
+  )
+}
+
+const FadeInLabel = ({ text, visible }: { text: string; visible: boolean }) => {
+  return (
+    <div
+      className={`ml-3 text-sm font-medium text-muted-foreground ${
+        visible ? 'h-6' : 'h-0'
+      } transition-height duration-500 ease-in-out overflow-hidden`}
+    >
+      {text}
+    </div>
   )
 }

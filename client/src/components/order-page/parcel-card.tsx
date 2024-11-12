@@ -1,4 +1,4 @@
-import { Parcel } from '@/components/order-page/parcel-form'
+import { Parcel } from '@/types/types'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Weight, Box, Trash2 } from 'lucide-react'
 

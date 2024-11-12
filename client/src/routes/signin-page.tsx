@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -13,23 +13,33 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+import { useAuth } from '@/providers/AuthProvider'
+import ErrorBanner from '@/components/error-banner'
+import { useState } from 'react'
 
-const LoginFormSchema = z.object({
+const SigninFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
 
-export default function LoginPage() {
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
+export default function SigninPage() {
+  const { signin } = useAuth()
+  const navigate = useNavigate()
+  const [bannerMessage, setBannerMessage] = useState<string | null>(null)
+  const form = useForm<z.infer<typeof SigninFormSchema>>({
+    resolver: zodResolver(SigninFormSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof SigninFormSchema>) {
+    if (await signin(values.email, values.password)) {
+      navigate('/profile')
+    } else {
+      setBannerMessage('Invalid email or password')
+    }
   }
 
   return (
@@ -40,6 +50,7 @@ export default function LoginPage() {
           className="w-[515px] p-10 border shadow rounded-3xl space-y-6"
         >
           <div className="text-2xl font-bold">Sign in to Vüber</div>
+          {bannerMessage && <ErrorBanner message={bannerMessage} />}
           <FormField
             control={form.control}
             name="email"

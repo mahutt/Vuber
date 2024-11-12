@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/form'
 import Container from '@/components/container'
 import { Package, Truck, ArrowUpRightIcon } from 'lucide-react'
+import { useAuth } from '@/providers/AuthProvider'
+import ErrorBanner from '@/components/error-banner'
 
 const formSchema = z.object({
   email: z
@@ -57,7 +59,10 @@ function OptionCard({
 }
 
 export default function SignupPage() {
+  const { signup, signin } = useAuth()
+  const navigate = useNavigate()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
+  const [bannerMessage, setBannerMessage] = useState<string | null>(null)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,9 +70,13 @@ export default function SignupPage() {
       password: '',
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    console.log(userType)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (await signup(values.email, values.password)) {
+      await signin(values.email, values.password)
+      navigate('/profile')
+    } else {
+      setBannerMessage('We could not create your account. Please try again.')
+    }
   }
   return (
     <Container>
@@ -82,6 +91,7 @@ export default function SignupPage() {
                 Create your Vüber account
               </h1>
             </div>
+            {bannerMessage && <ErrorBanner message={bannerMessage} />}
             <FormField
               control={form.control}
               name="email"
@@ -133,7 +143,7 @@ export default function SignupPage() {
               Create account
             </Button>
             <Link
-              to="/login"
+              to="/signin"
               className="text-blue-500 hover:underline text-center"
             >
               Already have an account? Log in
