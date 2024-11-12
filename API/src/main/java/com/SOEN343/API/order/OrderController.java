@@ -34,7 +34,8 @@ public class OrderController {
     private QuoteCalculator quoteCalculator;
 
     @Autowired
-    public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository,QuoteCalculator quoteCalc) {
+    public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository,
+            QuoteCalculator quoteCalc) {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
@@ -170,7 +171,7 @@ public class OrderController {
         if (order.getStatus().equals("Delivered")) {
             TrackingDto trackingDto = new TrackingDto(originCoordinates, destinationCoordinates, destinationCoordinates,
                     history,
-                    order.getStatus());
+                    order.getStatus(), order.getUser());
             return new ResponseEntity<>(trackingDto, HttpStatus.OK);
         }
 
@@ -192,7 +193,7 @@ public class OrderController {
         orderRepository.save(order);
         TrackingDto trackingDto = new TrackingDto(originCoordinates, newCurrentCoordinates, destinationCoordinates,
                 history,
-                order.getStatus());
+                order.getStatus(), order.getUser());
         return new ResponseEntity<>(trackingDto, HttpStatus.OK);
     }
 
@@ -207,33 +208,30 @@ public class OrderController {
     }
 
     @PostMapping("/quote")
-    public ResponseEntity<Object> getQuote(@RequestBody ParcelDetailsDto[] parcelDto){
-        
+    public ResponseEntity<Object> getQuote(@RequestBody ParcelDetailsDto[] parcelDto) {
+
         User user;
         int numberOfOrders;
-        if(!(userService.getCurrentUser() == null)){
+        if (!(userService.getCurrentUser() == null)) {
             user = userService.getCurrentUser();
             numberOfOrders = user.getOrders().size();
+        } else {
+            numberOfOrders = 0;
         }
-        else{
-            numberOfOrders= 0;
-        }
-       
 
-        double quote =0;
-        
-        if(parcelDto == null){
+        double quote = 0;
+
+        if (parcelDto == null) {
             return ResponseEntity.status(400).body("Null Object");
         }
-        
-        //setting strategy based on number size.
+
+        // setting strategy based on number size.
         quoteCalculator.setSrategy(numberOfOrders);
 
-        //using execute, which calls the quote calc from the strategy
+        // using execute, which calls the quote calc from the strategy
         quote = quoteCalculator.execute(parcelDto);
 
         return ResponseEntity.ok().body(quote);
     }
 
 }
-

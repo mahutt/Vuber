@@ -16,6 +16,10 @@ export interface User {
   name: string
 }
 
+export interface BackendUser {
+  username: string
+}
+
 export interface OrderDetails {
   total: number
   parcels: Parcel[]

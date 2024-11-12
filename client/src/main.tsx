@@ -60,6 +60,10 @@ const router = createBrowserRouter([
         element: <TrackingPage />,
       },
       {
+        path: '/track/:id',
+        element: <TrackingPage />,
+      },
+      {
         path: '/confirmation',
         element: <ConfirmationPage />,
       },

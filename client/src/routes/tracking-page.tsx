@@ -28,9 +28,10 @@ export default function TrackingPage() {
   const [currentLocation, setCurrentLocation] = useState<string>('')
   const [endLocation, setEndLocation] = useState<string>('')
   const [status, setStatus] = useState<string>('')
+  const [username, setUsername] = useState<string>('')
 
   if (!id) {
-    return <TrackingNumberInput />
+    return <TrackingNumberInput setLoading={setLoading} />
   }
 
   const track = async () => {
@@ -83,6 +84,7 @@ export default function TrackingPage() {
         origin = ''
       }
       setOriginLocation(origin)
+      setUsername(trackingData.user.username)
       setLoading(false)
     } catch (error) {
       if (
@@ -121,7 +123,11 @@ export default function TrackingPage() {
   return (
     <Container>
       <div className="mt-4 flex flex-col gap-4 h-full">
-        <OrderInformationCard orderId={id} status={status} />
+        <OrderInformationCard
+          orderId={id}
+          status={status}
+          username={username}
+        />
         <div className="rounded-2xl border shadow p-4 h-[500px] grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-4 overflow-scroll">
             <div className="flex items-center gap-2">
@@ -148,9 +154,11 @@ export default function TrackingPage() {
 function OrderInformationCard({
   orderId,
   status,
+  username,
 }: {
   orderId: string
   status: string
+  username: string
 }) {
   return (
     <div className="flex justify-between">
@@ -176,7 +184,7 @@ function OrderInformationCard({
       </div>
       <div className="text-end">
         <div className="text-sm font-bold text-slate-500">User Information</div>
-        <div>j@doe.com</div>
+        <div>{username}</div>
       </div>
     </div>
   )
@@ -212,7 +220,7 @@ function TrackingNumberInput({
   setLoading,
 }: {
   invalidId?: string
-  setLoading?: any
+  setLoading: (b: boolean) => void
 }) {
   const [trackingNumber, setTrackingNumber] = useState('')
   const navigate = useNavigate()
