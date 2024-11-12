@@ -14,6 +14,7 @@ import ErrorPage from './error-page.tsx';
 import Home from './Home.tsx';
 import './index.css';
 import ContactUs from './components/contact-page/contact-page.tsx';
+import ConfirmationPage from './routes/order-confirmation.tsx'
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         path: '/track',
         element: <TrackingPage />,
       },
+      {
+        path: '/confirmation',
+        element: <ConfirmationPage />,
+      }
     ],
   },
 ]);

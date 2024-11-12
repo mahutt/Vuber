@@ -70,7 +70,7 @@ const CheckoutForm = () => {
           setPickupInstructions('')  
           setDropoffInstructions('')  
 
-          window.location.href = '/'
+          window.location.href = '/confirmation'
         })
       }
     }
@@ -82,21 +82,19 @@ const CheckoutForm = () => {
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
         {/* Error Popup */}
         {errorMessage && (
-          <div className="mb-4 p-4 text-red-700 bg-red-100 border border-red-400 rounded-lg font-extrabold tracking-tight">
+          <div className="mb-4 p-4 text-red-700 bg-red-100 border border-red-400 rounded-lg">
             {errorMessage}
           </div>
         )}
 
         <div className="p-3 border rounded-md">
           <CardElement
-            className="p-2 text-gray-700 font-extrabold tracking-tight"
+            className="p-2 text-gray-700"
             options={{
               style: {
                 base: {
                   fontSize: '16px',
                   color: '#424770',
-                  fontWeight:'800',
-                  letterSpacing:'-0.015em',
                   '::placeholder': { color: '#a0aec0' },
                 },
                 invalid: { color: '#9e2146' },
@@ -116,7 +114,7 @@ const CheckoutForm = () => {
             value={postalCode}
             onChange={handlePostalCodeChange}
             placeholder="e.g., A1A1A1"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 font-extrabold tracking-tight"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600t"
           />
         </div>
         
