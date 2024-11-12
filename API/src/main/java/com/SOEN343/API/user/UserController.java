@@ -103,4 +103,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout() {
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok().build();
+    }
+
 }

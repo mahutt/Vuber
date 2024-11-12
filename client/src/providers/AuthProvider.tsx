@@ -76,8 +76,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const logout = async () => {
-    await api.post('/logout')
-    setUser(null)
+    api
+      .post('users/logout')
+      .then(() => {
+        localStorage.removeItem('accessToken')
+        setUser(null)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   }
 
   return (

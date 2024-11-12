@@ -9,7 +9,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 import {
   CubeIcon,
@@ -21,6 +20,7 @@ import { Truck } from 'lucide-react'
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import ChatbotToggle from '@/components/chat/chatbot-toggle'
+import ProfileButton from '@/components/profile-button'
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   to: string
@@ -109,13 +109,7 @@ export default function Root() {
           </NavigationMenu>
           <div className="flex-1"></div>
           {user ? (
-            <ReactRouterLink to={user ? `/profile` : `/signin`}>
-              <Avatar>
-                <AvatarFallback>
-                  {user.name.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </ReactRouterLink>
+            <ProfileButton />
           ) : (
             <>
               <ReactRouterLink
