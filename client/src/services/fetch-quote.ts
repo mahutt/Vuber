@@ -1,15 +1,14 @@
-// import api from '@/services/api'
 import { Parcel } from '@/types/types'
+import api from './api'
 
 const fetchQuote = async (parcels: Parcel[]): Promise<number> => {
-  //   const { data } = await api.post<{ quote: number }>('/quote', {
-  //     parcels,
-  //   })
-  //   return data.quote
-
-  // client-side quote calculation until backend is online:
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  return parcels.reduce((acc, parcel) => acc + parcel.weight, 0)
+    try {
+        const quote = await api.post<number>('/orders/quote', parcels )
+        return quote.data
+    } catch (error) {
+        console.error('Failed to fetch quote:', error)
+        return -1;
+    }
 }
 
 export default fetchQuote
