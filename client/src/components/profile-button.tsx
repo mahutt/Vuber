@@ -27,9 +27,7 @@ export default function ProfileButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[50px]">
-        <DropdownMenuLabel className="truncate">
-          thomasmahut{user.name}
-        </DropdownMenuLabel>
+        <DropdownMenuLabel className="truncate">{user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link to="/profile">
           <DropdownMenuItem>
