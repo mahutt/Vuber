@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.SOEN343.API.Coordinates.Coordinate;
+import com.SOEN343.API.QuoteService.BasicQuoteService;
 import com.SOEN343.API.order.dto.CoordinatesDto;
 import com.SOEN343.API.order.dto.OrderDetailsDto;
 import com.SOEN343.API.order.dto.ParcelDetailsDto;
@@ -15,6 +16,8 @@ import com.SOEN343.API.order.dto.TrackingDto;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.SOEN343.API.user.UserService;
+import com.SOEN343.API.QuoteService.IQuoteStrategy;
+import com.SOEN343.API.QuoteService.QuoteCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +31,14 @@ public class OrderController {
     private final UserService userService;
     private final OrderService orderService;
     private OrderRepository orderRepository;
+    private QuoteCalculator quoteCalculator;
 
     @Autowired
-    public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository) {
+    public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository,QuoteCalculator quoteCalc) {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
+        this.quoteCalculator = quoteCalc;
     }
 
     @GetMapping("/purge")
@@ -201,4 +206,34 @@ public class OrderController {
 
     }
 
+    @PostMapping("/quote")
+    public ResponseEntity<Object> getQuote(@RequestBody ParcelDetailsDto[] parcelDto){
+        
+        User user;
+        int numberOfOrders;
+        if(!(userService.getCurrentUser() == null)){
+            user = userService.getCurrentUser();
+            numberOfOrders = user.getOrders().size();
+        }
+        else{
+            numberOfOrders= 0;
+        }
+       
+
+        double quote =0;
+        
+        if(parcelDto == null){
+            return ResponseEntity.status(400).body("Null Object");
+        }
+        
+        //setting strategy based on number size.
+        quoteCalculator.setSrategy(numberOfOrders);
+
+        //using execute, which calls the quote calc from the strategy
+        quote = quoteCalculator.execute(parcelDto);
+
+        return ResponseEntity.ok().body(quote);
+    }
+
 }
+
