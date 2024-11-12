@@ -8,14 +8,20 @@ import com.SOEN343.API.order.dto.ParcelDetailsDto;
 public class QuoteCalculator {
     
     private IQuoteStrategy strategy;
+    private QuoteStragyFactory factory;
+
+    public QuoteCalculator(QuoteStragyFactory factory){
+        this.factory = factory;
+    }
 
     public void setSrategy(int numberOfOrders){
         if(numberOfOrders<3){
-            strategy = new BasicQuoteService();
+            System.out.print("\n\n***BASIC***\n\n");
+            strategy = factory.create("basic");
         }
         else{
             System.out.print("\n\n***DISCOUNT***\n\n");
-            strategy = new DiscountedQuoteService();
+            strategy = factory.create("discounted");
         }
     }
 

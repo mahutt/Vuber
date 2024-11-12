@@ -30,6 +30,7 @@ public class DiscountedQuoteService implements IQuoteStrategy {
         //Change in Algo, we now have a discount -> different strategy
         double discount = determineDiscount(finalWeightCost, finalSizeCost);
 
+        System.out.print("FROM DISCOUNTED Total Cost: "+totalCost * discount);
         return totalCost * discount;
     }
 
