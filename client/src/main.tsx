@@ -12,6 +12,7 @@ import TrackingPage from './routes/tracking-page.tsx'
 import ErrorPage from './error-page.tsx'
 import Home from './Home.tsx'
 import './index.css'
+import ContactUs from './components/contact-page/Contact-Page.tsx'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
         element: <OrderPage />,
       },
       {
+
+        path: 'contact-page',
+        element: <ContactUs/>,
+      },
+
         path: 'profile',
         element: <ProfilePage />,
       },
@@ -51,6 +57,7 @@ const router = createBrowserRouter([
         path: '/track',
         element: <TrackingPage/>
       }
+
     ],
   },
 ])
