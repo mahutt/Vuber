@@ -1,18 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AuthProvider } from '@/providers/AuthProvider.tsx'
-import Root from './routes/root.tsx'
-import SigninPage from './routes/signin-page.tsx'
-import OrderPage from './routes/order-page.tsx'
-import PaymentPage from './routes/payment.tsx'
-import SignupPage from './routes/signup-page.tsx'
-import ProfilePage from './routes/profile-page.tsx'
-import TrackingPage from './routes/tracking-page.tsx'
-import ErrorPage from './error-page.tsx'
-import Home from './Home.tsx'
-import './index.css'
-import ContactUs from './components/contact-page/Contact-Page.tsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { AuthProvider } from '@/providers/AuthProvider.tsx';
+
+import Root from './routes/root.tsx';
+import SigninPage from './routes/signin-page.tsx';
+import OrderPage from './routes/order-page.tsx';
+import PaymentPage from './routes/payment.tsx';
+import SignupPage from './routes/signup-page.tsx';
+import ProfilePage from './routes/profile-page.tsx';
+import TrackingPage from './routes/tracking-page.tsx';
+import ErrorPage from './error-page.tsx';
+import Home from './Home.tsx';
+import './index.css';
+import ContactUs from './components/contact-page/contact-page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -41,11 +42,10 @@ const router = createBrowserRouter([
         element: <OrderPage />,
       },
       {
-
         path: 'contact-page',
-        element: <ContactUs/>,
+        element: <ContactUs />,
       },
-
+      {
         path: 'profile',
         element: <ProfilePage />,
       },
@@ -55,12 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/track',
-        element: <TrackingPage/>
-      }
-
+        element: <TrackingPage />,
+      },
     ],
   },
-])
+]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -68,4 +67,4 @@ createRoot(document.getElementById('root')!).render(
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>
-)
+);
