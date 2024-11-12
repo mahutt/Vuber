@@ -3,6 +3,10 @@ import { Button } from '@/components/ui/button'
 import { fetchCoordinates } from '@/components/map'
 import { createOrder } from '@/services/order-service'
 import { Parcel, OrderDetails, Coordinates } from '@/types/types'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
 const fetchTypedCoordinates = async (
   location: string
