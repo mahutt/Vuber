@@ -30,11 +30,10 @@ export default function TrackingPage() {
   const [status, setStatus] = useState<string>('')
   const [username, setUsername] = useState<string>('')
 
-  if (!id) {
-    return <TrackingNumberInput setLoading={setLoading} />
-  }
-
   const track = async () => {
+    if (!id) {
+      return
+    }
     try {
       const trackingData = await trackOrder(id)
       if (trackingData == null) {
@@ -105,6 +104,10 @@ export default function TrackingPage() {
   useEffect(() => {
     track()
   }, [id])
+
+  if (!id) {
+    return <TrackingNumberInput setLoading={setLoading} />
+  }
 
   if (loading) {
     return (
