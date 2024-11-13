@@ -19,17 +19,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.SOEN343.API.config.auth.TokenProvider;
+import com.SOEN343.API.notificationservice.*;
 import com.SOEN343.API.user.dto.*;
 
-//Handle http requests related to User objects
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final AlertService alertService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AlertService alertService) {
         this.userService = userService;
+        this.alertService = alertService;
+        this.alertService.subscribe(new SecurityNotifier());
     }
 
     @Autowired
@@ -58,6 +61,10 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody @Valid SignUpDto data) {
+        if (userService.loadUserByUsername(data.name()) != null) {
+            alertService.failedSignup(data.name());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
         userService.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
