@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Current Orders</h2>
-          {user.orders ? (
+          {user.orders && user.orders.some(order => order.status !== "Delivered") ? (
             <ul className="space-y-4">
               {user.orders.map((order) => (
                 order.status !== "Delivered" && (
@@ -42,13 +42,13 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No orders found.</p>
+            <p className="text-gray-500">No current orders.</p>
           )}
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Past Orders</h2>
-          {user.orders ? (
+          {user.orders && user.orders.some(order => order.status === "Delivered") ? (
             <ul className="space-y-4">
               {user.orders.map((order) => (
                 order.status == "Delivered" && (
@@ -57,7 +57,7 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No orders found.</p>
+            <p className="text-gray-500">No past orders.</p>
           )}
         </section>
       </div>
