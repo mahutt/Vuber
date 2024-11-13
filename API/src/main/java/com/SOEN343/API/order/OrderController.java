@@ -1,14 +1,12 @@
 package com.SOEN343.API.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.SOEN343.API.Coordinates.Coordinate;
-import com.SOEN343.API.QuoteService.BasicQuoteService;
 import com.SOEN343.API.order.dto.CoordinatesDto;
 import com.SOEN343.API.order.dto.OrderDetailsDto;
 import com.SOEN343.API.order.dto.ParcelDetailsDto;
@@ -16,7 +14,6 @@ import com.SOEN343.API.order.dto.TrackingDto;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.SOEN343.API.user.UserService;
-import com.SOEN343.API.QuoteService.IQuoteStrategy;
 import com.SOEN343.API.QuoteService.QuoteCalculator;
 
 import java.util.ArrayList;

@@ -17,13 +17,13 @@ public class AlertService {
         subscribers.remove(subscriber);
     }
 
-    public void notifySubscribers(String message) {
+    public void notifySubscribers(Alert alert) {
         for (Subscriber subscriber : subscribers) {
-            subscriber.update(message);
+            subscriber.update(alert);
         }
     }
 
-    public void failedSignup(String email) {
-        notifySubscribers(email);
+    public void failedSignup(Alert alert) {
+        notifySubscribers(alert);
     }
 }
