@@ -26,8 +26,9 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
-        <section className="mb-6 flex items-center space-x-4">
+        <section className="mb-6">
           <h2 className="text-lg font-semibold">Welcome {user.name} !</h2>
+          <h4 className="italic lowercase">Role: {user.role}</h4>
         </section>
 
         <section>

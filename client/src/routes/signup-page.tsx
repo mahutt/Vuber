@@ -25,6 +25,7 @@ const formSchema = z.object({
   password: z.string().min(8, {
     message: 'Password must be at least 8 characters long',
   }),
+  role: z.enum(['sender', 'driver']),
 })
 
 function OptionCard({
@@ -68,10 +69,11 @@ export default function SignupPage() {
     defaultValues: {
       email: '',
       password: '',
+      role: 'sender',
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (await signup(values.email, values.password)) {
+    if (await signup(values.email, values.password, values.role)) {
       await signin(values.email, values.password)
       navigate('/profile')
     } else {
@@ -125,7 +127,10 @@ export default function SignupPage() {
                   title="Sender"
                   tag="I want to send packages."
                   active={userType === 'sender'}
-                  onMouseDown={() => setUserType('sender')}
+                  onMouseDown={() => {
+                    setUserType('driver')
+                    form.setValue('role', 'sender')
+                  }}
                 >
                   <Package className="w-32 h-32 text-gray-800" />
                 </OptionCard>
@@ -133,7 +138,10 @@ export default function SignupPage() {
                   title="Driver"
                   tag="I want to deliver packages."
                   active={userType === 'driver'}
-                  onMouseDown={() => setUserType('driver')}
+                  onMouseDown={() => {
+                    setUserType('driver')
+                    form.setValue('role', 'driver')
+                  }}
                 >
                   <Truck className="w-32 h-32 text-gray-800" />
                 </OptionCard>

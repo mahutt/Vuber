@@ -8,10 +8,11 @@ import com.SOEN343.API.user.User;
 public record UserDto(
                 int id,
                 String name,
+                String role,
                 List<Order> orders) {
 
         public UserDto(User user) {
-                this(user.getId(), user.getUsername(), user.getOrders());
+                this(user.getId(), user.getUsername(), user.getRole().toString(), user.getOrders());
         }
 
         public int getId() {
@@ -24,6 +25,10 @@ public record UserDto(
 
         public List<Order> getOrders() {
                 return orders;
+        }
+
+        public String getRole () {
+                return role;
         }
 
 }

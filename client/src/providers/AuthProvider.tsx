@@ -12,7 +12,7 @@ import { User } from '@/types/types'
 interface AuthContextType {
   user: User | null
   signin: (name: string, password: string) => Promise<boolean>
-  signup: (name: string, password: string) => Promise<boolean>
+  signup: (name: string, password: string, role: string) => Promise<boolean>
   logout: () => Promise<void>
   loading: boolean
 }
@@ -31,6 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkLoggedIn = async () => {
       try {
         const { data } = await api.get<User | null>('/users/current')
+        console.log(data)
         setUser(data)
       } catch (error) {
         setUser(null)
@@ -59,11 +60,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .catch(() => false)
   }
 
-  const signup = async (name: string, password: string): Promise<boolean> => {
+  const signup = async (name: string, password: string, role: string): Promise<boolean> => {
     return api
       .post('users/signup', {
         name,
         password,
+        role,
       })
       .then((response) => {
         if (response.status === 201) {
