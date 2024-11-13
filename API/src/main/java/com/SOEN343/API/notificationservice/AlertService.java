@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlertService {
     private final List<Subscriber> subscribers = new CopyOnWriteArrayList<>();
+    private final List<Alert> alerts = new CopyOnWriteArrayList<>();
 
     public void subscribe(Subscriber subscriber) {
         subscribers.add(subscriber);
@@ -23,7 +24,8 @@ public class AlertService {
         }
     }
 
-    public void failedSignup(Alert alert) {
+    public void addAlert(Alert alert) {
+        alerts.add(alert);
         notifySubscribers(alert);
     }
 }

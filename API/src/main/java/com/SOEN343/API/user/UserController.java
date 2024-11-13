@@ -63,7 +63,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody @Valid SignUpDto data) {
         if (userService.loadUserByUsername(data.name()) != null) {
-            alertService.failedSignup(new Alert(data.name(), AlertType.FAILED_SIGNUP));
+            alertService.addAlert(new Alert(data.name(), AlertType.FAILED_SIGNUP));
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }
         userService.signUp(data);
@@ -80,7 +80,7 @@ public class UserController {
             String accessToken = tokenService.generateAccessToken(user);
             return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
         } catch (Exception e) {
-            alertService.failedSignup(new Alert(data.name(), AlertType.FAILED_LOGIN));
+            alertService.addAlert(new Alert(data.name(), AlertType.FAILED_LOGIN));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
