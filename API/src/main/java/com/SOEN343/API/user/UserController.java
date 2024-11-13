@@ -43,7 +43,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers());
     }
 
-    // use
     @GetMapping("/current")
     public ResponseEntity<UserDto> getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,7 +50,7 @@ public class UserController {
             var user = authentication.getPrincipal();
             if (user instanceof User) {
                 User authenticatedUser = (User) user;
-                return ResponseEntity.ok(new UserDto(authenticatedUser.getId(), authenticatedUser.getUsername()));
+                return ResponseEntity.ok(new UserDto(authenticatedUser));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -69,7 +68,7 @@ public class UserController {
         try {
             var authUser = authenticationManager.authenticate(usernamePassword);
             User user = (User) authUser.getPrincipal();
-            UserDto userDto = new UserDto(user.getId(), user.getUsername());
+            UserDto userDto = new UserDto(user);
             String accessToken = tokenService.generateAccessToken(user);
             return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
         } catch (Exception e) {
