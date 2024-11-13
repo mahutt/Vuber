@@ -26,13 +26,14 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
-        <section className="mb-6 flex items-center space-x-4">
+        <section className="mb-6">
           <h2 className="text-lg font-semibold">Welcome {user.name} !</h2>
+          <h4 className="italic lowercase">Role: {user.role}</h4>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Current Orders</h2>
-          {user.orders ? (
+          {user.orders && user.orders.some(order => order.status !== "Delivered") ? (
             <ul className="space-y-4">
               {user.orders.map((order) => (
                 order.status !== "Delivered" && (
@@ -41,13 +42,13 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No orders found.</p>
+            <p className="text-gray-500">No current orders.</p>
           )}
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Past Orders</h2>
-          {user.orders ? (
+          {user.orders && user.orders.some(order => order.status === "Delivered") ? (
             <ul className="space-y-4">
               {user.orders.map((order) => (
                 order.status == "Delivered" && (
@@ -56,7 +57,7 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No orders found.</p>
+            <p className="text-gray-500">No past orders.</p>
           )}
         </section>
       </div>

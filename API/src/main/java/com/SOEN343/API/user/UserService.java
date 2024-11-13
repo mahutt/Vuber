@@ -88,6 +88,15 @@ public class UserService implements UserDetailsService {
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.name(), encryptedPassword);
+        
+        if (data.role().equalsIgnoreCase("SENDER")) {
+            newUser.setRole(User.Role.SENDER);
+        } else if (data.role().equalsIgnoreCase("DRIVER")) {
+            newUser.setRole(User.Role.DRIVER);
+        } else {
+            throw new InvalidClaimException("Invalid role specified");
+        }
+
         return userRepository.save(newUser);
     }
 
