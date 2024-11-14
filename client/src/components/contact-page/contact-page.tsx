@@ -79,6 +79,7 @@ function ContactUs() {
         Message: message,
       };
       sendEmail(emailDetails);
+      
     }
   };
 
