@@ -19,18 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.SOEN343.API.config.auth.TokenProvider;
+import com.SOEN343.API.notificationservice.*;
 import com.SOEN343.API.user.dto.*;
 
-//Handle http requests related to User objects
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AlertService alertService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -38,12 +34,19 @@ public class UserController {
     @Autowired
     private TokenProvider tokenService;
 
+    @Autowired
+    public UserController(UserService userService, AlertService alertService) {
+        this.userService = userService;
+        this.alertService = alertService;
+        this.alertService.subscribe(new SecurityNotifier());
+        this.alertService.subscribe(new UserNotifier());
+    }
+
     @GetMapping("/all")
     public ResponseEntity<Object> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
 
-    // use
     @GetMapping("/current")
     public ResponseEntity<UserDto> getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,7 +54,7 @@ public class UserController {
             var user = authentication.getPrincipal();
             if (user instanceof User) {
                 User authenticatedUser = (User) user;
-                return ResponseEntity.ok(new UserDto(authenticatedUser.getId(), authenticatedUser.getUsername()));
+                return ResponseEntity.ok(new UserDto(authenticatedUser));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -59,6 +62,10 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> createUser(@RequestBody @Valid SignUpDto data) {
+        if (userService.loadUserByUsername(data.name()) != null) {
+            alertService.addAlert(new Alert(data.name(), AlertType.FAILED_SIGNUP));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
         userService.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -69,22 +76,23 @@ public class UserController {
         try {
             var authUser = authenticationManager.authenticate(usernamePassword);
             User user = (User) authUser.getPrincipal();
-            UserDto userDto = new UserDto(user.getId(), user.getUsername());
+            UserDto userDto = new UserDto(user);
             String accessToken = tokenService.generateAccessToken(user);
             return ResponseEntity.ok(new SignInResponseDto(accessToken, userDto));
         } catch (Exception e) {
+            alertService.addAlert(new Alert(data.name(), AlertType.FAILED_LOGIN));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
-    @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
+    @PutMapping("/updateUser/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
         return userService.updateUser(id, user);
 
     }
 
-    @DeleteMapping("/deleteUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
-    public ResponseEntity<Object> updateUser(@PathVariable Integer id) {
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable Integer id) {
         return userService.deleteUser(id);
 
     }

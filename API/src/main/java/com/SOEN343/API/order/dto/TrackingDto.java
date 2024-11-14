@@ -3,6 +3,7 @@ package com.SOEN343.API.order.dto;
 import java.util.List;
 
 import com.SOEN343.API.Coordinates.Coordinate;
+import com.SOEN343.API.user.User;
 
 public class TrackingDto {
 
@@ -11,15 +12,17 @@ public class TrackingDto {
     private Coordinate destinationCoordinate;
     private List<Coordinate> previousCoordinates;
     private String status;
+    private User user;
 
     public TrackingDto(Coordinate originCoordiante, Coordinate currentCoordinate, Coordinate destinationCoordinate,
             List<Coordinate> previousCoordinates,
-            String status) {
+            String status, User user) {
         this.originCoordinate = originCoordiante;
         this.status = status;
         this.currentCoordinate = currentCoordinate;
         this.destinationCoordinate = destinationCoordinate;
         this.previousCoordinates = previousCoordinates;
+        this.user = user;
     }
 
     public Coordinate getCurrentCoordinate() {
@@ -60,6 +63,14 @@ public class TrackingDto {
 
     public void setOriginCoordinate(Coordinate originCoordinate) {
         this.originCoordinate = originCoordinate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

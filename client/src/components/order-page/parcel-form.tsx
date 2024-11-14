@@ -7,10 +7,10 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import DropdownRadio from '@/components/dropdown-radio'
+import NumberInput from '@/components/number-input'
 
 import { Parcel } from '@/types/types'
 
@@ -89,12 +89,10 @@ const ParcelForm = forwardRef<
           <div>
             <Label>Weight</Label>
             <div className="flex gap-3">
-              <Input
-                type="number"
-                value={parcel.weight}
-                onChange={(e) =>
-                  setParcel({ ...parcel, weight: Number(e.target.value) })
-                }
+              <NumberInput
+                number={parcel.weight}
+                setNumber={(n) => setParcel({ ...parcel, weight: Number(n) })}
+                min={0.5}
               />
               <DropdownRadio
                 options={[
@@ -111,35 +109,35 @@ const ParcelForm = forwardRef<
           <div>
             <Label>Size</Label>
             <div className="flex gap-3">
-              <Input
-                type="number"
-                value={parcel.size.width}
-                onChange={(e) =>
+              <NumberInput
+                number={parcel.size.width}
+                setNumber={(n) =>
                   setParcel({
                     ...parcel,
-                    size: { ...parcel.size, width: Number(e.target.value) },
+                    size: { ...parcel.size, width: Number(n) },
                   })
                 }
+                min={0.5}
               />
-              <Input
-                type="number"
-                value={parcel.size.height}
-                onChange={(e) =>
+              <NumberInput
+                number={parcel.size.height}
+                setNumber={(n) =>
                   setParcel({
                     ...parcel,
-                    size: { ...parcel.size, height: Number(e.target.value) },
+                    size: { ...parcel.size, height: Number(n) },
                   })
                 }
+                min={0.5}
               />
-              <Input
-                type="number"
-                value={parcel.size.length}
-                onChange={(e) =>
+              <NumberInput
+                number={parcel.size.length}
+                setNumber={(n) =>
                   setParcel({
                     ...parcel,
-                    size: { ...parcel.size, length: Number(e.target.value) },
+                    size: { ...parcel.size, length: n },
                   })
                 }
+                min={0.5}
               />
               <DropdownRadio
                 options={[

@@ -1,5 +1,5 @@
 import api from './api'
-import { Coordinate } from '@/types/types'
+import { Coordinate, BackendUser } from '@/types/types'
 
 export interface TrackingData {
   originCoordinate: Coordinate
@@ -7,6 +7,7 @@ export interface TrackingData {
   destinationCoordinate: Coordinate
   previousCoordinates: Coordinate[]
   status: string
+  user: BackendUser
 }
 
 export const trackOrder = async (id: any): Promise<TrackingData | null> => {

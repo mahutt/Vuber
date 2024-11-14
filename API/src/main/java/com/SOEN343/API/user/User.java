@@ -20,10 +20,16 @@ public class User implements UserDetails {
     private Integer id;
     private String name;
     private String password;
+    private Role role;
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Order> orders;
+
+    public enum Role {
+        SENDER,
+        DRIVER,
+    }
 
     public User(String name, String password) {
         this.name = name;
@@ -86,6 +92,14 @@ public class User implements UserDetails {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 }

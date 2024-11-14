@@ -14,6 +14,19 @@ export interface Parcel {
 export interface User {
   id: number
   name: string
+  role: string
+  orders: Order[]
+}
+
+export interface Order {
+  id: number
+  total: number
+  status: string
+  parcels: Parcel[]
+}
+
+export interface BackendUser {
+  username: string
 }
 
 export interface OrderDetails {
