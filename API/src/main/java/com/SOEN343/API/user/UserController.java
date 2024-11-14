@@ -29,18 +29,18 @@ public class UserController {
     private final AlertService alertService;
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenProvider tokenService;
+
+    @Autowired
     public UserController(UserService userService, AlertService alertService) {
         this.userService = userService;
         this.alertService = alertService;
         this.alertService.subscribe(new SecurityNotifier());
         this.alertService.subscribe(new UserNotifier());
     }
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenProvider tokenService;
 
     @GetMapping("/all")
     public ResponseEntity<Object> getUsers() {
@@ -85,14 +85,14 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updateUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
+    @PutMapping("/updateUser/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
         return userService.updateUser(id, user);
 
     }
 
-    @DeleteMapping("/deleteUser/{id}") // <-- The {id} is the @PathVariable parameter to this function
-    public ResponseEntity<Object> updateUser(@PathVariable Integer id) {
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable Integer id) {
         return userService.deleteUser(id);
 
     }
