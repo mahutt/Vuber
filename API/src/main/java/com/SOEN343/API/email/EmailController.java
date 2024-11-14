@@ -7,24 +7,36 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.SOEN343.API.order.dto.ParcelDetailsDto;
 
 @RestController
 @RequestMapping("/api/email")
 public class EmailController {
 
+    @PostMapping("/SendEmail")
+    public ResponseEntity<Object> sendEmail(@RequestBody EmailDetails emailDetails) {
 
 
-    @Autowired
-    public EmailController() {
+        try{
+
+        SendMail.SendEmail(emailDetails);
+        return ResponseEntity.ok().body("Success");
+
+
+        }catch(Exception e){
+
+            return ResponseEntity.status(420).body(null);
+        }
+
+
+        
+
 
     }
 
-    public static void sendMail(String receipient){
-
-
-    }
-
-    }
-
+}

@@ -10,9 +10,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
+
+
 public class SendMail {
 
-    public static void main(String[] args) {
+    public static void SendEmail(EmailDetails emailDetails) {
 
         // Recipient's email ID needs to be mentioned.
         String to = "xvinivuberx@gmail.com";
@@ -44,6 +47,7 @@ public class SendMail {
 
         });
 
+
         // Used to debug SMTP issues
         session.setDebug(true);
 
@@ -64,12 +68,16 @@ public class SendMail {
             //message.setText("This is actual message");
             
          // Send the actual HTML message.
-            message.setContent(
-         "<html><body>" +
-         "<h1>Thank you for Contacting Us!</h1>" +
-         "<p>Thank you for your support!</p>" +
-         "</body></html>",
-         "text/html");
+         message.setContent(
+            "<html><body>" +
+            "<h1>" + emailDetails.Name + " has messaged us!</h1>" +
+            "<p>Their phone number is: " + emailDetails.PhoneNum + "</p>" +
+            "<p>Their email is: " + emailDetails.Email + "</p>" +
+            "<p>Their message is: " + emailDetails.Message + "</p>" +
+            "</body></html>",
+            "text/html"
+        );
+        
 
             System.out.println("sending...");
             // Send message
