@@ -4,6 +4,7 @@ import api from './api'
 
 const sendEmail = async (emailDetails:EmailDetails): Promise<string> => {
     try {
+        console.log(emailDetails);
         const response = await api.post<string>('/email/SendEmail', emailDetails )
         return response.data
     } catch (error) {
