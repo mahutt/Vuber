@@ -18,13 +18,15 @@ import com.SOEN343.API.order.dto.ParcelDetailsDto;
 @RequestMapping("/api/email")
 public class EmailController {
 
+    public SmptpEmailFacade emailFacade;
     @PostMapping("/SendEmail")
     public ResponseEntity<Object> sendEmail(@RequestBody EmailDetails emailDetails) {
 
 
         try{
-
-        SendMail.SendEmail(emailDetails);
+        
+        SmptpEmailFacade emailFacade = new SmptpEmailFacade();
+        emailFacade.sendToContactSupport(emailDetails);
         return ResponseEntity.ok().body("Success");
 
 
@@ -32,10 +34,6 @@ public class EmailController {
 
             return ResponseEntity.status(420).body(null);
         }
-
-
-        
-
 
     }
 
