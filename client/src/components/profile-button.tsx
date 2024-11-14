@@ -52,10 +52,10 @@ function AuthenticateButtons() {
   return (
     <>
       <Link
-        to="/signup"
-        className="text-blue-400 hover:underline text-sm font-medium"
-      >
+        to="/signup">
+        <Button className="text-white bg-black transition-color duration-200 hover:text-blue-500 hover:bg-neutral-800 text-sm font-medium">
         Sign up
+        </Button> 
       </Link>
       <Link to="/signin">
         <Button className="bg-blue-500 hover:bg-blue-400 transition-color duration-200">
