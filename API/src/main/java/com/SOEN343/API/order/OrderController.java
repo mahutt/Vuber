@@ -44,55 +44,6 @@ public class OrderController {
         orderRepository.deleteAll();
     }
 
-    // @PostMapping("/new")
-    // public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto
-    // orderDetails) {
-    // double total = orderDetails.getTotal();
-    // CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
-    // CoordinatesDto destinationCoordinates =
-    // orderDetails.getDestinationCoordinates();
-    // // Coordinate originCoords = new
-    // Coordinate(originCoordinates.getLng(),originCoordinates.getLat());
-    // // Coordinate destCoords = new Coordinate(destinationCoordinates.getLng(),
-    // destinationCoordinates.getLat());
-
-    // User user = userService.getCurrentUser();
-
-    // Order order = new Order();
-    // order.setUser(user);
-    // order.setStatus("Pending");
-    // order.setTotal(total);
-
-    // // order.setOriginCoords(originCoords);
-    // // order.setDestinationCoords(destCoords);
-    // // order.setCurrentCoordinates(originCoords);
-    // // order.getPrevCoordinates().add(originCoords);
-
-    // // order.setOrigin(originCoordinates.toString());
-    // // order.setDestination(destinationCoordinates.toString());
-
-    // List<Parcel> parcelList = new ArrayList<>();
-
-    // for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
-    // Parcel parcel = new Parcel();
-    // parcel.setName(parcelDto.getName());
-    // parcel.setWeight(parcelDto.getWeight());
-    // parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightunit()));
-    // parcel.setWidth(parcelDto.getWidth());
-    // parcel.setLength(parcelDto.getLength());
-    // parcel.setHeight(parcelDto.getHeight());
-    // parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
-    // parcel.setDescription(parcelDto.getDescription());
-    // parcel.setOrder(order);
-    // parcelList.add(parcel);
-    // }
-
-    // order.setParcels(parcelList);
-    // Order savedOrder = orderRepository.save(order);
-
-    // return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
-    // }
-
     @PostMapping("/new")
     public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto orderDetails) {
         double total = orderDetails.getTotal();
