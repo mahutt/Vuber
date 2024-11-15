@@ -16,4 +16,11 @@ public class SmtpEmailFacade {
         String host = "smtp.gmail.com";
         emailer.sendEmail(details, to, from, host);
     }
+
+    public void sendToUser(EmailDetails details, String userEmail) {
+        String to = userEmail;
+        String from = "xvinivuberx@gmail.com";
+        String host = "smtp.gmail.com";
+        emailer.sendEmail(details, to, from, host);
+    }
 }
