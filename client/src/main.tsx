@@ -18,6 +18,7 @@ import ConfirmationPage from './routes/order-confirmation.tsx'
 import EmailConfirmation from './components/contact-page/email-confirmation-page.tsx';
 
 import AboutUs from './components/about-us-page/about-us-page.js'
+import ReviewPage from './routes/review.tsx'
 
 
 const router = createBrowserRouter([
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: '/email-confirmation-page',
         element: <EmailConfirmation/>,
+      },
+      {
+        path:'/review',
+        element:<ReviewPage/>
       }
     ],
   },
