@@ -128,7 +128,7 @@ export default function SignupPage() {
                   tag="I want to send packages."
                   active={userType === 'sender'}
                   onMouseDown={() => {
-                    setUserType('driver')
+                    setUserType('sender')
                     form.setValue('role', 'sender')
                   }}
                 >
