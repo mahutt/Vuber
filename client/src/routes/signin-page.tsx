@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -25,6 +25,7 @@ const SigninFormSchema = z.object({
 export default function SigninPage() {
   const { signin } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [bannerMessage, setBannerMessage] = useState<string | null>(null)
   const form = useForm<z.infer<typeof SigninFormSchema>>({
     resolver: zodResolver(SigninFormSchema),
@@ -36,7 +37,8 @@ export default function SigninPage() {
 
   async function onSubmit(values: z.infer<typeof SigninFormSchema>) {
     if (await signin(values.email, values.password)) {
-      navigate('/profile')
+      const redirectLocation = searchParams.get('redirect')
+      navigate(redirectLocation ? `/${redirectLocation}` : '/profile')
     } else {
       setBannerMessage('Invalid email or password')
     }
@@ -81,7 +83,11 @@ export default function SigninPage() {
 
           <div className="flex justify-between items-center">
             <Link
-              to="/signup"
+              to={`/signup${
+                searchParams.get('redirect') === 'payment'
+                  ? '?redirect=payment'
+                  : ''
+              }`}
               className="text-blue-500 hover:underline flex gap-1 items-center"
             >
               Sign up instead

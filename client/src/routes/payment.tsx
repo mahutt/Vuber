@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import fetchQuote from '@/services/fetch-quote'
+import { useAuth } from '@/providers/AuthProvider'
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
@@ -155,6 +156,9 @@ const CheckoutForm = ({
 }
 
 export default function PaymentPage() {
+  const { user, loading } = useAuth()
+  const navigate = useNavigate()
+
   const [startLocation] = useLocalStorage<string>('start-location', '')
   const [endLocation] = useLocalStorage<string>('end-location', '')
   const [pickupInstructions] = useLocalStorage<string>(
@@ -170,6 +174,10 @@ export default function PaymentPage() {
   useEffect(() => {
     fetchQuote(parcels).then(setQuote)
   }, [parcels])
+
+  if (!user && !loading) {
+    navigate('/signin?redirect=payment')
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

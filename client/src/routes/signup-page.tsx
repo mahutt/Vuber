@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -62,6 +62,7 @@ function OptionCard({
 export default function SignupPage() {
   const { signup, signin } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
   const [bannerMessage, setBannerMessage] = useState<string | null>(null)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +76,8 @@ export default function SignupPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (await signup(values.email, values.password, values.role)) {
       await signin(values.email, values.password)
-      navigate('/profile')
+      const redirectLocation = searchParams.get('redirect')
+      navigate(redirectLocation ? `/${redirectLocation}` : '/profile')
     } else {
       setBannerMessage('We could not create your account. Please try again.')
     }
@@ -151,7 +153,11 @@ export default function SignupPage() {
               Create account
             </Button>
             <Link
-              to="/signin"
+              to={`/signin${
+                searchParams.get('redirect') === 'payment'
+                  ? '?redirect=payment'
+                  : ''
+              }`}
               className="text-blue-500 hover:underline text-center"
             >
               Already have an account? Log in
