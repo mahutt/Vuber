@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
-public class StripeService {
+public class StripeServiceAdapter implements IPaymentAdapter{
 
+
+    ChargeCreateParams chargeParams;
+    
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
@@ -23,7 +26,7 @@ public class StripeService {
 
     }
 
-    public StripeService() {
+    public StripeServiceAdapter() {
         Stripe.apiKey = stripeApiKey;
         System.out.println(stripeApiKey);
     }
@@ -32,7 +35,7 @@ public class StripeService {
 
         int amountInCents = (int) (amount * 100);
 
-        ChargeCreateParams chargeParams = ChargeCreateParams.builder()
+        chargeParams = ChargeCreateParams.builder()
             .setAmount((long) amountInCents)  
             .setCurrency("cad")              
             .setSource(token)                 
