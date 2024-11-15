@@ -166,7 +166,7 @@ function OrderInformationCard({
   return (
     <div className="flex justify-between">
       <div>
-        <div className="text-sm font-bold text-slate-500">Tracking Number</div>
+        <div className="text-sm font-bold text-slate-500">Order Number</div>
         <div className="text-2xl font-bold">{orderId}</div>
       </div>
       <div className="text-center">
@@ -244,7 +244,7 @@ function TrackingNumberInput({
         <div className="w-[350px] flex flex-col gap-4 items-ends">
           <FadeInWrapper>
             <div className="text-4xl font-extrabold tracking-tight mb-4">
-              What's your tracking number?
+              What's your order number?
             </div>
           </FadeInWrapper>
           <FadeInWrapper delay={50}>
@@ -257,7 +257,7 @@ function TrackingNumberInput({
           {invalidId && (
             <FadeInWrapper delay={75}>
               <div className="text-m text-red-500">
-                {invalidId} is not a valid tracking number.
+                {invalidId} is not a valid order number.
               </div>
             </FadeInWrapper>
           )}
