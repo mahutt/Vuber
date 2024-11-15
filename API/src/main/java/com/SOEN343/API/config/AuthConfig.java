@@ -27,7 +27,6 @@ public class AuthConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-             
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -37,10 +36,12 @@ public class AuthConfig {
                         .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/orders/*").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/api/orders/*").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/orders/track/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/email/*").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/email/*").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS,"/api/email/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/orders/track/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/orders/track/{id}").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/orders/track/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/email/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/email/*").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/email/*").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -24,14 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
 
     private final StripeService stripeService;
-
 
     @Autowired
     private final UserService userService;
@@ -98,12 +95,11 @@ public class OrderController {
             parcelList.add(parcel);
         }
 
-        try{
+        try {
             Charge charge = stripeService.chargeCard(token, total);
             order.setChargeId(charge.getId());
-        }catch(StripeException e)
-        {
-            
+        } catch (StripeException e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
@@ -171,14 +167,13 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOrder(@PathVariable Integer id){
+    public ResponseEntity<Object> getOrder(@PathVariable Integer id) {
         Order order = orderService.getOrderById(id);
-        if(order!=null){
+        if (order != null) {
             return ResponseEntity.ok(order);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
     }
-    
 
     @PostMapping("/quote")
     public ResponseEntity<Object> getQuote(@RequestBody ParcelDetailsDto[] parcelDto) {
