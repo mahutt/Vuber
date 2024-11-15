@@ -101,6 +101,7 @@ function OrderCard({ order }: { order: Order }) {
             onClick={(e) => {
               e.stopPropagation();
               console.log("Review");
+              navigate('/');
             }}
           >
             Review
