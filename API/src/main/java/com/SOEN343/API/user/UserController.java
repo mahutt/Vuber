@@ -54,7 +54,8 @@ public class UserController {
             var user = authentication.getPrincipal();
             if (user instanceof User) {
                 User authenticatedUser = (User) user;
-                return ResponseEntity.ok(new UserDto(authenticatedUser));
+                User userWithOrders = userService.getUserById(authenticatedUser.getId());
+                return ResponseEntity.ok(new UserDto(userWithOrders));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
