@@ -15,10 +15,10 @@ import Home from './Home.tsx'
 import './index.css'
 import ContactUs from './components/contact-page/contact-page.tsx'
 import ConfirmationPage from './routes/order-confirmation.tsx'
-import EmailConfirmation from './components/contact-page/email-confirmation-page.tsx';
+import EmailConfirmation from './components/contact-page/email-confirmation-page.tsx'
+import FaqPage from './routes/faq-page.tsx'
 
 import AboutUs from './components/about-us-page/about-us-page.js'
-
 
 const router = createBrowserRouter([
   {
@@ -72,8 +72,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/email-confirmation-page',
-        element: <EmailConfirmation/>,
-      }
+        element: <EmailConfirmation />,
+      },
+      {
+        path: '/faq',
+        element: <FaqPage />,
+      },
     ],
   },
 ])
