@@ -23,6 +23,10 @@ export interface Order {
   total: number
   status: string
   parcels: Parcel[]
+  origin: string
+  destination: string
+  pickupInstructions: string
+  dropoffInstructions: string
 }
 
 export interface BackendUser {

@@ -6,6 +6,10 @@ import { fetchCoordinates } from '@/components/map'
 import { Button } from '@/components/ui/button'
 import { Parcel, OrderDetails, Coordinate } from '@/types/types'
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react'
+import fetchQuote from '@/services/fetch-quote'
+
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
@@ -17,17 +21,20 @@ const fetchTypedCoordinates = async (location: string): Promise<Coordinate> => {
   return { lng: coordinatesArray[0], lat: coordinatesArray[1] }
 }
 
-const CheckoutForm = () => {
+const CheckoutForm = ({startLocation, endLocation, pickupInstructions, dropoffInstructions, parcels, quote
+}: {
+  startLocation: string
+  endLocation: string
+  pickupInstructions: string
+  dropoffInstructions: string
+  parcels: Parcel[]
+  quote: number
+}) => {
+  const navigate = useNavigate();
   const stripe = useStripe()
   const elements = useElements()
-  const [parcels, setParcels] = useLocalStorage<Parcel[]>('order-draft', [])
-  const [startLocation, setStartLocation] = useLocalStorage<string>('start-location', '')
-  const [endLocation, setEndLocation] = useLocalStorage<string>('end-location', '')
-  const [pickupInstructions, setPickupInstructions] = useLocalStorage<string>('pickup-instructions', '')
-  const [dropoffInstructions, setDropoffInstructions] = useLocalStorage<string>('dropoff-instructions', '')
   const [postalCode, setPostalCode] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
   const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 6) {
       setPostalCode(e.target.value)
@@ -37,41 +44,41 @@ const CheckoutForm = () => {
   const executeCreateOrder = async () => {
     if (!stripe || !elements) {
       setErrorMessage('Stripe has not been initialized. Please try again.')
-      return
+      return;
     }
 
     const originCoordinates = await fetchTypedCoordinates(startLocation)
     const destinationCoordinates = await fetchTypedCoordinates(endLocation)
     const orderDetails: OrderDetails = {
-      total: 0,
+      total: quote,
       parcels,
       originCoordinates,
       destinationCoordinates,
       pickupInstructions,
       dropoffInstructions,
-    }
+    };
 
-    const cardElement = elements.getElement(CardElement)
+    const cardElement = elements.getElement(CardElement);
     if (cardElement) {
-      const { error } = await stripe.createToken(cardElement)
+      const { token, error } = await stripe.createToken(cardElement);
       if (error) {
         setErrorMessage(error.message || 'Invalid card information. Please check your details.')
         console.log('Card details invalid')
-      } else {
+      } else if (token) {
         console.log('Card validated successfully')
-        setErrorMessage(null)
-
-        createOrder(orderDetails).then((orderId) => {
-          console.log('Order created with ID:', orderId)
-
-          setParcels([])  
-          setStartLocation('')  
-          setEndLocation('')  
-          setPickupInstructions('')  
-          setDropoffInstructions('')  
-
-          window.location.href = '/confirmation'
-        })
+        setErrorMessage(null);
+        try {
+          const number = await createOrder(orderDetails, token.id)
+          localStorage.removeItem("order-draft")
+          localStorage.removeItem("start-location")
+          localStorage.removeItem("end-location")
+          localStorage.removeItem("pickup-instructions")
+          localStorage.removeItem("dropoff-instructions")
+          navigate(`/confirmation/${number}`)
+        } catch (error) {
+          setErrorMessage("Error connecting to backend.")
+          console.error(error);
+        }
       }
     }
   }
@@ -99,7 +106,7 @@ const CheckoutForm = () => {
                 },
                 invalid: { color: '#9e2146' },
               },
-              hidePostalCode: true, 
+              hidePostalCode: true,
             }}
           />
         </div>
@@ -117,8 +124,8 @@ const CheckoutForm = () => {
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600t"
           />
         </div>
-        
-        <Button 
+
+        <Button
           onClick={executeCreateOrder}
           className="w-full bg-blue-500 hover:bg-blue-400 transition-color duration-200 text-white py-7 rounded-md font-extrabold text-xl"
         >
@@ -130,14 +137,47 @@ const CheckoutForm = () => {
 }
 
 export default function PaymentPage() {
+  const [startLocation] = useLocalStorage<string>('start-location', '')
+  const [endLocation] = useLocalStorage<string>('end-location', '')
+  const [pickupInstructions] = useLocalStorage<string>('pickup-instructions', '')
+  const [dropoffInstructions] = useLocalStorage<string>('dropoff-instructions', '')
+  const [parcels] = useLocalStorage<Parcel[]>('order-draft', [])
+  const [quote, setQuote] = useState<number>(0)
+  useEffect(() => {
+    fetchQuote(parcels)
+      .then(setQuote)
+  }, [parcels])
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="text-6xl font-extrabold tracking-tight mb-8 text-center text-gray-800">
         Payment Step
       </div>
+
+      <div className="max-w-lg w-full mb-8 p-6 bg-white rounded-lg shadow-md">
+        <h3 className="text-2xl font-bold mb-4 text-gray-700">Order Summary</h3>
+        <p className="font-extrabold tracking-tight">Total: ${quote.toFixed(2)}</p>
+        <p className="font-extrabold tracking-tight mt-2">Start Location:</p>
+        <p>{startLocation}</p>
+        <p className="font-extrabold tracking-tight mt-2">End Location:</p>
+        <p>{endLocation}</p>
+        
+        <p className="font-extrabold tracking-tight mt-2">Items:</p>
+        <ul className="list-disc ml-5">
+          {parcels.map((parcel, index) => (
+            <li key={index} className="tracking-tight">{parcel.name || `Parcel ${index + 1}`} - {parcel.description}</li>
+          ))}
+        </ul>
+        
+        <p className="font-extrabold tracking-tight mt-2">Pickup Instructions:</p>
+        <p>{pickupInstructions}</p>
+        
+        <p className="font-extrabold tracking-tight mt-2">Dropoff Instructions:</p>
+        <p>{dropoffInstructions}</p>
+      </div>
       <Elements stripe={stripePromise}>
         <div className="max-w-lg w-full">
-          <CheckoutForm />
+          <CheckoutForm startLocation={startLocation} endLocation={endLocation} pickupInstructions={pickupInstructions} dropoffInstructions={dropoffInstructions} parcels={parcels} quote={quote}/>
         </div>
       </Elements>
     </div>

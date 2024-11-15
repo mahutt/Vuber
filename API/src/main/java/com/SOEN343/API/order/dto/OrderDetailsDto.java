@@ -1,5 +1,7 @@
 package com.SOEN343.API.order.dto;
 
+import java.util.Arrays;
+
 public class OrderDetailsDto {
     private ParcelDetailsDto parcels[];
     private double total;
@@ -10,6 +12,13 @@ public class OrderDetailsDto {
 
     public ParcelDetailsDto[] getParcels() {
         return parcels;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDetailsDto [parcels=" + Arrays.toString(parcels) + ", total=" + total + ", originCoordinates="
+                + originCoordinates + ", destinationCoordinates=" + destinationCoordinates + ", pickupInstructions="
+                + pickupInstructions + ", dropoffInstructions=" + dropoffInstructions + "]";
     }
 
     public void setParcels(ParcelDetailsDto[] parcels) {

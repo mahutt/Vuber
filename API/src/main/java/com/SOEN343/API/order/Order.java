@@ -30,6 +30,9 @@ public class Order {
     @Column
     private String status;
 
+    @Column
+    private String chargeId;
+
     @Column(nullable = true)
     private Double total;
 
@@ -91,6 +94,14 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getChargeId() {
+        return chargeId;
+    }
+
+    public void setChargeId(String chargeId) {
+        this.chargeId = chargeId;
     }
 
     public String getStatus() {

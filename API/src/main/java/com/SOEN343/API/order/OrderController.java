@@ -11,18 +11,27 @@ import com.SOEN343.API.order.dto.CoordinatesDto;
 import com.SOEN343.API.order.dto.OrderDetailsDto;
 import com.SOEN343.API.order.dto.ParcelDetailsDto;
 import com.SOEN343.API.order.dto.TrackingDto;
+import com.SOEN343.API.order.dto.OrderRequestDto;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.SOEN343.API.user.UserService;
 import com.SOEN343.API.QuoteService.QuoteCalculator;
+import com.SOEN343.API.payment.StripeService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
+
+    private final StripeService stripeService;
+
 
     @Autowired
     private final UserService userService;
@@ -32,11 +41,12 @@ public class OrderController {
 
     @Autowired
     public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository,
-            QuoteCalculator quoteCalc) {
+            QuoteCalculator quoteCalc, StripeService stripeService) {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
         this.quoteCalculator = quoteCalc;
+        this.stripeService = stripeService;
     }
 
     @GetMapping("/purge")
@@ -44,57 +54,10 @@ public class OrderController {
         orderRepository.deleteAll();
     }
 
-    // @PostMapping("/new")
-    // public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto
-    // orderDetails) {
-    // double total = orderDetails.getTotal();
-    // CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
-    // CoordinatesDto destinationCoordinates =
-    // orderDetails.getDestinationCoordinates();
-    // // Coordinate originCoords = new
-    // Coordinate(originCoordinates.getLng(),originCoordinates.getLat());
-    // // Coordinate destCoords = new Coordinate(destinationCoordinates.getLng(),
-    // destinationCoordinates.getLat());
-
-    // User user = userService.getCurrentUser();
-
-    // Order order = new Order();
-    // order.setUser(user);
-    // order.setStatus("Pending");
-    // order.setTotal(total);
-
-    // // order.setOriginCoords(originCoords);
-    // // order.setDestinationCoords(destCoords);
-    // // order.setCurrentCoordinates(originCoords);
-    // // order.getPrevCoordinates().add(originCoords);
-
-    // // order.setOrigin(originCoordinates.toString());
-    // // order.setDestination(destinationCoordinates.toString());
-
-    // List<Parcel> parcelList = new ArrayList<>();
-
-    // for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
-    // Parcel parcel = new Parcel();
-    // parcel.setName(parcelDto.getName());
-    // parcel.setWeight(parcelDto.getWeight());
-    // parcel.setWeightunit(Parcel.getWeightEnumValue(parcelDto.getWeightunit()));
-    // parcel.setWidth(parcelDto.getWidth());
-    // parcel.setLength(parcelDto.getLength());
-    // parcel.setHeight(parcelDto.getHeight());
-    // parcel.setSizeUnit(Parcel.getSizeEnumValue(parcelDto.getSizeUnit()));
-    // parcel.setDescription(parcelDto.getDescription());
-    // parcel.setOrder(order);
-    // parcelList.add(parcel);
-    // }
-
-    // order.setParcels(parcelList);
-    // Order savedOrder = orderRepository.save(order);
-
-    // return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
-    // }
-
     @PostMapping("/new")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDetailsDto orderDetails) {
+    public ResponseEntity<Integer> createOrder(@RequestBody OrderRequestDto orderRequest) {
+        OrderDetailsDto orderDetails = orderRequest.getOrderDetails();
+        String token = orderRequest.getToken();
         double total = orderDetails.getTotal();
         CoordinatesDto originCoordinates = orderDetails.getOriginCoordinates();
         CoordinatesDto destinationCoordinates = orderDetails.getDestinationCoordinates();
@@ -119,11 +82,6 @@ public class OrderController {
         order.setCurrentCoordinates(originCoords);
         order.getPrevCoordinates().add(originCoords);
 
-        System.out.println("==============================================================");
-        System.out.println(destinationCoordinates.toString());
-        System.out.println(originCoordinates.toString());
-        System.out.println("==============================================================");
-
         List<Parcel> parcelList = new ArrayList<>();
 
         for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
@@ -140,10 +98,18 @@ public class OrderController {
             parcelList.add(parcel);
         }
 
+        try{
+            Charge charge = stripeService.chargeCard(token, total);
+            order.setChargeId(charge.getId());
+        }catch(StripeException e)
+        {
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
         order.setParcels(parcelList);
         Order savedOrder = orderRepository.save(order);
-
-        return ResponseEntity.status(HttpStatus.OK).body(savedOrder);
+        return ResponseEntity.status(HttpStatus.OK).body(savedOrder.getId());
     }
 
     // get all orders (for now)
@@ -203,6 +169,16 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOrder(@PathVariable Integer id){
+        Order order = orderService.getOrderById(id);
+        if(order!=null){
+            return ResponseEntity.ok(order);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+    }
+    
 
     @PostMapping("/quote")
     public ResponseEntity<Object> getQuote(@RequestBody ParcelDetailsDto[] parcelDto) {

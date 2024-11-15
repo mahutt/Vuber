@@ -54,9 +54,7 @@ public class ParcelDetailsDto {
 
     public void setSize(SizeDto size) {
         this.size = size;
-    }
-
-    
+    }  
 
 }
 
