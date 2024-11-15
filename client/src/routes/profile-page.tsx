@@ -5,7 +5,7 @@ import { Order, Parcel } from '@/types/types'
 
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth()
+  const { user, loading, refreshUser } = useAuth()
   const navigate = useNavigate()
 
 
@@ -14,6 +14,10 @@ export default function ProfilePage() {
       navigate('/signin')
     }
   }, [user, loading, navigate])
+
+  useEffect(() => {
+    refreshUser()
+  }, [])
 
   if (loading) {
     return <div className="text-center p-4">Loading...</div>
@@ -106,7 +110,7 @@ function OrderCard({ order }: { order: Order }) {
 
 function ParcelCard({ parcel }: { parcel: Parcel }) {
   return (
-    <li className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
       <p className="font-medium">
         {parcel.name}
       </p>
@@ -115,6 +119,6 @@ function ParcelCard({ parcel }: { parcel: Parcel }) {
           <strong>Description:</strong> {parcel.description}
         </p>
       )}
-    </li>
+    </div>
   );
 }

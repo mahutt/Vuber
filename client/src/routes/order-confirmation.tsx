@@ -18,9 +18,7 @@ const OrderConfirmation = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        console.log("chat is are we in this try block?")
         const order = await getOrderDetails(Number(id));
-        console.log("chat are we seeting the order?")
         setOrder(order)
         console.log(order)
       } catch (error) {

@@ -14,6 +14,7 @@ interface AuthContextType {
   signin: (name: string, password: string) => Promise<boolean>
   signup: (name: string, password: string, role: string) => Promise<boolean>
   logout: () => Promise<void>
+  refreshUser: () => Promise<void>
   loading: boolean
 }
 
@@ -27,17 +28,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        const { data } = await api.get<User | null>('/users/current')
-        setUser(data)
-      } catch (error) {
-        setUser(null)
-      } finally {
-        setLoading(false)
-      }
+
+  const checkLoggedIn = async () => {
+    try {
+      const { data } = await api.get<User | null>('/users/current')
+      setUser(data)
+    } catch (error) {
+      setUser(null)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     checkLoggedIn()
   }, [])
 
@@ -92,8 +95,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       })
   }
 
+  const refreshUser = async () => {
+    checkLoggedIn()
+  }
+
   return (
-    <AuthContext.Provider value={{ user, signin, logout, signup, loading }}>
+    <AuthContext.Provider value={{ user, signin, logout, signup, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   )
