@@ -46,3 +46,12 @@ export interface Coordinate {
   lat: number
   lng: number
 }
+
+export interface EmailDetails{
+
+  Name: String
+  PhoneNum: String
+  Email: String
+  Message: String
+
+}

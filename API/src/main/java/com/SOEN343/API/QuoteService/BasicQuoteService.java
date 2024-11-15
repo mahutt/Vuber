@@ -5,7 +5,7 @@ import com.SOEN343.API.order.dto.SizeDto;
 
 public class BasicQuoteService implements IQuoteStrategy{
 
-        private static final double BASE_RATE_PER_KG = 5.0; 
+    private static final double BASE_RATE_PER_KG = 5.0; 
     private static final double BASE_RATE_PER_LBS = 2.5;
     private static final double BASE_RATE_PER_CM3 = 0.01; 
     private static final double BASE_RATE_PER_INCH = 2.5;
