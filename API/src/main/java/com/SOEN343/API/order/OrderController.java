@@ -16,7 +16,7 @@ import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.SOEN343.API.user.UserService;
 import com.SOEN343.API.QuoteService.QuoteCalculator;
-import com.SOEN343.API.payment.StripeService;
+import com.SOEN343.API.payment.StripeServiceAdapter;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    private final StripeService stripeService;
+    private final StripeServiceAdapter stripeService;
 
     @Autowired
     private final UserService userService;
@@ -38,7 +38,7 @@ public class OrderController {
 
     @Autowired
     public OrderController(UserService userService, OrderService orderService, OrderRepository orderRepository,
-            QuoteCalculator quoteCalc, StripeService stripeService) {
+            QuoteCalculator quoteCalc, StripeServiceAdapter stripeService) {
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
