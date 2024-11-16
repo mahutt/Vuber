@@ -1,7 +1,7 @@
 package com.SOEN343.API.email;
 
 public class SmtpEmailFacade {
-    SmptpEmailer emailer = SmptpEmailer.getInstance();
+    SmtpEmailer emailer = SmtpEmailer.getInstance();
 
     public void sendToContactSupport(EmailDetails details) {
         String to = "xvinivuberx@gmail.com";
