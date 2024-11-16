@@ -16,6 +16,7 @@ import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
 import com.SOEN343.API.user.UserService;
 import com.SOEN343.API.QuoteService.QuoteCalculator;
+import com.SOEN343.API.QuoteService.QuoteStrategyFactory;
 import com.SOEN343.API.payment.StripeServiceAdapter;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -29,6 +30,7 @@ import java.util.Optional;
 public class OrderController {
 
     private final StripeServiceAdapter stripeService;
+    private QuoteStrategyFactory factory;
 
     @Autowired
     private final UserService userService;
@@ -44,6 +46,7 @@ public class OrderController {
         this.orderService = orderService;
         this.quoteCalculator = quoteCalc;
         this.stripeService = stripeService;
+        this.factory = new QuoteStrategyFactory();
     }
 
     @GetMapping("/purge")
@@ -187,14 +190,18 @@ public class OrderController {
             numberOfOrders = 0;
         }
 
-        // double quote = 0;
+        double quote = 0;
 
-        // if (parcelDto == null) {
-        // return ResponseEntity.status(400).body("Null Object");
-        // }
+        if (numberOfOrders < 3) {
+            quoteCalculator.setStrategy(factory.create("basic"));
+        } else {
+            quoteCalculator.setStrategy(factory.create("discounted"));
+        }
 
-        double quote;
-        quoteCalculator.setStrategy(numberOfOrders);
+        if (parcelDto == null) {
+            return ResponseEntity.status(400).body("Null Object");
+        }
+
         quote = quoteCalculator.execute(parcelDto);
         return ResponseEntity.ok().body(quote);
     }
