@@ -14,7 +14,7 @@ public class QuoteCalculator {
         this.factory = factory;
     }
 
-    public void setSrategy(int numberOfOrders) {
+    public void setStrategy(int numberOfOrders) {
         if (numberOfOrders < 3) {
             System.out.print("\n\n***BASIC***\n\n");
             strategy = factory.create("basic");

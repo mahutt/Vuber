@@ -187,18 +187,15 @@ public class OrderController {
             numberOfOrders = 0;
         }
 
-        double quote = 0;
+        // double quote = 0;
 
-        if (parcelDto == null) {
-            return ResponseEntity.status(400).body("Null Object");
-        }
+        // if (parcelDto == null) {
+        // return ResponseEntity.status(400).body("Null Object");
+        // }
 
-        // setting strategy based on number size.
-        quoteCalculator.setSrategy(numberOfOrders);
-
-        // using execute, which calls the quote calc from the strategy
+        double quote;
+        quoteCalculator.setStrategy(numberOfOrders);
         quote = quoteCalculator.execute(parcelDto);
-
         return ResponseEntity.ok().body(quote);
     }
 
