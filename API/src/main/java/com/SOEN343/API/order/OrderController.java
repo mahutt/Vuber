@@ -191,17 +191,15 @@ public class OrderController {
         }
 
         double quote = 0;
+        if (parcelDto == null) {
+            return ResponseEntity.status(400).body("Null Object");
+        }
 
         if (numberOfOrders < 3) {
             quoteCalculator.setStrategy(factory.create("basic"));
         } else {
             quoteCalculator.setStrategy(factory.create("discounted"));
         }
-
-        if (parcelDto == null) {
-            return ResponseEntity.status(400).body("Null Object");
-        }
-
         quote = quoteCalculator.execute(parcelDto);
         return ResponseEntity.ok().body(quote);
     }
