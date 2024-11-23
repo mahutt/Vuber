@@ -8,10 +8,6 @@ const OrderConfirmation = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [order, setOrder] = useState<Order | null>(null)
-  if (!id) {
-    navigate('/')
-    return null
-  }
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -26,6 +22,11 @@ const OrderConfirmation = () => {
 
     fetchOrderDetails()
   }, [id])
+
+  if (!id) {
+    navigate('/')
+    return null
+  }
 
   if (!order) {
     return <div>Loading order details...</div>
