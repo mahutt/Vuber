@@ -28,12 +28,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-
   const checkLoggedIn = async () => {
     try {
       const { data } = await api.get<User | null>('/users/current')
       setUser(data)
-    } catch (error) {
+    } catch {
       setUser(null)
     } finally {
       setLoading(false)
@@ -100,7 +99,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, signin, logout, signup, refreshUser, loading }}>
+    <AuthContext.Provider
+      value={{ user, signin, logout, signup, refreshUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   )

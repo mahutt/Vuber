@@ -13,17 +13,6 @@ export default function Map({
   endLocation: string
   pingLocation?: string
 }) {
-  if (!mapboxgl.accessToken) {
-    return (
-      <div className="h-full w-full flex items-center justify-center">
-        <p className="text-lg text-gray-600">
-          Mapbox access token is missing. Please provide it in the environment
-          variable <code>VITE_MAPBOX_ACCESS_TOKEN</code>.
-        </p>
-      </div>
-    )
-  }
-
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
 

@@ -60,15 +60,6 @@ export default function OrderPage() {
   }
 
   const pickUpLocation = useRef<HTMLInputElement>(null)
-  useEffect(() => {
-    if (startLocation !== '' && endLocation !== '') {
-      setAddParcelPhase(true)
-    } else {
-      setTimeout(() => {
-        pickUpLocation.current?.focus()
-      }, 250)
-    }
-  }, [])
   const [startLocation, setStartLocation] = useLocalStorage<string>(
     'start-location',
     ''
@@ -78,11 +69,20 @@ export default function OrderPage() {
     ''
   )
   useEffect(() => {
-    if (addParcelPhase) {
-      setAddParcelPhase(false)
+    if (startLocation !== '' && endLocation !== '') {
+      setAddParcelPhase(true)
+    } else {
+      setTimeout(() => {
+        pickUpLocation.current?.focus()
+      }, 250)
     }
   }, [startLocation, endLocation])
   const [addParcelPhase, setAddParcelPhase] = useState<boolean>(false)
+  useEffect(() => {
+    if (addParcelPhase) {
+      setAddParcelPhase(false)
+    }
+  }, [startLocation, endLocation, addParcelPhase])
   const navigate = useNavigate()
 
   return (

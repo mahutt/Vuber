@@ -15,7 +15,7 @@ function ContactUs() {
   const navigate = useNavigate()
 
   // Function to handle phone number input and formatting
-  const handlePhoneChange = (e: { target: { value: any } }) => {
+  const handlePhoneChange = (e: { target: { value: string } }) => {
     let value = e.target.value
     value = value.replace(/\D/g, '')
 
@@ -36,7 +36,7 @@ function ContactUs() {
   }
 
   // Function to handle email input and validation
-  const handleEmailChange = (e: { target: { value: any } }) => {
+  const handleEmailChange = (e: { target: { value: string } }) => {
     const emailValue = e.target.value
     setEmail(emailValue)
 
