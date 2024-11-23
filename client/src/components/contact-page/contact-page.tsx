@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import sendEmail from '@/services/send-emails'
 import { EmailDetails } from '@/types/types'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +8,7 @@ function ContactUs() {
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
-  const [emailValid, setEmailValid] = useState(null)
+  const [emailValid, setEmailValid] = useState<boolean | null>(false)
   const [phoneValid, setPhoneValid] = useState(false)
   const [shake, setShake] = useState(false)
 
@@ -172,7 +171,7 @@ function ContactUs() {
               <textarea
                 id="message"
                 name="message"
-                rows="2"
+                rows={2}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="mt-1 block w-full p-2 border rounded-md"
