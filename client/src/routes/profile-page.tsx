@@ -1,13 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/providers/AuthProvider'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Order, Parcel } from '@/types/types'
-
 
 export default function ProfilePage() {
   const { user, loading, refreshUser } = useAuth()
   const navigate = useNavigate()
-
 
   useEffect(() => {
     if (!user && !loading) {
@@ -17,7 +15,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     refreshUser()
-  }, [])
+  })
 
   if (loading) {
     return <div className="text-center p-4">Loading...</div>
@@ -37,13 +35,15 @@ export default function ProfilePage() {
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Current Orders</h2>
-          {user.orders && user.orders.some(order => order.status !== "Delivered") ? (
+          {user.orders &&
+          user.orders.some((order) => order.status !== 'Delivered') ? (
             <ul className="space-y-4">
-              {user.orders.map((order) => (
-                order.status !== "Delivered" && (
-                  <OrderCard key={order.id} order={order} />
-                )
-              ))}
+              {user.orders.map(
+                (order) =>
+                  order.status !== 'Delivered' && (
+                    <OrderCard key={order.id} order={order} />
+                  )
+              )}
             </ul>
           ) : (
             <p className="text-gray-500">No current orders.</p>
@@ -52,13 +52,15 @@ export default function ProfilePage() {
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Past Orders</h2>
-          {user.orders && user.orders.some(order => order.status === "Delivered") ? (
+          {user.orders &&
+          user.orders.some((order) => order.status === 'Delivered') ? (
             <ul className="space-y-4">
-              {user.orders.map((order) => (
-                order.status == "Delivered" && (
-                  <OrderCard key={order.id} order={order} />
-                )
-              ))}
+              {user.orders.map(
+                (order) =>
+                  order.status == 'Delivered' && (
+                    <OrderCard key={order.id} order={order} />
+                  )
+              )}
             </ul>
           ) : (
             <p className="text-gray-500">No past orders.</p>
@@ -70,11 +72,11 @@ export default function ProfilePage() {
 }
 
 function OrderCard({ order }: { order: Order }) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`/track/${order.id}`);
-  };
+    navigate(`/track/${order.id}`)
+  }
 
   return (
     <li
@@ -87,18 +89,19 @@ function OrderCard({ order }: { order: Order }) {
       <p>
         <strong>Status:</strong>{' '}
         <span
-          className={`px-2 py-1 rounded-full text-sm font-medium ${order.status === 'Delivered'
-            ? 'bg-green-100 text-green-800'
-            : order.status === 'In Transit'
+          className={`px-2 py-1 rounded-full text-sm font-medium ${
+            order.status === 'Delivered'
+              ? 'bg-green-100 text-green-800'
+              : order.status === 'In Transit'
               ? 'bg-blue-100 text-blue-800'
               : 'bg-yellow-100 text-yellow-800'
-            }`}
+          }`}
         >
           {order.status}
         </span>
       </p>
       <ul className="ml-4 space-y-2 mt-2">
-        {order.parcels.map(parcel => (
+        {order.parcels.map((parcel) => (
           <li>
             <ParcelCard parcel={parcel} />
           </li>
@@ -111,14 +114,12 @@ function OrderCard({ order }: { order: Order }) {
 function ParcelCard({ parcel }: { parcel: Parcel }) {
   return (
     <div className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-      <p className="font-medium">
-        {parcel.name}
-      </p>
+      <p className="font-medium">{parcel.name}</p>
       {parcel.description && (
         <p>
           <strong>Description:</strong> {parcel.description}
         </p>
       )}
     </div>
-  );
+  )
 }
