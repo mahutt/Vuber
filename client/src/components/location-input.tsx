@@ -24,7 +24,7 @@ const LocationInput = forwardRef<HTMLInputElement, LocationInputProps>(
         </div>
         <input
           onFocus={() => setFocused(true)}
-          className="outline-none ring-0 focus:ring-0 focus:outline-none bg-inherit"
+          className="outline-none ring-0 focus:ring-0 focus:outline-none bg-inherit w-full"
           type={type}
           ref={ref}
           {...props}

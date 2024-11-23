@@ -16,9 +16,9 @@ function Home() {
   )
   return (
     <section className="h-full relative">
-      <div className="max-w-screen-xl mx-auto p-16 h-full flex items-center justify-around gap-4">
-        <div className="w-[350px] flex flex-col gap-4 items-end">
-          <div className="text-6xl font-extrabold tracking-tight mb-8">
+      <div className="max-w-screen-xl mx-auto p-8 md:p-16 h-full flex flex-wrap items-center justify-around gap-4">
+        <div className="max-w-[350px] w-full flex flex-col gap-4 items-end">
+          <div className="text-4xl md:text-6xl font-extrabold tracking-tight mb-2 md:mb-8">
             Ship anything with{' '}
             <span className="bg-gradient-to-tl from-blue-400 to-blue-200 bg-clip-text text-transparent">
               Vüber
