@@ -50,7 +50,7 @@ export default function NumberInput({
   useEffect(() => {
     const float = parseFloat(stringNumber)
     setNumber(isNaN(float) ? 0 : float)
-  }, [stringNumber])
+  }, [stringNumber, setNumber])
   return (
     <div className="relative w-full">
       <input

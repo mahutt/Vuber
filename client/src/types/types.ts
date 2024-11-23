@@ -47,11 +47,9 @@ export interface Coordinate {
   lng: number
 }
 
-export interface EmailDetails{
-
-  Name: String
-  PhoneNum: String
-  Email: String
-  Message: String
-
+export interface EmailDetails {
+  Name: string
+  PhoneNum: string
+  Email: string
+  Message: string
 }

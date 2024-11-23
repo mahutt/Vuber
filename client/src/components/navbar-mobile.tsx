@@ -31,7 +31,10 @@ const linkStyling =
 const menuItemStyling = 'flex flex-row items-center gap-2'
 
 export default function NavbarMobile() {
-  const [_, setChatbotOpen] = useLocalStorage<boolean>('chatbot-open', false)
+  const [_unused, setChatbotOpen] = useLocalStorage<boolean>(
+    'chatbot-open',
+    false
+  )
   const location = useLocation()
   const [isOpen, setIsOpen] = React.useState(false)
   const { user, logout } = useAuth()

@@ -24,84 +24,83 @@ export default function TrackingPage() {
   const [isValid, setIsValid] = useState(true)
   const [loading, setLoading] = useState(true)
   const [originLocation, setOriginLocation] = useState<string>('')
-  const [previousLocations, setPreviousLocations] = useState<String[]>([])
+  const [previousLocations, setPreviousLocations] = useState<string[]>([])
   const [currentLocation, setCurrentLocation] = useState<string>('')
   const [endLocation, setEndLocation] = useState<string>('')
   const [status, setStatus] = useState<string>('')
   const [username, setUsername] = useState<string>('')
 
-  const track = async () => {
-    if (!id) {
-      return
-    }
-    try {
-      const trackingData = await trackOrder(id)
-      if (trackingData == null) {
-        setIsValid(false)
-        setLoading(false)
+  useEffect(() => {
+    const track = async () => {
+      if (!id) {
         return
       }
-      setStatus(trackingData.status)
-      setIsValid(true)
-      var currLoc = await fetchPlaceName(
-        trackingData.currentCoordinate.lat,
-        trackingData.currentCoordinate.lng
-      )
-      if (currLoc == null) {
-        currLoc = ''
-      }
-      setCurrentLocation(currLoc)
-
-      var dest = await fetchPlaceName(
-        trackingData.destinationCoordinate.lat,
-        trackingData.destinationCoordinate.lng
-      )
-      if (dest == null) {
-        dest = ''
-      }
-      setEndLocation(dest)
-
-      const prevCoordArr = trackingData.previousCoordinates
-      const trackingHistory: string[] = []
-      for (let i = 0; i < prevCoordArr.length; i++) {
-        let locString = await fetchPlaceName(
-          prevCoordArr[i].lat,
-          prevCoordArr[i].lng
-        )
-        if (locString) {
-          trackingHistory.push(locString)
-        } else {
-          trackingHistory.push('Error fetching Location')
+      try {
+        const trackingData = await trackOrder(id)
+        if (trackingData == null) {
+          setIsValid(false)
+          setLoading(false)
+          return
         }
-      }
-      setPreviousLocations(trackingHistory)
-      let origin = await fetchPlaceName(
-        trackingData.originCoordinate.lat,
-        trackingData.originCoordinate.lng
-      )
-      if (origin == null) {
-        origin = ''
-      }
-      setOriginLocation(origin)
-      setUsername(trackingData.user.username)
-      setLoading(false)
-    } catch (error) {
-      if (
-        error instanceof Error &&
-        'response' in error &&
-        (error as any).response.status === 400
-      ) {
-        console.log('Bad Request: Invalid tracking number')
-        setIsValid(false)
-        // Continue your function logic here, if needed
-      } else {
-        console.error('An unexpected error occurred:', error)
-      }
-      setLoading(false)
-    }
-  }
+        setStatus(trackingData.status)
+        setIsValid(true)
+        let currLoc = await fetchPlaceName(
+          trackingData.currentCoordinate.lat,
+          trackingData.currentCoordinate.lng
+        )
+        if (currLoc == null) {
+          currLoc = ''
+        }
+        setCurrentLocation(currLoc)
 
-  useEffect(() => {
+        let dest = await fetchPlaceName(
+          trackingData.destinationCoordinate.lat,
+          trackingData.destinationCoordinate.lng
+        )
+        if (dest == null) {
+          dest = ''
+        }
+        setEndLocation(dest)
+
+        const prevCoordArr = trackingData.previousCoordinates
+        const trackingHistory: string[] = []
+        for (let i = 0; i < prevCoordArr.length; i++) {
+          const locString = await fetchPlaceName(
+            prevCoordArr[i].lat,
+            prevCoordArr[i].lng
+          )
+          if (locString) {
+            trackingHistory.push(locString)
+          } else {
+            trackingHistory.push('Error fetching Location')
+          }
+        }
+        setPreviousLocations(trackingHistory)
+        let origin = await fetchPlaceName(
+          trackingData.originCoordinate.lat,
+          trackingData.originCoordinate.lng
+        )
+        if (origin == null) {
+          origin = ''
+        }
+        setOriginLocation(origin)
+        setUsername(trackingData.user.username)
+        setLoading(false)
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          'response' in error &&
+          (error as { response?: { status?: number } }).response?.status === 400
+        ) {
+          console.log('Bad Request: Invalid tracking number')
+          setIsValid(false)
+          // Continue your function logic here, if needed
+        } else {
+          console.error('An unexpected error occurred:', error)
+        }
+        setLoading(false)
+      }
+    }
     track()
   }, [id])
 
@@ -193,7 +192,7 @@ function OrderInformationCard({
   )
 }
 
-function LocationHistory({ locations }: { locations: String[] }) {
+function LocationHistory({ locations }: { locations: string[] }) {
   return (
     <ScrollArea>
       <Table>

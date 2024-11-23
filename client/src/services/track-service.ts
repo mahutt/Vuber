@@ -10,11 +10,11 @@ export interface TrackingData {
   user: BackendUser
 }
 
-export const trackOrder = async (id: any): Promise<TrackingData | null> => {
+export const trackOrder = async (id: string): Promise<TrackingData | null> => {
   try {
     const response = await api.get<TrackingData>(`/orders/track/${id}`)
     return response.data
-  } catch (error) {
+  } catch {
     return null
   }
 }

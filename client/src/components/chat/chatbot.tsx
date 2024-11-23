@@ -58,7 +58,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
   async function processMessagetoVini(someMessages: MessageType[]) {
     setTyping(true)
     //with @chatscope library. our messages are bascially in the following JSON format {sender : 'user' or 'ai', message: "The message content here", }
-    let apiMessages = someMessages.map((messageObject) => {
+    const apiMessages = someMessages.map((messageObject) => {
       let role = ''
       if (messageObject.sender === 'ai') {
         role = 'assistant'

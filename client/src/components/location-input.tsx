@@ -7,7 +7,7 @@ export interface LocationInputProps
 }
 
 const LocationInput = forwardRef<HTMLInputElement, LocationInputProps>(
-  ({ className, type, filled, ...props }, ref) => {
+  ({ type, filled, ...props }, ref) => {
     const [focused, setFocused] = useState(false)
     return (
       <div

@@ -17,7 +17,7 @@ const FadeInWrapper = ({
       setIsVisible(true)
     }, delay)
     return () => clearTimeout(timeout)
-  }, [])
+  }, [delay])
 
   return (
     <div

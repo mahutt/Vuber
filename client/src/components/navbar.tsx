@@ -27,7 +27,7 @@ const linkStyling =
   'h-9 rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none'
 
 const Link: React.FC<LinkProps> = ({ to, ...props }) => {
-  let location = useLocation()
+  const location = useLocation()
   const isActive = to === location.pathname
 
   return (
@@ -38,7 +38,10 @@ const Link: React.FC<LinkProps> = ({ to, ...props }) => {
 }
 
 export default function Navbar() {
-  const [_, setChatbotOpen] = useLocalStorage<boolean>('chatbot-open', false)
+  const [_unused, setChatbotOpen] = useLocalStorage<boolean>(
+    'chatbot-open',
+    false
+  )
   return (
     <header className="bg-black">
       <div className="max-w-screen-xl mx-auto px-16 py-3 flex flex-row items-center gap-4">
