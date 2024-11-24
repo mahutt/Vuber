@@ -1,4 +1,5 @@
 export interface Parcel {
+  id: number
   name: string
   description: string
   weight: number

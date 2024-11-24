@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.SOEN343.API.user.dto.SignUpDto;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 
+import jakarta.transaction.Transactional;
+
 import java.util.*;
 
 //Logic for user class
@@ -35,8 +37,14 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @Transactional
     public List<User> getUsers() {
-        return this.userRepository.findAll();
+        List<User> users = userRepository.findAllWithOrders();
+        if (!users.isEmpty()) {
+            userRepository.findOrdersWithParcelsByUsers(users);
+            userRepository.findOrdersWithCoordinatesByUsers(users);
+        }
+        return users;
     }
 
     public ResponseEntity<Object> updateUser(Integer id, User updateUser) {
@@ -88,7 +96,7 @@ public class UserService implements UserDetailsService {
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.name(), encryptedPassword);
-        
+
         if (data.role().equalsIgnoreCase("SENDER")) {
             newUser.setRole(User.Role.SENDER);
         } else if (data.role().equalsIgnoreCase("DRIVER")) {

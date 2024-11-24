@@ -2,6 +2,7 @@ package com.SOEN343.API.order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.SOEN343.API.Coordinates.Coordinate;
 import com.SOEN343.API.parcel.Parcel;
@@ -25,7 +26,7 @@ public class Order {
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Parcel> parcels;
+    private Set<Parcel> parcels;
 
     @Column
     private String status;
@@ -136,11 +137,11 @@ public class Order {
         this.destination = destination;
     }
 
-    public List<Parcel> getParcels() {
+    public Set<Parcel> getParcels() {
         return parcels;
     }
 
-    public void setParcels(List<Parcel> parcels) {
+    public void setParcels(Set<Parcel> parcels) {
         this.parcels = parcels;
     }
 

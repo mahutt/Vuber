@@ -21,9 +21,10 @@ import com.SOEN343.API.payment.StripeServiceAdapter;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -82,7 +83,7 @@ public class OrderController {
         order.setCurrentCoordinates(originCoords);
         order.getPrevCoordinates().add(originCoords);
 
-        List<Parcel> parcelList = new ArrayList<>();
+        Set<Parcel> parcelList = new HashSet<>();
 
         for (ParcelDetailsDto parcelDto : orderDetails.getParcels()) {
             Parcel parcel = new Parcel();

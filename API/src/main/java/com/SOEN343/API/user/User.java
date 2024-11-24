@@ -2,6 +2,7 @@ package com.SOEN343.API.user;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +24,8 @@ public class User implements UserDetails {
     private Role role;
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Order> orders;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Order> orders;
 
     public enum Role {
         SENDER,
@@ -86,11 +87,11 @@ public class User implements UserDetails {
         return password;
     }
 
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 

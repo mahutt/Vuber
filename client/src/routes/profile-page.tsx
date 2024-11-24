@@ -15,7 +15,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     refreshUser()
-  })
+  }, [])
 
   if (loading) {
     return <div className="text-center p-4">Loading...</div>
@@ -102,7 +102,7 @@ function OrderCard({ order }: { order: Order }) {
       </p>
       <ul className="ml-4 space-y-2 mt-2">
         {order.parcels.map((parcel) => (
-          <li>
+          <li key={parcel.id}>
             <ParcelCard parcel={parcel} />
           </li>
         ))}
