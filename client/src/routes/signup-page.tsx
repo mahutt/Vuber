@@ -43,17 +43,21 @@ function OptionCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border shadow-md ${
+      className={`flex-1 rounded-2xl border shadow-md ${
         active ? 'border-blue-500 shadow-blue-500' : 'opacity-80'
-      } p-8 transform transition-transform duration-300 hover:scale-[101%] active:scale-[99%] cursor-pointer`}
+      } p-4 transform transition-transform duration-300 hover:scale-[101%] active:scale-[99%] cursor-pointer`}
       onMouseDown={onMouseDown}
     >
-      <div className="flex flex-col items-center gap-4">
-        <div className={`text-xl font-medium ${active ? 'text-blue-500' : ''}`}>
-          {title}
-        </div>
+      <div className="flex gap-4">
         <div>{children}</div>
-        <div className="text-sm text-gray-500">{tag}</div>
+        <div className="flex flex-col">
+          <div
+            className={`text-lg font-medium ${active ? 'text-blue-500' : ''}`}
+          >
+            {title}
+          </div>
+          <div className="text-xs text-gray-500">{tag}</div>
+        </div>
       </div>
     </div>
   )
@@ -88,7 +92,7 @@ export default function SignupPage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-[484px] flex flex-col gap-4 justify-center items-stretch"
+            className="max-w-[484px] w-full flex flex-col gap-4 justify-center items-stretch"
           >
             <div className="w-full py-2">
               <h1 className="text-2xl font-bold tracking-tight">
@@ -124,7 +128,7 @@ export default function SignupPage() {
             />
             <FormItem>
               <FormLabel className="text-gray-700">Account type</FormLabel>
-              <div className="flex flex-row justify-center gap-4">
+              <div className="flex flex-col md:flex-row justify-center gap-4">
                 <OptionCard
                   title="Sender"
                   tag="I want to send packages."
@@ -134,7 +138,7 @@ export default function SignupPage() {
                     form.setValue('role', 'sender')
                   }}
                 >
-                  <Package className="w-32 h-32 text-gray-800" />
+                  <Package className="w-16 h-16 text-gray-800" />
                 </OptionCard>
                 <OptionCard
                   title="Driver"
@@ -145,7 +149,7 @@ export default function SignupPage() {
                     form.setValue('role', 'driver')
                   }}
                 >
-                  <Truck className="w-32 h-32 text-gray-800" />
+                  <Truck className="w-16 h-16 text-gray-800" />
                 </OptionCard>
               </div>
             </FormItem>
