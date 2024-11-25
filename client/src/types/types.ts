@@ -59,6 +59,6 @@ export interface EmailDetails {
 export interface Story {
   id: number
   caption: string
-  date: string
+  date: Date
   imageUrl: string
 }

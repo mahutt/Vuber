@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createStory } from '@/services/story-services'
+import { createStory, base64ToFile } from '@/services/story-services'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog } from '@/components/ui/dialog'
@@ -61,8 +61,11 @@ export default function StoryForm({
 
     try {
       setUploading(true)
-      const createdStory = await createStory({ photo, caption })
-      addStory(createdStory)
+      const photoFile = base64ToFile(photo, 'captured-photo.png')
+      const createdStory = await createStory({ file: photoFile, caption })
+      if (createdStory) {
+        addStory(createdStory)
+      }
       closeForm()
       setUploading(false)
     } catch (error) {
