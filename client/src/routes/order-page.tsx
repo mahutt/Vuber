@@ -83,7 +83,7 @@ export default function OrderPage() {
     if (addParcelPhase) {
       setAddParcelPhase(false)
     }
-  }, [startLocation, endLocation, addParcelPhase])
+  }, [startLocation, endLocation])
   const navigate = useNavigate()
 
   return (

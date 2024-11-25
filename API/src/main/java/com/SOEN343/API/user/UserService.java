@@ -124,4 +124,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public void deleteByRole(User.Role role) {
+        userRepository.deleteByRole(role);
+    }
 }

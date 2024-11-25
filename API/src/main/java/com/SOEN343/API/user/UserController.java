@@ -42,6 +42,13 @@ public class UserController {
         this.alertService.subscribe(new UserNotifier());
     }
 
+    // This endpoint is for demo purposes
+    @GetMapping("/delete-drivers")
+    public ResponseEntity<Object> test() {
+        userService.deleteByRole(User.Role.DRIVER);
+        return ResponseEntity.ok("All DRIVER users have been deleted");
+    }
+
     @GetMapping("/all")
     public ResponseEntity<Object> getUsers() {
         return ResponseEntity.ok(userService.getUsers());

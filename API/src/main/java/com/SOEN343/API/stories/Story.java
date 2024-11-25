@@ -2,11 +2,13 @@ package com.SOEN343.API.stories;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.SOEN343.API.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "stories")
@@ -15,22 +17,23 @@ public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    
+
     private String caption;
 
     private LocalDate date;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User driver;
 
     private String imageUrl;
 
-    public Story(){
+    public Story() {
 
     }
 
-    public Story(String caption, LocalDate date, User driver, String imageUrl){
+    public Story(String caption, LocalDate date, User driver, String imageUrl) {
         this.caption = caption;
         this.date = date;
         this.driver = driver;
@@ -77,7 +80,5 @@ public class Story {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
-    
 
 }
