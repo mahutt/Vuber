@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/providers/AuthProvider'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Order, Parcel } from '@/types/types'
 import AssignedOrderCard from '@/components/profile/assigned-order-card'
 
 export default function ProfilePage() {
   const { user, loading, refreshUser } = useAuth()
   const navigate = useNavigate()
+  const [ordersToDeliver, setOrdersToDeliver] = useState<Order[]>([])
 
   useEffect(() => {
     if (!user && !loading) {
@@ -17,6 +18,14 @@ export default function ProfilePage() {
   useEffect(() => {
     refreshUser()
   }, [])
+
+  useEffect(() => {
+    if (user && user.role === 'DRIVER') {
+      setOrdersToDeliver(
+        user.assignedOrders.filter((order) => order.status !== 'Delivered')
+      )
+    }
+  }, [user])
 
   if (loading) {
     return <div className="text-center p-4">Loading...</div>
@@ -37,14 +46,14 @@ export default function ProfilePage() {
         {user.role === 'DRIVER' && (
           <section>
             <h2 className="text-2xl font-semibold mb-4">Assigned Orders</h2>
-            {user.assignedOrders && user.assignedOrders.length > 0 ? (
+            {ordersToDeliver && ordersToDeliver.length > 0 ? (
               <div className="grid gap-4">
-                {user.assignedOrders.map((order) => (
+                {ordersToDeliver.map((order) => (
                   <AssignedOrderCard key={order.id} order={order} />
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500">No assigned orders.</p>
+              <p className="text-gray-500">No orders to be delivered.</p>
             )}
           </section>
         )}

@@ -123,6 +123,18 @@ public class OrderController {
         return orderRepository.findAll();
     }
 
+    @PostMapping("/complete/{id}")
+    public ResponseEntity<Object> completeOrder(@PathVariable Integer id) {
+        Optional<Order> orderOpt = orderRepository.findById(id);
+        if (!orderOpt.isPresent()) {
+            return new ResponseEntity<>(HttpStatusCode.valueOf(400));
+        }
+        Order order = orderOpt.get();
+        order.setStatus("Delivered");
+        orderRepository.save(order);
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
     @GetMapping("/track/{id}")
     public ResponseEntity<Object> trackOrder(@PathVariable Integer id) {
 

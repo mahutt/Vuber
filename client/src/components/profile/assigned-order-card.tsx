@@ -1,8 +1,13 @@
 import { Order, Parcel } from '@/types/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { MapPin } from 'lucide-react'
+import { Loader2, MapPin } from 'lucide-react'
+import completeOrder from '@/services/complete-order'
+import { useAuth } from '@/providers/AuthProvider'
+import { useState } from 'react'
 
 export default function AssignedOrderCard({ order }: { order: Order }) {
+  const { refreshUser } = useAuth()
+  const [loading, setLoading] = useState<boolean>(false)
   const calculateTotalWeight = (parcels: Parcel[]) => {
     const kgParcels = parcels
       .filter((p) => p.weightUnit === 'kg')
@@ -56,9 +61,20 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
           </div>
 
           <button
-            onClick={() => console.log('Mark as Delivered')}
-            className="w-full mt-4 bg-blue-50 text-blue-600 hover:bg-blue-100 py-2 rounded-md transition-colors duration-200"
+            disabled={loading}
+            onClick={async () => {
+              setLoading(true)
+              const result = await completeOrder(order.id)
+              if (result) {
+                await refreshUser()
+              } else {
+                console.error('Failed to complete order')
+              }
+              setLoading(false)
+            }}
+            className="w-full flex justify-center gap-2 mt-4 bg-blue-50 text-blue-600 hover:bg-blue-100 py-2 rounded-md transition-colors duration-200"
           >
+            {loading && <Loader2 className="animate-spin" />}
             Mark as Delivered
           </button>
         </div>
