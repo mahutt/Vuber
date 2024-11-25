@@ -29,6 +29,10 @@ public class User implements UserDetails {
     private Set<Order> orders;
 
     @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assignedUser")
+    private Set<Order> assignedOrders;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Story> stories;
 
@@ -98,6 +102,18 @@ public class User implements UserDetails {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public Set<Order> getAssignedOrders() {
+        return assignedOrders;
+    }
+
+    public void setAssignedOrders(Set<Order> assignedOrders) {
+        this.assignedOrders = assignedOrders;
+    }
+
+    public void addAssignedOrder(Order order) {
+        this.assignedOrders.add(order);
     }
 
     public Role getRole() {

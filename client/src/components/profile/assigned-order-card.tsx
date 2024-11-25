@@ -33,7 +33,7 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
+          <div className="w-fit">
             <div className="flex items-start gap-2">
               <MapPin className="mt-1 h-5 w-5 text-green-600 flex-shrink-0" />
               <p className="font-medium text-green-700">Pickup Location</p>
@@ -44,14 +44,14 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
             </div>
           </div>
 
-          <div className="flex items-start gap-2">
-            <MapPin className="mt-1 h-5 w-5 text-red-600 flex-shrink-0" />
-            <div>
+          <div className="w-fit">
+            <div className="flex items-start gap-2">
+              <MapPin className="mt-1 h-5 w-5 text-red-600 flex-shrink-0" />
               <p className="font-medium text-red-700">Dropoff Location</p>
-              <p className="text-sm text-gray-600">{order.destination}</p>
-              <div className="mt-1 text-sm bg-red-50 text-red-700 p-2 rounded">
-                <strong>Instructions:</strong> {order.dropoffInstructions}
-              </div>
+            </div>
+            <p className="text-sm text-gray-600">{order.destination}</p>
+            <div className="mt-1 text-sm bg-red-50 text-red-700 p-2 rounded">
+              <strong>Instructions:</strong> {order.dropoffInstructions}
             </div>
           </div>
 

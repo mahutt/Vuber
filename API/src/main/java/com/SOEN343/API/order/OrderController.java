@@ -108,6 +108,11 @@ public class OrderController {
         }
 
         order.setParcels(parcelList);
+        User driver = userService.getFirstDriver();
+        if (driver != null) {
+            order.setAssignedUser(driver);
+        }
+
         Order savedOrder = orderRepository.save(order);
         return ResponseEntity.status(HttpStatus.OK).body(savedOrder.getId());
     }

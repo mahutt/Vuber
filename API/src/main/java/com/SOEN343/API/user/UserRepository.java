@@ -32,4 +32,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     void deleteByRole(User.Role role);
 
     List<User> findByRole(User.Role role);
+
+    User findFirstByRole(User.Role role);
 }

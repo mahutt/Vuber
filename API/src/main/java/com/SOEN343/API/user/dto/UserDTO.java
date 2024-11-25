@@ -9,10 +9,11 @@ public record UserDto(
         int id,
         String name,
         String role,
-        Set<Order> orders) {
+        Set<Order> orders,
+        Set<Order> assignedOrders) {
 
     public UserDto(User user) {
-        this(user.getId(), user.getUsername(), user.getRole().toString(), user.getOrders());
+        this(user.getId(), user.getUsername(), user.getRole().toString(), user.getOrders(), user.getAssignedOrders());
     }
 
     public int getId() {

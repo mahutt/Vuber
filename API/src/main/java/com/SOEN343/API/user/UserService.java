@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.SOEN343.API.order.Order;
 import com.SOEN343.API.user.dto.SignUpDto;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 
@@ -131,5 +132,9 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
         }
         userRepository.deleteByRole(role);
+    }
+
+    public User getFirstDriver() {
+        return userRepository.findFirstByRole(User.Role.DRIVER);
     }
 }

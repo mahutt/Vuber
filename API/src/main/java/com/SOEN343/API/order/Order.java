@@ -28,6 +28,11 @@ public class Order {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    @JsonBackReference
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "assigned_user_id", nullable = true)
+    private User assignedUser;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Parcel> parcels;
@@ -195,6 +200,14 @@ public class Order {
 
     public void setDropoffInstructions(String dropoffInstructions) {
         this.dropoffInstructions = dropoffInstructions;
+    }
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
     }
 
 }
