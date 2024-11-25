@@ -55,3 +55,10 @@ export interface EmailDetails {
   Email: string
   Message: string
 }
+
+export interface Story {
+  id: number
+  caption: string
+  date: string
+  imageUrl: string
+}

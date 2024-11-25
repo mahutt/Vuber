@@ -3,6 +3,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import { useEffect, useState } from 'react'
 import { Order, Parcel } from '@/types/types'
 import AssignedOrderCard from '@/components/profile/assigned-order-card'
+import StoriesTab from '@/components/profile/stories-tab'
 
 export default function ProfilePage() {
   const { user, loading, refreshUser } = useAuth()
@@ -41,6 +42,10 @@ export default function ProfilePage() {
         <section className="mb-6">
           <h2 className="text-lg font-semibold">Welcome {user.name} !</h2>
           <h4 className="italic lowercase">Role: {user.role}</h4>
+        </section>
+
+        <section>
+          <StoriesTab />
         </section>
 
         {user.role === 'DRIVER' && (
