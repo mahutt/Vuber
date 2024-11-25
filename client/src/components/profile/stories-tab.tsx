@@ -3,34 +3,43 @@ import { Story } from '@/types/types'
 import { useEffect, useState } from 'react'
 import { getDriverStories, getSenderStories } from '@/services/story-services'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Plus } from 'lucide-react'
+import { Loader2, Plus, RotateCcw } from 'lucide-react'
 import StoryViewer from './story-viewer'
 import StoryForm from './story-form'
+import { Button } from '../ui/button'
 
 export default function StoriesTab() {
   const { user, loading } = useAuth()
   const [stories, setStories] = useState<Story[]>([])
   const [loadingStories, setLoadingStories] = useState<boolean>(true)
+  const [refreshing, setRefreshing] = useState<boolean>(true)
   const [isDriver, setIsDriver] = useState<boolean>(false)
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
+
+  const fetchStories = async () => {
+    if (!user) {
+      return
+    }
+    if (user.role === 'DRIVER') {
+      setIsDriver(true)
+      getSenderStories(user.id)
+        .then((stories) => setStories(stories))
+        .then(() => setLoadingStories(false))
+        .then(() => setRefreshing(false))
+    } else {
+      setIsDriver(false)
+      getDriverStories(user.id)
+        .then((stories) => setStories(stories))
+        .then(() => setLoadingStories(false))
+        .then(() => setRefreshing(false))
+    }
+  }
 
   useEffect(() => {
     if (loading) {
       return
     }
-    if (user) {
-      if (user.role === 'DRIVER') {
-        setIsDriver(true)
-        getSenderStories(user.id)
-          .then((stories) => setStories(stories))
-          .then(() => setLoadingStories(false))
-      } else {
-        setIsDriver(false)
-        getDriverStories(user.id)
-          .then((stories) => setStories(stories))
-          .then(() => setLoadingStories(false))
-      }
-    }
+    fetchStories()
   }, [user, loading])
 
   const addStory = (story: Story) => {
@@ -71,10 +80,26 @@ export default function StoriesTab() {
 
   return (
     <div>
-      <p className="mb-2 text-muted-foreground">
+      <p className="mb-2 text-muted-foreground flex items-center gap-2">
         {isDriver
           ? "Let senders know what you're up to:"
           : "See what your driver's up to:"}
+        {!isDriver && (
+          <Button
+            variant="ghost"
+            className="p-2"
+            onClick={() => {
+              setRefreshing(true)
+              fetchStories()
+            }}
+          >
+            {refreshing ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <RotateCcw className="w-6 h-6" />
+            )}
+          </Button>
+        )}
       </p>
       <div className="flex items-center gap-2 flex-wrap py-2">
         {renderStoriesContent()}
