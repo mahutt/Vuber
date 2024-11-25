@@ -77,7 +77,7 @@ export default function OrderPage() {
         pickUpLocation.current?.focus()
       }, 250)
     }
-  }, [startLocation, endLocation])
+  }, [])
   const [addParcelPhase, setAddParcelPhase] = useState<boolean>(false)
   useEffect(() => {
     if (addParcelPhase) {

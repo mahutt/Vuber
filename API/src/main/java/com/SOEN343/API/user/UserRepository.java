@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("DELETE FROM User u WHERE u.role = :role")
     void deleteByRole(User.Role role);
+
+    List<User> findByRole(User.Role role);
 }

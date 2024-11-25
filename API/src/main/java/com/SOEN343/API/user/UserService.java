@@ -125,6 +125,11 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteByRole(User.Role role) {
+        List<User> users = userRepository.findByRole(role);
+        for (User user : users) {
+            user.getOrders().clear();
+            userRepository.save(user);
+        }
         userRepository.deleteByRole(role);
     }
 }

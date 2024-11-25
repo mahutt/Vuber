@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.SOEN343.API.Coordinates.Coordinate;
 import com.SOEN343.API.parcel.Parcel;
 import com.SOEN343.API.user.User;
@@ -22,6 +25,7 @@ public class Order {
 
     @JsonBackReference
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @JsonManagedReference

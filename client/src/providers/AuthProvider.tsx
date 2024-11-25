@@ -30,6 +30,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkLoggedIn = async () => {
     try {
+      const token = localStorage.getItem('accessToken')
+      if (!token) {
+        setLoading(false)
+        return
+      }
       const { data } = await api.get<User | null>('/users/current')
       setUser(data)
     } catch {
