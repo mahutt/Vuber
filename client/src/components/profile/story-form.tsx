@@ -5,17 +5,21 @@ import { Input } from '@/components/ui/input'
 import { Dialog } from '@/components/ui/dialog'
 import { Camera, Loader2 } from 'lucide-react'
 import { DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { Story } from '@/types/types'
 
 export default function StoryForm({
   isOpen,
   setIsOpen,
+  addStory,
 }: {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+  addStory: (story: Story) => void
 }) {
   const [photo, setPhoto] = useState<string | null>(null)
   const [caption, setCaption] = useState('')
   const [takingPhoto, setTakingPhoto] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const closeForm = () => {
     setIsOpen(false)
@@ -56,10 +60,13 @@ export default function StoryForm({
     if (!photo || !caption.trim()) return
 
     try {
-      await createStory({ photo, caption })
+      setUploading(true)
+      const createdStory = await createStory({ photo, caption })
+      addStory(createdStory)
       closeForm()
-      alert('Story created successfully!')
+      setUploading(false)
     } catch (error) {
+      setUploading(false)
       console.error('Error creating story:', error)
     }
   }
@@ -107,10 +114,10 @@ export default function StoryForm({
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!photo || !caption.trim()}
+              disabled={!photo || !caption.trim() || uploading}
               className="flex-1"
             >
-              Submit
+              {uploading ? <Loader2 className="animate-spin" /> : 'Submit'}
             </Button>
           </div>
         </div>

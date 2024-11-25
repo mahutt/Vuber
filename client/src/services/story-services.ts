@@ -75,9 +75,8 @@ export const createStory = async ({
   await new Promise((resolve) => setTimeout(resolve, 1000))
   return {
     id: Math.floor(Math.random() * 1000),
-    caption: 'Story 2',
-    imageUrl:
-      'https://www.tplusride.com/wp-content/uploads/2019/01/GettyImages-1065087504.jpg',
+    caption: caption,
+    imageUrl: photo,
     date: new Date().toISOString(),
   }
 }

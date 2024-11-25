@@ -33,6 +33,13 @@ export default function StoriesTab() {
     }
   }, [user, loading])
 
+  const addStory = (story: Story) => {
+    setStories((prev) => [
+      ...prev.filter((prevStory) => prevStory.id !== story.id),
+      story,
+    ])
+  }
+
   const renderStoriesContent = () => {
     if (loadingStories) {
       return Array(5)
@@ -72,7 +79,11 @@ export default function StoriesTab() {
       <div className="flex items-center gap-2 flex-wrap py-2">
         {renderStoriesContent()}
       </div>
-      <StoryForm isOpen={isFormOpen} setIsOpen={setIsFormOpen} />
+      <StoryForm
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+        addStory={addStory}
+      />
     </div>
   )
 }
