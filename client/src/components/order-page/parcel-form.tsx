@@ -31,6 +31,7 @@ const ParcelForm = forwardRef<
 >(({ addParcel, onEdit }, ref) => {
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [parcel, setParcel] = useState<Parcel>({
+    id: Math.floor(Math.random() * 1000000),
     name: 'Parcel 1',
     description: '',
     weight: 1,

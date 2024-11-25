@@ -39,6 +39,7 @@ export default function OrderPage() {
   const addParcel = () => {
     parcelForm.current?.setEditIndex(null)
     parcelForm.current?.setParcel({
+      id: Math.floor(Math.random() * 1000000),
       name: `Parcel ${parcels.length + 1}`,
       description: '',
       weight: 1,
