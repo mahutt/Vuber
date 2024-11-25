@@ -3,6 +3,7 @@ import api from './api'
 
 // this function is for fetching the stories belonging to a sender's driver.
 export const getDriverStories = async (userId: number): Promise<Story[]> => {
+  console.log(userId, api) // to enable build
   //   try {
   //     const { data } = await api.post<Story[]>(`/stories/sender/${userId}`)
   //     return data
