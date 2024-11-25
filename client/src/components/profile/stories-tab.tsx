@@ -22,13 +22,13 @@ export default function StoriesTab() {
     }
     if (user.role === 'DRIVER') {
       setIsDriver(true)
-      getSenderStories(user.id)
+      getDriverStories(user.id)
         .then((stories) => setStories(stories))
         .then(() => setLoadingStories(false))
         .then(() => setRefreshing(false))
     } else {
       setIsDriver(false)
-      getDriverStories(user.id)
+      getSenderStories(user.id)
         .then((stories) => setStories(stories))
         .then(() => setLoadingStories(false))
         .then(() => setRefreshing(false))

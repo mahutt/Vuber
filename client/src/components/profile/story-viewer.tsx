@@ -33,7 +33,7 @@ export default function StoryViewer({ story }: { story: Story }) {
             />
             <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-md">
               <p className="text-xs">
-                {formatDistance(new Date(story.date), new Date(), {
+                {formatDistance(story.date, new Date(), {
                   addSuffix: true,
                 })}
               </p>

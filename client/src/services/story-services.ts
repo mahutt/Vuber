@@ -2,31 +2,13 @@ import { Story } from '@/types/types'
 import api from './api'
 
 export const getDriverStories = async (userId: number): Promise<Story[]> => {
-  console.log(userId, api) // to enable build
-  //   try {
-  //     const { data } = await api.post<Story[]>(`/stories/driver/${userId}`)
-  //     return data
-  //   } catch (error) {
-  //     console.error('Failed to fetch stories:', error)
-  //     return []
-  //   }
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  return [
-    {
-      id: 1,
-      caption: 'Story 1',
-      imageUrl:
-        'https://www.tplusride.com/wp-content/uploads/2019/01/GettyImages-1065087504.jpg',
-      date: new Date(),
-    },
-    {
-      id: 2,
-      caption: 'Story 2',
-      imageUrl:
-        'https://www.tplusride.com/wp-content/uploads/2019/01/GettyImages-1065087504.jpg',
-      date: new Date(),
-    },
-  ]
+  try {
+    const { data } = await api.get<Story[]>(`/stories/${userId}`)
+    return data
+  } catch (error) {
+    console.error('Failed to fetch stories:', error)
+    return []
+  }
 }
 
 export const getSenderStories = async (userId: number): Promise<Story[]> => {
@@ -108,3 +90,20 @@ export function downloadImage(file: File, filename?: string) {
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
 }
+
+// return [
+//     {
+//       id: 1,
+//       caption: 'Story 1',
+//       imageUrl:
+//         'https://www.tplusride.com/wp-content/uploads/2019/01/GettyImages-1065087504.jpg',
+//       date: new Date(),
+//     },
+//     {
+//       id: 2,
+//       caption: 'Story 2',
+//       imageUrl:
+//         'https://www.tplusride.com/wp-content/uploads/2019/01/GettyImages-1065087504.jpg',
+//       date: new Date(),
+//     },
+//   ]

@@ -61,7 +61,8 @@ export default function StoryForm({
 
     try {
       setUploading(true)
-      const photoFile = base64ToFile(photo, 'captured-photo.png')
+      const date = new Date().toISOString().replace(/[:.]/g, '-')
+      const photoFile = base64ToFile(photo, `captured-photo-${date}.png`)
       const createdStory = await createStory({ file: photoFile, caption })
       if (createdStory) {
         addStory(createdStory)
