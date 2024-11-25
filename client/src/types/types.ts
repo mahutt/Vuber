@@ -15,8 +15,9 @@ export interface Parcel {
 export interface User {
   id: number
   name: string
-  role: string
+  role: 'SENDER' | 'DRIVER'
   orders: Order[]
+  assignedOrders: Order[]
 }
 
 export interface Order {

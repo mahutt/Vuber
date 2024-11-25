@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/providers/AuthProvider'
 import { useEffect } from 'react'
 import { Order, Parcel } from '@/types/types'
+import AssignedOrderCard from '@/components/profile/assigned-order-card'
 
 export default function ProfilePage() {
   const { user, loading, refreshUser } = useAuth()
@@ -33,6 +34,21 @@ export default function ProfilePage() {
           <h4 className="italic lowercase">Role: {user.role}</h4>
         </section>
 
+        {user.role === 'DRIVER' && (
+          <section>
+            <h2 className="text-2xl font-semibold mb-4">Assigned Orders</h2>
+            {user.assignedOrders && user.assignedOrders.length > 0 ? (
+              <div className="grid gap-4">
+                {user.assignedOrders.map((order) => (
+                  <AssignedOrderCard key={order.id} order={order} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No assigned orders.</p>
+            )}
+          </section>
+        )}
+
         <section>
           <h2 className="text-2xl font-semibold mb-4">Current Orders</h2>
           {user.orders &&
@@ -57,7 +73,7 @@ export default function ProfilePage() {
             <ul className="space-y-4">
               {user.orders.map(
                 (order) =>
-                  order.status == 'Delivered' && (
+                  order.status === 'Delivered' && (
                     <OrderCard key={order.id} order={order} />
                   )
               )}
@@ -73,11 +89,9 @@ export default function ProfilePage() {
 
 function OrderCard({ order }: { order: Order }) {
   const navigate = useNavigate()
-
   const handleClick = () => {
     navigate(`/track/${order.id}`)
   }
-
   return (
     <li
       className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
