@@ -1,6 +1,6 @@
 package com.SOEN343.API.stories;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -20,7 +20,7 @@ public class Story {
 
     private String caption;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
@@ -33,7 +33,7 @@ public class Story {
 
     }
 
-    public Story(String caption, LocalDate date, User driver, String imageUrl) {
+    public Story(String caption, LocalDateTime date, User driver, String imageUrl) {
         this.caption = caption;
         this.date = date;
         this.driver = driver;
@@ -57,11 +57,11 @@ public class Story {
         this.caption = caption;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

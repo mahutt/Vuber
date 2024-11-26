@@ -1,7 +1,7 @@
 package com.SOEN343.API.stories;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,8 +49,8 @@ public class StoryController {
             User user = userService.getCurrentUser();
             User attachedUser = userService.getUserById(user.getId());
             String url = uploadService.uploadFile(file.getOriginalFilename(), file);
-            LocalDate today = LocalDate.now();
-            Story story = new Story(caption, today, attachedUser, url);
+            LocalDateTime now = LocalDateTime.now();
+            Story story = new Story(caption, now, attachedUser, url);
             Story saveStory = storyService.createStory(story);
             StoryDto dto = new StoryDto(saveStory);
             return ResponseEntity.status(HttpStatus.OK).body(dto);

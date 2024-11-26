@@ -1,7 +1,7 @@
 
 package com.SOEN343.API.stories.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.SOEN343.API.stories.Story;
 
@@ -9,7 +9,7 @@ public class StoryDto {
 
     private Integer id;
     private String caption;
-    private LocalDate date;
+    private LocalDateTime date;
     private String imageUrl;
 
     public StoryDto() {
@@ -38,15 +38,13 @@ public class StoryDto {
         this.caption = caption;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
-
- 
 
     public String getImageUrl() {
         return imageUrl;
@@ -56,4 +54,3 @@ public class StoryDto {
         this.imageUrl = imageUrl;
     }
 }
-
