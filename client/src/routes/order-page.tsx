@@ -88,12 +88,14 @@ export default function OrderPage() {
 
   return (
     <Container>
-      <div className="h-full flex flex-row items-center gap-10 py-10">
+      <div className="h-full flex flex-col sm:flex-row items-center gap-10 py-10">
         <FadeInWrapper className="h-full">
-          <div className="h-full flex flex-col gap-4 max-w-[300px] justify-center">
+          <div className="h-full flex flex-col gap-4 max-w-[320px] justify-center">
             <div
-              className={`text-3xl font-bold tracking-tight mb-2 transition-height duration-500 ease-in-out overflow-hidden
-                 ${addParcelPhase ? 'h-0' : 'h-[108px]'}`}
+              className={`text-2xl md:text-3xl font-bold tracking-tight mb-2 transition-height duration-500 ease-in-out overflow-hidden
+                 ${
+                   addParcelPhase ? 'h-0' : 'h-[70px] sm:h-[100px] md:h-[108px]'
+                 }`}
             >
               Where should we deliver your package?
             </div>
