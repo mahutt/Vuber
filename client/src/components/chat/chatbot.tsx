@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useLocalStorage from 'use-local-storage'
 
 import {
@@ -16,6 +17,7 @@ import {
   Message,
   MessageInput,
 } from '@/components/chat/chat-kit'
+import { chatbotTools } from '@/services/chatbot'
 
 const API_KEY = import.meta.env.VITE_OPENAI_SECRET_KEY
 interface MessageType {
@@ -25,6 +27,7 @@ interface MessageType {
   position: string // Adjust if neces
 }
 function Chatbot({ onClose }: { onClose: () => void }) {
+  const navigate = useNavigate()
   const [typing, setTyping] = useState<boolean>(false)
   const [messages, setMessages] = useLocalStorage<MessageType[]>(
     'chatbot-messages',
@@ -69,7 +72,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
 
     const systemMessage = {
       role: 'system',
-      content: `You are a customer service rep for Vuber - a online package delivery service. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. You may you function calling to navigate to the page that a user desires, or to simply present them with the link to navigate to a given page.`,
+      content: `You are a customer service rep for Vuber - a online package delivery service. We manage a network of independent delivery drivers and efficiently connect them to users with delivery needs. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. Only use the navigate_to_page function if the user explicitly asks you to bring them to a page on their behalf.`,
     }
 
     const apiRequestBody = {
@@ -78,6 +81,8 @@ function Chatbot({ onClose }: { onClose: () => void }) {
         systemMessage,
         ...apiMessages, //All the text messages
       ],
+      tools: chatbotTools,
+      tool_choice: 'auto',
     }
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -89,17 +94,34 @@ function Chatbot({ onClose }: { onClose: () => void }) {
     })
 
     const data = await response.json()
-    console.log(data.choices[0].message.content)
+    console.log(data)
 
-    const AiMessage: MessageType = {
-      message: data.choices[0].message.content,
-      sender: 'ai',
-      direction: 'incoming',
-      position: 'left',
+    if (data.choices[0].message.tool_calls) {
+      const toolCall = data.choices[0].message.tool_calls[0]
+      if (toolCall.function.name === 'navigate_to_page') {
+        const pageToNavigate = JSON.parse(toolCall.function.arguments).page
+        navigate(pageToNavigate)
+        const navigationMessage: MessageType = {
+          message: `Navigating to ${pageToNavigate.replace('/', '')} page`,
+          sender: 'ai',
+          direction: 'incoming',
+          position: 'left',
+        }
+        const newMessages = [...someMessages, navigationMessage]
+        setMessages(newMessages)
+      }
+    } else {
+      const AiMessage: MessageType = {
+        message: data.choices[0].message.content,
+        sender: 'ai',
+        direction: 'incoming',
+        position: 'left',
+      }
+      const newMessages = [...someMessages, AiMessage]
+
+      setMessages(newMessages)
     }
-    const newMessages = [...someMessages, AiMessage]
     setTyping(false)
-    setMessages(newMessages)
   }
 
   return (
