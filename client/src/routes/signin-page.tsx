@@ -60,7 +60,7 @@ export default function SigninPage() {
               <FormItem>
                 <FormLabel className="text-gray-700">Email</FormLabel>
                 <FormControl>
-                  <Input {...field} className="py-5" />
+                  <Input {...field} className="py-5 text-base" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -74,7 +74,11 @@ export default function SigninPage() {
               <FormItem>
                 <FormLabel className="text-gray-700">Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} className="py-5" />
+                  <Input
+                    type="password"
+                    {...field}
+                    className="py-5 text-base"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
