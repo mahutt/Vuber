@@ -33,7 +33,6 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
   }, [order])
 
   const calculateTotalWeight = (parcels: Parcel[]) => {
-    console.log('parcels', parcels)
     const kgParcels = parcels
       .filter((p) => p.weightUnit.toLowerCase() === 'kg')
       .reduce((acc, p) => acc + p.weight, 0)
