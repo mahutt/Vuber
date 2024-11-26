@@ -51,11 +51,10 @@ export default function ProfileButton() {
 function AuthenticateButtons() {
   return (
     <>
-      <Link
-        to="/signup">
+      <Link to="/signup">
         <Button className="text-white bg-black transition-color duration-200 hover:text-blue-500 hover:bg-neutral-800 text-sm font-medium">
-        Sign up
-        </Button> 
+          Sign up
+        </Button>
       </Link>
       <Link to="/signin">
         <Button className="bg-blue-500 hover:bg-blue-400 transition-color duration-200">
