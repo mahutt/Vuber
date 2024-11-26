@@ -109,7 +109,7 @@ export default function StoryForm({
             placeholder="Write a caption..."
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            className="w-full"
+            className="w-full text-base"
           />
 
           <div className="flex space-x-2">
