@@ -9,12 +9,13 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
   const { refreshUser } = useAuth()
   const [loading, setLoading] = useState<boolean>(false)
   const calculateTotalWeight = (parcels: Parcel[]) => {
+    console.log('parcels', parcels)
     const kgParcels = parcels
-      .filter((p) => p.weightUnit === 'kg')
+      .filter((p) => p.weightUnit.toLowerCase() === 'kg')
       .reduce((acc, p) => acc + p.weight, 0)
 
     const lbParcels = parcels
-      .filter((p) => p.weightUnit === 'lb')
+      .filter((p) => p.weightUnit.toLowerCase() === 'lb')
       .reduce((acc, p) => acc + p.weight * 0.453592, 0) // Convert lb to kg
 
     return {
@@ -45,7 +46,14 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
             </div>
             <p className="text-sm text-gray-600">{order.origin}</p>
             <div className="mt-1 text-sm bg-green-50 text-green-700 p-2 rounded">
-              <strong>Instructions:</strong> {order.pickupInstructions}
+              <strong className="mr-1">Instructions:</strong>
+              {order.pickupInstructions === '' ? (
+                <span className="italic text-muted-foreground">
+                  (None provided)
+                </span>
+              ) : (
+                order.pickupInstructions
+              )}
             </div>
           </div>
 
@@ -56,7 +64,14 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
             </div>
             <p className="text-sm text-gray-600">{order.destination}</p>
             <div className="mt-1 text-sm bg-red-50 text-red-700 p-2 rounded">
-              <strong>Instructions:</strong> {order.dropoffInstructions}
+              <strong className="mr-1">Instructions:</strong>
+              {order.dropoffInstructions === '' ? (
+                <span className="italic text-muted-foreground">
+                  (None provided)
+                </span>
+              ) : (
+                order.dropoffInstructions
+              )}
             </div>
           </div>
 

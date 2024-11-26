@@ -36,8 +36,8 @@ public class ParcelDetailsDto {
         this.weight = weight;
     }
 
-    public void setWeightUnit(String weightunit) {
-        this.weightUnit = weightunit;
+    public void setWeightUnit(String weightUnit) {
+        this.weightUnit = weightUnit;
     }
 
     public void setSizeUnit(String sizeUnit) {
@@ -54,7 +54,6 @@ public class ParcelDetailsDto {
 
     public void setSize(SizeDto size) {
         this.size = size;
-    }  
+    }
 
 }
-

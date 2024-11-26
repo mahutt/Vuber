@@ -46,7 +46,7 @@ public class Parcel {
     private Double weight;
 
     @Column
-    private WeightUnit weightunit;
+    private WeightUnit weightUnit;
 
     @Column
     private int width;
@@ -95,12 +95,12 @@ public class Parcel {
         this.weight = weight;
     }
 
-    public WeightUnit getWeightunit() {
-        return weightunit;
+    public WeightUnit getWeightUnit() {
+        return weightUnit;
     }
 
-    public void setWeightunit(WeightUnit weightunit) {
-        this.weightunit = weightunit;
+    public void setWeightunit(WeightUnit weightUnit) {
+        this.weightUnit = weightUnit;
     }
 
     public int getWidth() {
