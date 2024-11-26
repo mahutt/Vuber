@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.SOEN343.API.order.Order;
+import com.SOEN343.API.order.OrderRepository;
 import com.SOEN343.API.user.dto.SignUpDto;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 
@@ -23,10 +24,12 @@ import java.util.*;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
     }
 
     public ResponseEntity<Object> getAuthenticatedUser() {
@@ -130,6 +133,10 @@ public class UserService implements UserDetailsService {
         for (User user : users) {
             user.getOrders().clear();
             userRepository.save(user);
+            for (Order order : user.getAssignedOrders()) {
+                order.setAssignedUser(null);
+                orderRepository.save(order);
+            }
         }
         userRepository.deleteByRole(role);
     }
