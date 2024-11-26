@@ -57,7 +57,6 @@ function Chatbot({ onClose }: { onClose: () => void }) {
 
   async function processMessagetoVini(someMessages: MessageType[]) {
     setTyping(true)
-    //with @chatscope library. our messages are bascially in the following JSON format {sender : 'user' or 'ai', message: "The message content here", }
     const apiMessages = someMessages.map((messageObject) => {
       let role = ''
       if (messageObject.sender === 'ai') {
@@ -70,11 +69,9 @@ function Chatbot({ onClose }: { onClose: () => void }) {
 
     const systemMessage = {
       role: 'system',
-      content:
-        'You are a customer service rep. You will need to answer questions about shipping and handleing pakcages. If customer asks about pricing, let them know prices are decided based on too and from locations along with the dimensions and weight of parcels being sent. If they are unhappy, ask about the issue and prompt them to leave a review using their tracking ID. Otherwise just chat Limit the response to a 150 word max and always ask if the user has follow up questions', //"No matter what the user enters, you will respond with the chorus of Rick Astley's song Never gonna give you up. If part of the song is already included, continue a similar sized portion of the song"  "You are a motor vehicle expert. You will need to answer car and vehicle questions to people who are not well versed in the subject, but they do know how to drive a car. Speak like a car salesman."
+      content: `You are a customer service rep for Vuber - a online package delivery service. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. You may you function calling to navigate to the page that a user desires, or to simply present them with the link to navigate to a given page.`,
     }
 
-    //OpenAI api roles "user" -> a message from the app user, "assistant" -> a message from openAI, "System" -> a genreal instruction defining HOW the open AI model should act. Kind of like a pre prompt
     const apiRequestBody = {
       model: 'gpt-4o-mini',
       messages: [
