@@ -57,6 +57,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .then((response) => {
         if (response.status === 200 && response.data) {
           localStorage.setItem('accessToken', response.data.accessToken)
+          localStorage.removeItem('chatbot-messages')
           setUser(response.data.user)
           return true
         } else {
@@ -92,6 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .post('users/logout')
       .then(() => {
         localStorage.removeItem('accessToken')
+        localStorage.removeItem('chatbot-messages')
         setUser(null)
       })
       .catch((e) => {
