@@ -2,9 +2,11 @@ package com.SOEN343.API.stories;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +71,21 @@ public class StoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Getting stories");
         }
 
+    }
+    @GetMapping("/sender/stories/{id}")
+    public ResponseEntity<Object> getStoryBySenderId(@PathVariable Integer id) {
+        try {
+            
+            List<Story> stories = storyRepository.findStoriesByUserId(id);
+            if (stories.size() == 0 || stories == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No stories found");
+
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(stories);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting stories");
+        }
     }
 
 }
