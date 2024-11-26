@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import Container from '@/components/container'
-import { Package, Truck, ArrowUpRightIcon } from 'lucide-react'
+import { Package, Truck, ArrowUpRightIcon, Loader2 } from 'lucide-react'
 import { useAuth } from '@/providers/AuthProvider'
 import ErrorBanner from '@/components/error-banner'
 
@@ -69,6 +69,7 @@ export default function SignupPage() {
   const [searchParams] = useSearchParams()
   const [userType, setUserType] = useState<'sender' | 'driver'>('sender')
   const [bannerMessage, setBannerMessage] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,6 +79,7 @@ export default function SignupPage() {
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true)
     if (await signup(values.email, values.password, values.role)) {
       await signin(values.email, values.password)
       const redirectLocation = searchParams.get('redirect')
@@ -85,6 +87,7 @@ export default function SignupPage() {
     } else {
       setBannerMessage('We could not create your account. Please try again.')
     }
+    setLoading(false)
   }
   return (
     <Container>
@@ -157,7 +160,12 @@ export default function SignupPage() {
                 </OptionCard>
               </div>
             </FormItem>
-            <Button type="submit" className="py-6 rounded-lg">
+            <Button
+              type="submit"
+              className="py-6 rounded-lg"
+              disabled={loading}
+            >
+              {loading && <Loader2 className="animate-spin" />}
               Create account
             </Button>
             <Link
