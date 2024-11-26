@@ -1,13 +1,37 @@
-import { Order, Parcel } from '@/types/types'
+import { Coordinate, Order, Parcel } from '@/types/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, MapPin } from 'lucide-react'
 import completeOrder from '@/services/complete-order'
 import { useAuth } from '@/providers/AuthProvider'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { fetchPlaceName } from '../map'
 
 export default function AssignedOrderCard({ order }: { order: Order }) {
   const { refreshUser } = useAuth()
   const [loading, setLoading] = useState<boolean>(false)
+  const [originPlaceName, setOriginPlaceName] = useState<string>('')
+  const [destinationPlaceName, setDestinationPlaceName] = useState<string>('')
+
+  const fetchPlaceNames = async () => {
+    if (!order.originCoords || !order.destinationCoords) return
+    const origin = await fetchPlaceName(
+      order.originCoords.lat,
+      order.originCoords.lng
+    )
+    const destination = await fetchPlaceName(
+      order.destinationCoords.lat,
+      order.destinationCoords.lng
+    )
+    setOriginPlaceName(origin ?? makeCoordDtoStringPrettier(order.origin))
+    setDestinationPlaceName(
+      destination ?? makeCoordDtoStringPrettier(order.destination)
+    )
+  }
+
+  useEffect(() => {
+    fetchPlaceNames()
+  }, [order])
+
   const calculateTotalWeight = (parcels: Parcel[]) => {
     console.log('parcels', parcels)
     const kgParcels = parcels
@@ -44,7 +68,7 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
               <MapPin className="mt-1 h-5 w-5 text-green-600 flex-shrink-0" />
               <p className="font-medium text-green-700">Pickup Location</p>
             </div>
-            <p className="text-sm text-gray-600">{order.origin}</p>
+            <p className="text-sm text-gray-600">{originPlaceName}</p>
             <div className="mt-1 text-sm bg-green-50 text-green-700 p-2 rounded">
               <strong className="mr-1">Instructions:</strong>
               {order.pickupInstructions === '' ? (
@@ -62,7 +86,7 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
               <MapPin className="mt-1 h-5 w-5 text-red-600 flex-shrink-0" />
               <p className="font-medium text-red-700">Dropoff Location</p>
             </div>
-            <p className="text-sm text-gray-600">{order.destination}</p>
+            <p className="text-sm text-gray-600">{destinationPlaceName}</p>
             <div className="mt-1 text-sm bg-red-50 text-red-700 p-2 rounded">
               <strong className="mr-1">Instructions:</strong>
               {order.dropoffInstructions === '' ? (
@@ -96,4 +120,24 @@ export default function AssignedOrderCard({ order }: { order: Order }) {
       </CardContent>
     </Card>
   )
+}
+
+function parseCoordinates(input: string): Coordinate | null {
+  const regex = /lat=(-?\d+\.\d+), lng=(-?\d+\.\d+)/
+  const match = input.match(regex)
+  if (match) {
+    const lat = parseFloat(match[1])
+    const lng = parseFloat(match[2])
+    return { lat, lng }
+  }
+  return null
+}
+
+function makeCoordDtoStringPrettier(input: string): string {
+  const coordinate = parseCoordinates(input)
+  if (coordinate) {
+    return `lattitude: ${coordinate.lat}, longitude: ${coordinate.lng}`
+  } else {
+    return input
+  }
 }

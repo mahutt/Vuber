@@ -29,6 +29,8 @@ export interface Order {
   destination: string
   pickupInstructions: string
   dropoffInstructions: string
+  originCoords?: Coordinate
+  destinationCoords?: Coordinate
 }
 
 export interface BackendUser {
