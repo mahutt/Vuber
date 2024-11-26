@@ -106,12 +106,14 @@ function Chatbot({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <Card className="w-[500px] h-[500px] flex flex-col">
-      <CardHeader className="flex flex-row gap-4 items-center">
+    <Card className="h-[500px] flex flex-col">
+      <CardHeader className="p-4 md:px-6 flex flex-row gap-4 items-center">
         <Bot size={32} />
         <div className="flex-1">
           <CardTitle>VuberBot</CardTitle>
-          <CardDescription>Our friendly support bot</CardDescription>
+          <CardDescription className="hidden md:block">
+            Our friendly support bot
+          </CardDescription>
         </div>
         <button
           onClick={(e) => {
@@ -122,7 +124,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
           <X size={24} />
         </button>
       </CardHeader>
-      <CardContent className="h-full overflow-auto">
+      <CardContent className="h-full overflow-auto px-4 md:px-6">
         <ChatContainer>
           <MessageList typingIndicator={typing}>
             {messages.map((message, i) => {

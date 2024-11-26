@@ -10,7 +10,7 @@ export default function ChatbotToggle() {
       onClick={() => setIsOpen(true)}
       className={`z-50 overflow-hidden group fixed bottom-4 right-4 bg-white cursor-pointer transition-all duration-300 ${
         isOpen
-          ? 'w-[500px] h-[500px] rounded-xl'
+          ? 'w-11/12 max-w-[500px] max-h-[500px] rounded-xl'
           : 'w-14 h-14 rounded-full p-2 shadow'
       }`}
     >

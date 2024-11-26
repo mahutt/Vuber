@@ -55,8 +55,8 @@ export function Message({
   children: ReactNode
   direction?: MessageDirection
 }) {
-  const incomingStyling = `self-start mr-10 bg-slate-800 text-white px-3 py-2 rounded-tr-lg rounded-br-lg rounded-bl-lg`
-  const outgoingStyling = `self-end ml-10 bg-slate-200 text-slate-800 px-3 py-2 rounded-tl-lg rounded-bl-lg rounded-br-lg`
+  const incomingStyling = `self-start mr-2 md:mr-10 bg-slate-800 text-white px-3 py-2 rounded-tr-lg rounded-br-lg rounded-bl-lg`
+  const outgoingStyling = `self-end ml-2 md:ml-10 bg-slate-200 text-slate-800 px-3 py-2 rounded-tl-lg rounded-bl-lg rounded-br-lg`
   return (
     <div
       className={direction === 'incoming' ? incomingStyling : outgoingStyling}
