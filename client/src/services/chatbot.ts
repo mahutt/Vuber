@@ -32,4 +32,21 @@ export const chatbotTools = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'track_order',
+      description: 'Track the status of an order by its ID',
+      parameters: {
+        type: 'object',
+        properties: {
+          order_id: {
+            type: 'number',
+            description: 'The ID of the order to track',
+          },
+        },
+        required: ['order_id'],
+      },
+    },
+  },
 ]
