@@ -18,6 +18,7 @@ import {
   MessageInput,
 } from '@/components/chat/chat-kit'
 import { chatbotTools } from '@/services/chatbot'
+import { useAuth } from '@/providers/AuthProvider'
 
 const API_KEY = import.meta.env.VITE_OPENAI_SECRET_KEY
 interface MessageType {
@@ -27,6 +28,7 @@ interface MessageType {
   position: string // Adjust if neces
 }
 function Chatbot({ onClose }: { onClose: () => void }) {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [typing, setTyping] = useState<boolean>(false)
   const [messages, setMessages] = useLocalStorage<MessageType[]>(
@@ -34,7 +36,7 @@ function Chatbot({ onClose }: { onClose: () => void }) {
     [
       {
         message:
-          'Need a hand with anything? I am your dedicated AI package handling expert, Vini :) Ask away!',
+          'Need a hand with anything? I am your dedicated AI package handling expert, VuberBot!',
         sender: 'ai',
         direction: 'incoming',
         position: 'left',
@@ -72,7 +74,13 @@ function Chatbot({ onClose }: { onClose: () => void }) {
 
     const systemMessage = {
       role: 'system',
-      content: `You are a customer service rep for Vuber - a online package delivery service. We manage a network of independent delivery drivers and efficiently connect them to users with delivery needs. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. Only use the navigate_to_page function if the user explicitly asks you to bring them to a page on their behalf.`,
+      content: `You are a customer service rep for Vuber - a online package delivery service. We manage a network of independent delivery drivers and efficiently connect them to users with delivery needs. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. If the conversation ever becomes irrelevant to the delivery service, inform the user that you may only help them with their delivery needs. Only use the navigate_to_page function if the user explicitly asks you to bring them to a page on their behalf. ${
+        user
+          ? `The user you are speaking to has the following information: ${JSON.stringify(
+              user
+            )}`
+          : 'The user you are speaking to is not logged in.'
+      }`,
     }
 
     const apiRequestBody = {
