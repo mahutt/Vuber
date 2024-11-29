@@ -45,7 +45,6 @@ function Chatbot({ onClose }: { onClose: () => void }) {
   )
 
   const handleSend = async (message: string) => {
-    console.log('User message:', message)
     const newMessage: MessageType = {
       message: message,
       sender: 'user',
@@ -74,9 +73,9 @@ function Chatbot({ onClose }: { onClose: () => void }) {
 
     const systemMessage = {
       role: 'system',
-      content: `You are a customer service rep for Vuber - a online package delivery service. We manage a network of independent delivery drivers and efficiently connect them to users with delivery needs. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. If the conversation ever becomes irrelevant to the delivery service, inform the user that you may only help them with their delivery needs. Only use the navigate_to_page function if the user explicitly asks you to bring them to a page on their behalf. ${
+      content: `You are a customer service rep for Vuber - a online package delivery service. We manage a network of independent delivery drivers and efficiently connect them to users with delivery needs. Our pricing is based on the distance of the delivery, and on the weight and dimensions of the parcels (many parcels may be included in a single delivery order.) Be as concise as possible when answering messages. Vuber reps. are straight to the point and helpful. If the conversation ever becomes irrelevant to the user's usage of the site or the delivery service, inform the user that you may only help them with their delivery needs. Only use the navigate_to_page function if the user explicitly asks you to bring them to a page on their behalf. Only use the track_order function if the user asks about the location or status of an order. ${
         user
-          ? `The user you are speaking to has the following information: ${JSON.stringify(
+          ? `The user you are speaking to is logged in / signed in and has the following information: ${JSON.stringify(
               user
             )}`
           : 'The user you are speaking to is not logged in.'
@@ -116,6 +115,17 @@ function Chatbot({ onClose }: { onClose: () => void }) {
           position: 'left',
         }
         const newMessages = [...someMessages, navigationMessage]
+        setMessages(newMessages)
+      } else if (toolCall.function.name === 'track_order') {
+        const orderId = JSON.parse(toolCall.function.arguments).order_id
+        navigate(`/track/${orderId}`)
+        const trackingMessage: MessageType = {
+          message: `Tracking order ${orderId}`,
+          sender: 'ai',
+          direction: 'incoming',
+          position: 'left',
+        }
+        const newMessages = [...someMessages, trackingMessage]
         setMessages(newMessages)
       }
     } else {
